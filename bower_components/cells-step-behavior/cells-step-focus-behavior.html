@@ -1,0 +1,49 @@
+<script>
+  window.CellsBehaviors = window.CellsBehaviors || {};
+  window.CellsBehaviors.StepFocusBehavior = {
+    properties: {
+      isCurrent: {
+        type: Boolean,
+        computed: '_isCurrent(active, collapsed)',
+        observer: '_notifyStepFocus'
+      }
+    },
+
+    _isCurrent: function(active, collapsed) {
+      return active && !collapsed;
+    },
+
+    _notifyStepFocus(newIsCurrent, oldIsCurrent) {
+      if (!newIsCurrent && oldIsCurrent === undefined) {
+        return;
+      }
+      if (newIsCurrent && !oldIsCurrent) {
+        this.focusIn();
+        return;
+      }
+      if (!newIsCurrent && oldIsCurrent) {
+        this.focusOut(this.isValid());
+        return;
+      }
+    },
+
+    focusIn() {
+      this.__emmitFocusChange('in', {});
+    },
+
+    focusOut(isValid) {
+      this.__emmitFocusChange('out', {isValid});
+    },
+
+    __emmitFocusChange(status, payload) {
+      this.dispatchEvent(new CustomEvent('cells-step-focus-' + status, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          currentStep: this.currentStep,
+          isValid: (payload || {}).isValid
+        }
+      }));
+    },
+  };
+</script>

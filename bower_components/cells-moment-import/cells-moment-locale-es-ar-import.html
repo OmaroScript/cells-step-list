@@ -1,0 +1,20 @@
+<script>
+/* global moment */
+if (moment && moment.defineLocale) {
+  const arLocale = 'es-AR';
+  if (window.AppConfig && window.AppConfig.lang === arLocale) {
+    const parentLocale = arLocale.split('-')[0];
+    const arMonthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
+    if (moment.locale(arLocale) !== arLocale) {
+      moment.defineLocale(arLocale, {
+        parentLocale: parentLocale
+      });
+    }
+    moment.updateLocale(arLocale, {
+      monthsShort: arMonthsShort
+    });
+    moment.locale(arLocale);
+  }
+
+}
+</script>

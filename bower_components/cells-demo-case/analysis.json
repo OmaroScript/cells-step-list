@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "# cells-demo-case\n\n![Polymer 2.x](https://img.shields.io/badge/Polymer-2.x-green.svg)\n\n`<cells-demo-case>` is aimed to be used inside a `cells-demo-helper` component. It expect to have a `template` tag as content. Any content inside that template tag is exposed as a stringfied HTML in the `inner` property. It can also receive `heading` and `description` attributes, which will set a title and description for the demo case when used in the demo helper.\n\nExample:\n\n```html\n<cells-demo-case heading=\"Demo title\" description=\"Demo description\">\n\t<template>\n\t\tContent here\n\t</template>\n</cells-demo-case>\n```\n\n## Styling\n\nThis component does not expose any mixin nor custom property.",
+      "summary": "Exposes the HTML of component demo cases for cells-demo-helper",
+      "path": "cells-demo-case/cells-demo-case.js",
+      "properties": [
+        {
+          "name": "inner",
+          "type": "string | null | undefined",
+          "description": "Stores the component content's HTML as a string",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 56,
+              "column": 2
+            },
+            "end": {
+              "line": 58,
+              "column": 3
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "heading",
+          "type": "string | null | undefined",
+          "description": "Title of the demo case",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 6
+            },
+            "end": {
+              "line": 45,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "description",
+          "type": "string | null | undefined",
+          "description": "Description of the demo case",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 50,
+              "column": 6
+            },
+            "end": {
+              "line": 52,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "getInner",
+          "description": "Returns the current innerHTML of the template tag in the content",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 63,
+              "column": 2
+            },
+            "end": {
+              "line": 65,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 26,
+          "column": 0
+        },
+        "end": {
+          "line": 67,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "Polymer.Element",
+      "name": "cellsDemoCase",
+      "attributes": [
+        {
+          "name": "inner",
+          "description": "Stores the component content's HTML as a string",
+          "sourceRange": {
+            "start": {
+              "line": 56,
+              "column": 2
+            },
+            "end": {
+              "line": 58,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "heading",
+          "description": "Title of the demo case",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 6
+            },
+            "end": {
+              "line": 45,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "description",
+          "description": "Description of the demo case",
+          "sourceRange": {
+            "start": {
+              "line": 50,
+              "column": 6
+            },
+            "end": {
+              "line": 52,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "cells-demo-case"
+    }
+  ]
+}

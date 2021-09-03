@@ -1,0 +1,38 @@
+{
+  "name": "cells-icon-message",
+  "version": "14.13.1",
+  "description": "Displays an inline contextual message with an icon with different styles depending on the type.",
+  "keywords": [
+    "message",
+    "icon",
+    "image",
+    "alert",
+    "contextual message",
+    "inline message",
+    "a11y"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "iron-icon": "^2.0.0",
+    "cells-i18n-behavior": "^13.0.0",
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "cells-atom-icon": "^12.1.5",
+    "cells-st-button": "^13.0.0",
+    "cells-banking-theme": "^12.0.0",
+    "cells-coronita-base-theme": "^12.0.0",
+    "cells-demo-helper": "^12.0.0",
+    "cells-demo-mocker-selector": "^12.0.0",
+    "cells-glomo-theme": "^15.0.0",
+    "cells-sass": "^2.0.0",
+    "coronita-icons": "^12.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0"
+  },
+  "main": "cells-icon-message.html",
+  "_source": "art://BGCM/cells-icon-message",
+  "_target": "^14.0.0",
+  "_release": "14.13.1",
+  "_originalSource": "cells-icon-message"
+}

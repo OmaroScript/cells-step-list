@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es-ES">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>Demo cells-demo-helper</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+
+  <link rel="import" href="../cells-demo-helper.html">
+  <link rel="lazy-import" href="../../polymer/lib/elements/dom-bind.html">
+  <link rel="lazy-import" href="../../coronita-icons/coronita-icons.html">
+  <link rel="lazy-import" href="../../banking-icons/banking-icons.html">
+  <link rel="lazy-import" href="../../cells-navigation-bar/cells-navigation-bar.html">
+  <link rel="lazy-import" href="../../cells-switch/cells-switch.html">
+  <link rel="lazy-import" href="../../cells-login-view/cells-login-view.html">
+  <link rel="lazy-import" href="css/demo-styles.html">
+</head>
+
+<body unresolved ontouchstart>
+
+  <cells-demo-event-toaster events='["iframe-loaded"]' id="eventToaster"></cells-demo-event-toaster>
+
+  <cells-demo-helper resolution="mobile" i18n multi-toast locales-path="locales" events='["selected-item", "one", "two"]'
+    available-themes='["cells-coronita-base-theme","cells-banking-theme"]'>
+    <cells-demo-case heading="Demo Lang switcher">
+      <template>
+        <cells-navigation-bar selected="0" id="cells-navigation-bar" prevent-navigation></cells-navigation-bar>
+        <script>
+          let component = document.querySelector('#cells-navigation-bar');
+          component.items = [{
+            'label': 'cells-navigation-bar-home',
+            'icon': 'coronita:home',
+            'id': 'home'
+          }, {
+            'label': 'cells-navigation-bar-pay',
+            'icon': 'coronita:wallet',
+            'id': 'payments'
+          }, {
+            'label': 'cells-navigation-bar-notifications',
+            'icon': 'coronita:alarm',
+            'id': 'notifications'
+          }];
+        </script>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Demo Theme" description="change the theme to see the different themes">
+      <template>
+        <style>
+          body {
+            padding: 20px;
+          }
+        </style>
+        <cells-switch class="changing-label" label-on="Changed by toggle on">Label by default when off</cells-switch>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Multiple toasts" description="Use the boolean attribute multi-toast to allow showing multiple toasts simultaneously">
+      <template>
+        <style>
+          body {
+            padding: 20px;
+            text-align: center;
+          }
+
+          button {
+            font-family: sans-serif;
+            font-size: 15px;
+            color: #fff;
+            background-color: #004481;
+            border-radius: 1px;
+            border: 0;
+            padding: 15px;
+            cursor: pointer;
+          }
+        </style>
+        <dom-bind>
+          <template>
+            <button on-click="fireEvent" data-event="one">Fire event "one"</button>
+            <button on-click="fireEvent" data-event="two">Fire event "two"</button>
+          </template>
+        </dom-bind>
+        <script>
+          document.addEventListener('WebComponentsReady', function() {
+            let demo = document.querySelector('dom-bind');
+            demo.fireEvent = function(e) {
+              document.dispatchEvent(new CustomEvent(e.target.dataset.event, { bubbles: true, composed: true }));
+            };
+          });
+        </script>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Demo with a lot of imports">
+      <template>
+        <cells-login-view id="login" allow-registration clear-id-icon="coronita:close" clear-pwd-icon="coronita:close"
+          toggle-pwd-icon="coronita:visualize" toggle-pwd-icon-toggled="coronita:hide" start-icon="coronita:lock"
+          end-icon="coronita:unlock" header-image="https://bbva-cells-files.s3.amazonaws.com/cells/cells-assets/glomo/images/access/bg-login.jpg">
+        </cells-login-view>
+      </template>
+    </cells-demo-case>
+  </cells-demo-helper>
+</body>
+
+</html>

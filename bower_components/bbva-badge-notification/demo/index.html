@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>Demo bbva-badge-notification</title>
+    <script>window.I18nMsg = window.I18nMsg || {}; window.I18nMsg.disabled = true;</script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+    <link rel="lazy-import" href="../bbva-badge-notification.html">
+    <link rel="lazy-import" href="css/demo-styles.html">
+  </head>
+  <body unresolved ontouchstart>
+    <cells-demo-helper available-themes='["bbva-convergence-theme", "cells-coronita-base-theme"]'>
+      <cells-demo-case heading="Basic" description="A basic example">
+        <template>
+          <style>
+            .wrapper {
+              display: flex;
+              align-items: center;
+            }
+            .wrapper > bbva-badge-notification {
+              margin: 8px;
+            }
+            .wrapper > p {
+              margin-left: 8px;
+            }
+          </style>
+          <div class="wrapper">
+            <bbva-badge-notification 
+              accessibility-text="3 Notificaciones"
+              text="3"></bbva-badge-notification>
+            <bbva-badge-notification 
+              accessibility-text="13 Notificaciones" 
+              class="border-dark" 
+              text="13"></bbva-badge-notification>
+            <bbva-badge-notification 
+              accessibility-text="8 Notificaciones"
+              class="dark" 
+              text="8"></bbva-badge-notification>
+          </div>
+          <div class="wrapper">
+            <p>Lorem ipsum</p>
+            <bbva-badge-notification 
+              accessibility-text="8 Notificaciones" 
+              text="8"></bbva-badge-notification>
+          </div>
+        </template>
+      </cells-demo-case>
+      <cells-demo-case heading="Absolute" description="A position absolute example">
+        <template>
+          <div class="wrapper">
+            <div class="container">
+              <bbva-badge-notification 
+                accessibility-text="8 Notificaciones" 
+                class="abs top-left" 
+                text="8"></bbva-badge-notification>
+            </div>
+            <div class="container">
+              <bbva-badge-notification 
+                accessibility-text="8 Notificaciones" 
+                class="abs top-right" 
+                text="8"></bbva-badge-notification>
+            </div>
+            <div class="container">
+              <bbva-badge-notification 
+                accessibility-text="8 Notificaciones"
+                class="abs bottom-left" 
+                text="8"></bbva-badge-notification>
+            </div>
+            <div class="container">
+              <bbva-badge-notification 
+                accessibility-text="8 Notificaciones" 
+                class="abs bottom-right" 
+                text="8"></bbva-badge-notification>
+            </div>
+          </div>
+        </template>
+      </cells-demo-case>
+    </cells-demo-helper>
+  </body>
+</html>

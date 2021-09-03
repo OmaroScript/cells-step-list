@@ -1,0 +1,698 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="x-cells-step-manager-behavior-test.html">
+  <link rel="import" href="x-cells-step-behavior-test.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <x-cells-step-manager-behavior-test
+        id="manager"
+        auto-activate-step
+      ></x-cells-step-manager-behavior-test>
+      <x-cells-step-behavior-test
+        id="step1"
+        index="1"
+        current-step="1"
+        not-initialize-with-attached
+      ></x-cells-step-behavior-test>
+      <x-cells-step-behavior-test
+        id="step2"
+        index="2"
+        current-step="2"
+        not-initialize-with-attached
+      ></x-cells-step-behavior-test>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    suite('initial setup', function() {
+      let manager;
+      const stepScheme = {
+        active: false,
+        collapsed: false,
+        skip: false,
+        hidden: false,
+        lastStep: false,
+        set: () => { },
+        get: () => { },
+        reset: () => { },
+        isValid: () => { },
+        close: () => { }
+      };
+
+      const mockedSteps = [
+        stepScheme,
+        stepScheme,
+        stepScheme,
+        stepScheme,
+        stepScheme,
+        stepScheme
+      ];
+
+      setup(function() {
+        manager = fixture('default')[0];
+
+        document.addEventListener('register-step', manager.registerStep.bind(manager));
+        step1.initialize();
+        step2.initialize();
+        step1.active = true;
+      });
+
+      test('manager should have the two steps in _steps prop', () => {
+        expect(manager._steps[step1.currentStep]).to.eql(step1);
+        expect(manager._steps[step2.currentStep]).to.eql(step2);
+      });
+
+      suite('initStepState', () => {
+
+        test('should set all default values for a step', () => {
+          step1.active = true;
+          step1.collapsed = true;
+          step1.scrolled = true;
+          step1.decorated = true;
+          step1.disabled = true;
+          step1.hidden = true;
+          step1.skip = true;
+          step1.blocked = true;
+          step1.next = true;
+          step1.previous = true;
+
+          manager.initStepState(step1);
+
+          expect(step1.active).to.be.eql(manager.getStepInitialState(step1.currentStep).active);
+          expect(step1.collapsed).to.be.eql(manager.getStepInitialState(step1.currentStep).collapsed);
+          expect(step1.scrolled).to.be.eql(manager.getStepInitialState(step1.currentStep).scrolled);
+          expect(step1.decorated).to.be.eql(manager.getStepInitialState(step1.currentStep).decorated);
+          expect(step1.disabled).to.be.eql(manager.getStepInitialState(step1.currentStep).disabled);
+          expect(step1.hidden).to.be.eql(manager.getStepInitialState(step1.currentStep).hidden);
+          expect(step1.skip).to.be.eql(manager.getStepInitialState(step1.currentStep).skip);
+          expect(step1.blocked).to.be.eql(manager.getStepInitialState(step1.currentStep).blocked);
+          expect(step1.next).to.be.eql(manager.getStepInitialState(step1.currentStep).next);
+          expect(step1.previous).to.be.eql(manager.getStepInitialState(step1.currentStep).previous);
+        });
+      });
+
+      suite('_resetStepProps', () => {
+
+        test('should reset params to false for a step', () => {
+          step1.active = true;
+          step1.collapsed = true;
+          step1.scrolled = true;
+          step1.disabled = true;
+          step1.blocked = true;
+          step1.previous = true;
+
+          manager._resetStepProps(step1);
+
+          expect(step1.active).to.be.eql(false);
+          expect(step1.collapsed).to.be.eql(false);
+          expect(step1.scrolled).to.be.eql(false);
+          expect(step1.disabled).to.be.eql(false);
+          expect(step1.blocked).to.be.eql(false);
+          expect(step1.previous).to.be.eql(false);
+        })
+      })
+
+      suite('getStepInitialState', () => {
+
+        test('should get initial step state when defined', () => {
+          manager.stepsInit = {
+            1: {
+              active: true
+            },
+            default: {
+              collapsed: true
+            }
+          };
+
+          const state = manager.getStepInitialState(1);
+
+          expect(state).to.be.eql(manager.stepsInit[1]);
+        });
+
+        test('should get default step state when not defined', () => {
+          manager.stepsInit = {
+            1: {
+              active: true
+            },
+            default: {
+              collapsed: true
+            }
+          };
+
+          const state = manager.getStepInitialState(2);
+
+          expect(state).to.be.eql(manager.stepsInit.default);
+        });
+
+        test('should get customStepsInit config  when customStepsInitNeeded is true', () => {
+          manager.customStepsInitNeeded = true;
+
+          manager.customStepsInit = {
+            1: {
+              active: true
+            },
+            default: {
+              collapsed: true
+            }
+          };
+
+          const state = manager.getStepInitialState(1);
+
+          expect(state).to.be.eql(manager.customStepsInit[1]);
+        });
+      });
+
+      suite('when steps have changed', () => {
+
+        setup(() => {
+          step1.active = true;
+          step2.active = true;
+          step1.collapsed = true;
+          step1.collapsed = true;
+          step2.scrolled = true;
+          step2.scrolled = true;
+        });
+
+        suite('resetWithDefaultSettings method', () => {
+
+          suite('when called without params', () => {
+
+            test('should call all step reset methods', () => {
+              sinon.spy(step1, 'reset');
+              sinon.spy(step2, 'reset');
+
+              manager.resetWithDefaultSettings();
+
+              expect(step1.reset).called;
+              expect(step2.reset).called;
+
+              step1.reset.restore();
+              step2.reset.restore();
+            });
+
+            test('should set all init params for steps', () => {
+              manager.initSteps();
+              sinon.spy(manager, 'initStepState');
+              manager.resetWithDefaultSettings();
+
+              expect(manager.initStepState).called;
+              expect(manager.initStepState.args).to.have.length(2);
+              expect(manager.initStepState.args[0][0]).to.be.eql(step1);
+              expect(manager.initStepState.args[1][0]).to.be.eql(step2);
+
+              manager.initStepState.restore();
+            });
+
+            test('should set currentStep to first step', () => {
+              manager.currentStep = 2;
+
+              manager.resetWithDefaultSettings();
+
+              expect(manager.currentStep).to.be.eql(1);
+            });
+
+            test('should set ariaHidden property to false when active is true', () => {
+              manager.initSteps();
+              step1.active = false;
+              expect(step1.ariaHidden).to.be.eql('true');
+            });
+          });
+
+        });
+
+        suite('resetFollowingSteps', () => {
+          suite('when called with an index', () => {
+
+            test('should call all step reset methods for steps after the index', () => {
+              sinon.spy(step1, 'reset');
+              sinon.spy(step2, 'reset');
+
+              manager.resetFollowingSteps(1);
+
+              expect(step1.reset).not.called;
+              expect(step2.reset).called;
+
+              step1.reset.restore();
+              step2.reset.restore();
+            });
+
+            test('should reset all step properties after the index', () => {
+              manager.initSteps();
+              sinon.spy(manager, '_resetStepProps');
+
+              manager.resetFollowingSteps(1);
+
+              expect(manager._resetStepProps).called;
+              expect(manager._resetStepProps.args).to.have.length(1);
+              expect(manager._resetStepProps.args[0][0]).to.be.eql(step2);
+
+              manager._resetStepProps.restore();
+            });
+
+            test('should not set currentStep to first step', () => {
+              manager.currentStep = 2;
+
+              manager.resetFollowingSteps(2);
+
+              expect(manager.currentStep).to.be.eql(2);
+            });
+
+            test('should dispatch reset-following-steps-finished event', () => {
+              const callback = sinon.spy();
+              manager.initSteps();
+
+              manager.addEventListener('reset-following-steps-finished', callback, { once: true });
+              manager.resetFollowingSteps(1);
+
+              expect(callback).called;
+            });
+          });
+        });
+      });
+
+      suite('methods in general', () => {
+        suite('setSteps', () => {
+
+          test('should enter 1 and 3 if when currentStep is 1', () => {
+            sinon.spy(manager, '_nextStep');
+            manager.currentStep = 1;
+            manager.setSteps();
+            expect(manager._steps[1].collapsed).to.equal(true);
+            expect(manager._steps[1].decorated).to.equal(true);
+            expect(manager._nextStep).called;
+          });
+
+          test('should enter 1 and 2 if when currentStep is 2', () => {
+            sinon.spy(manager, '_nextStep');
+            manager.currentStep = 2;
+            manager.setSteps();
+            expect(manager._steps[2].collapsed).to.equal(true);
+            expect(manager._steps[1].decorated).to.equal(false);
+            expect(manager._nextStep).called;
+          });
+
+          test('should go for the first else and not call _nexStep when currentStep equals zero', () => {
+            sinon.spy(manager, '_nextStep');
+            manager.currentStep = 0;
+            manager.setSteps();
+            expect(manager._nextStep).not.called;
+          });
+
+        });
+
+        suite('__nextStep', () => {
+
+          test('should go for the first if when currenStep is different from maxSteps', () => {
+            sinon.spy(manager, '__gotoNext');
+            manager.lastActiveStep = {currentStep: 2};
+            manager.__nextStep();
+            expect(manager._steps[1].next).to.equal(false);
+            expect(manager._steps[1].previous).to.equal(false);
+            expect(manager.__gotoNext).called;
+
+          });
+
+          test('should go for the first else when currenStep is equal to maxSteps', () => {
+            sinon.spy(manager, '__gotoNext');
+            manager.lastActiveStep = {currentStep: 2};
+            manager.maxSteps = 2;
+            manager.__nextStep();
+            expect(manager._steps[1].next).to.equal(false);
+            expect(manager._steps[1].previous).to.equal(false);
+            expect(manager.__gotoNext).called;
+          });
+
+          test('should go for the second else when the step is not defined', () => {
+            sinon.spy(manager, '__gotoNext');
+            manager._steps = {'undefined-step': 0};
+            manager.__nextStep();
+            expect(manager.__gotoNext).called;
+          });
+
+        });
+
+        suite('getLastActiveStep', () => {
+
+          test('should launch the cells-scroll-zone event and return lastActiveStep.id when it is called', () => {
+            manager.lastActiveStep = {id: 1}
+            sinon.spy(manager, 'dispatchEvent');
+            manager.getLastActiveStep();
+            expect(manager.dispatchEvent).called;
+            expect(manager.dispatchEvent.args[0][0].detail).to.deep.equal({id: 1});
+            expect(manager.dispatchEvent.args[0][0].type).to.equal('cells-scroll-zone');
+            expect(manager.getLastActiveStep()).to.deep.equal(1);
+          });
+
+        });
+
+
+        suite('showSelectedSteps', () => {
+          test('should call _nextStep', () => {
+            manager.maxSteps = 7;
+            manager._steps = mockedSteps;
+            sinon.spy(manager, '_nextStep');
+            manager.showSelectedSteps([0, 1, 2, 3, 4, 5], false);
+            expect(manager._nextStep).called;
+            manager._nextStep.restore();
+          });
+        });
+
+        suite('hideSelectedSteps', () => {
+          test('should call _setMaxSteps', () => {
+            manager.maxSteps = 7;
+            manager._steps = mockedSteps;
+            sinon.spy(manager, '_setMaxSteps');
+            manager.hideSelectedSteps([0, 1, 2, 3, 4, 5]);
+            expect(manager._setMaxSteps).called;
+            manager._setMaxSteps.restore();
+          });
+        });
+
+        suite('getLastStep', () => {
+
+          test('should return to the next step', () => {
+            manager.getLastStep();
+            expect(manager.getLastStep()).to.deep.equal(step2);
+          });
+
+        });
+
+        suite('unregisterSteps', () => {
+
+          test('should change the variable _steps to empty object and call the method _checkRegisteredSteps', () => {
+            sinon.spy(manager, '_checkRegisteredSteps');
+            manager.unregisterSteps();
+            expect(manager._steps).to.be.empty;
+            expect(manager._checkRegisteredSteps).called;
+          });
+
+        });
+
+        suite('resetSteps', () => {
+
+          test('should call the _resetStepProps method when _steps is greater than 1', () => {
+            sinon.spy(manager, '_resetStepProps');
+            manager.resetSteps();
+            expect(manager._resetStepProps).called;
+          });
+
+        });
+
+        suite('_addDecoration', () => {
+
+          test('should call getLastStep and not go into the 2 if.', () => {
+            sinon.spy(manager, 'getLastStep');
+            manager._addDecoration();
+            expect(manager.getLastStep).called;
+
+          });
+
+          test('you should call getLastStep and enter the 2 if , and initialize the lastEdited property', () => {
+            sinon.spy(manager, 'getLastStep');
+            manager._steps[1].active = true;
+            manager._steps[1].collapsed = true;
+            manager._addDecoration();
+            expect(manager.getLastStep).called;
+          });
+
+          suite('when step 1 is collapsed', () => {
+
+            setup(() => {
+              manager.decorateSteps = true;
+              step1.active = true;
+              step1.collapsed = true;
+            });
+
+            test('should decorate step 1', () => {
+              manager._addDecoration();
+
+              expect(step1.decorated).to.be.true;
+            });
+          });
+
+          suite('when step 1 is ghost (skip and hidden)', () => {
+
+            setup(() => {
+              manager.decorateSteps = true;
+              step1.active = true;
+              step1.collapsed = true;
+              step1.isGhost = true;
+            });
+
+            test('should not decorate step 1', () => {
+              manager._addDecoration();
+
+              expect(step1.decorated).to.be.false;
+            });
+          });
+
+        });
+
+        suite('onAnyStepCollapsedChanged', () => {
+
+          test('should launch the event all-steps-collapsed when all steps are not collapsed', () => {
+            sinon.spy(manager, 'dispatchEvent');
+            manager.onAnyStepCollapsedChanged();
+            expect(manager.allStepsCollapsed).to.equal(false);
+            expect(manager.dispatchEvent).called;
+            expect(manager.dispatchEvent.args[0][0].type).to.equal('all-steps-collapsed');
+            expect(manager.dispatchEvent.args[0][0].detail).to.equal(false);
+          });
+
+          test('should launch the events all-steps-collapsed-changed, all-steps-collapsed and cells-all-steps-scroll when all steps are collapsed', () => {
+            sinon.spy(manager, 'dispatchEvent');
+            manager._steps[1].collapsed = true;
+            manager._steps[2].collapsed = true;
+            manager.onAnyStepCollapsedChanged();
+            expect(manager.dispatchEvent).called;
+            expect(manager.dispatchEvent.args[0][0].type).to.equal('all-steps-collapsed-changed');
+            expect(manager.dispatchEvent.args[0][0].detail).to.deep.equal({ value: true, queueProperty: true});
+            expect(manager.dispatchEvent.args[1][0].type).to.equal('all-steps-collapsed');
+            expect(manager.dispatchEvent.args[1][0].detail).to.equal(true);
+            expect(manager.dispatchEvent.args[2][0].type).to.equal('cells-all-steps-scroll');
+            expect(manager.dispatchEvent.args[2][0].detail).to.equal(step1);
+          });
+
+        });
+        suite('_activateSteps', () => {
+
+          setup(() => {
+            sinon.spy(manager, 'getPreviousStep');
+            sinon.spy(manager, 'getNextStep');
+            sinon.spy(manager, '_addDecoration');
+            sinon.spy(manager, 'getLastActiveStep');
+          });
+
+          teardown(() => {
+            manager.getPreviousStep.restore();
+            manager.getNextStep.restore();
+            manager._addDecoration.restore();
+            manager.getLastActiveStep.restore();
+          });
+
+          test('should call getPreviousStep, getNextStep and _addDecoration when the manager has decorateSteps', () => {
+            manager.decorateSteps = true;
+            manager._activateSteps(step1);
+
+            expect(manager.currentStep).to.equal(1);
+            expect(manager.lastActiveStep).to.deep.equal(step1);
+            expect(step2.next).to.equal(true);
+            expect(manager.getPreviousStep).called;
+            expect(manager.getNextStep).called;
+            expect(manager._addDecoration).called;
+          });
+
+          test('should not call _addDecoration when the manager has not decorateSteps', () => {
+            manager.decorateSteps = false;
+            manager._activateSteps(step1);
+
+            expect(manager.currentStep).to.equal(1);
+            expect(manager.lastActiveStep).to.deep.equal(step1);
+            expect(step2.next).to.equal(true);
+            expect(manager.getPreviousStep).called;
+            expect(manager.getNextStep).called;
+            expect(manager._addDecoration).not.called;
+          });
+          test('should call _addDecoration when the manager has decorateSteps and _activateSteps receive an undefined param', () => {
+            manager.decorateSteps = true;
+            manager._activateSteps(undefined);
+
+            expect(manager.getPreviousStep).not.called;
+            expect(manager.getNextStep).not.called;
+            expect(manager._addDecoration).called;
+          });
+
+          test('should animate when first step is fixed', (done) => {
+            manager.decorateSteps = true;
+            step1.fixed = true;
+            manager._activateSteps(step2);
+
+            setTimeout(() => {
+              expect(manager.getLastActiveStep).called;
+              done();
+            }, manager.animationTimeout);
+          });
+        });
+
+        suite('toggleCollapsedView', () => {
+          test('should set canExecute property to false and call _deActivateNextSteps and _toggleCollapsedSteps methods', () => {
+            sinon.spy(manager, '_deActivateNextSteps');
+            sinon.spy(manager, '_toggleCollapsedSteps');
+
+            manager.toggleCollapsedView(1)
+            expect(manager.canExecute).to.be.eql(false);
+            expect(manager._deActivateNextSteps).called;
+            expect(manager._toggleCollapsedSteps).called;
+          });
+        });
+
+        suite('_blockStateSteps', () => {
+          test('should set blocked property to false of all the steps', () => {
+            manager._blockStateSteps(true);
+            expect(manager._steps[1].blocked).to.be.eql(true);
+            expect(manager._steps[2].blocked).to.be.eql(true);
+          });
+        });
+
+        suite('_canExecute', () => {
+          test('should set canExecute property to false', () => {
+            manager._canExecute();
+
+            expect(manager.canExecute).to.be.eql(false);
+          });
+
+          test('should set canExecute property to true and call getLastActiveStep method', () => {
+
+            manager._steps[1].collapsed = true;
+            manager._steps[2].collapsed = true;
+            manager._steps[2].isValid = () => true;
+            manager._steps[1].isValid = () => true;
+            sinon.spy(manager, 'getLastActiveStep');
+
+            manager._canExecute();
+
+            expect(manager.canExecute).to.be.eql(true);
+            expect(manager.currentStep).to.be.eql(null);
+            expect(manager.getLastActiveStep).called;
+          });
+        });
+
+        suite('_manageStateSteps', () => {
+          test('should set decorated property to false of all the steps', () => {
+            manager._manageStateSteps(step1);
+
+            expect(manager._steps[1].decorated).to.be.eql(false);
+            expect(manager._steps[2].decorated).to.be.eql(false);
+          });
+
+          test('should set currentStep to step that has changed its status', () => {
+            manager.currentStep = 3;
+            manager._manageStateSteps(step1);
+
+            expect(manager.currentStep).to.be.eql(1);
+          });
+
+          test('should not set currentStep if _manageStateStep has no params', () => {
+            manager.currentStep = 3;
+            manager._manageStateSteps();
+
+            expect(manager.currentStep).to.be.eql(3);
+          });
+
+
+        });
+
+        suite('resetCustomStepInit', () => {
+          test('Should reset customStepsInit and set customStepsInitNeeded to false', () => {
+            manager.stepsInit = {
+              1: {
+                active: true
+              },
+              default: {
+                collapsed: true
+              }
+            };
+
+            manager.resetCustomStepInit();
+
+            expect(manager.customStepsInit).to.be.eql({
+              1: {
+                active: true
+              },
+              default: {
+                collapsed: true
+              }
+            });
+            expect(manager.customStepsInitNeeded).to.be.false;
+          });
+        });
+      });
+
+      suite('to go to next step, one must set current step to collapsed and implement isValid', () => {
+        // this is needed because if current step collapsed value is not set to true, _nextStep does not go to next step
+        suite('after setting collapsed', () => {
+          setup(() => {
+            step1.collapsed = true;
+          });
+
+          suite('and current step is valid, when doing next step', () => {
+
+            setup(() => {
+              step1.isValid = () => true;
+              manager.__nextStep();
+            });
+
+            test('current step should be 2', () => {
+              expect(manager.currentStep).to.be.eql(2);
+            });
+
+            test('step1 should be active, collapsed and previous', () => {
+              expect(step1.active).to.be.true;
+              expect(step1.collapsed).to.be.true;
+              expect(step1.previous).to.be.true;
+            });
+
+            test('step2 should be active', () => {
+              expect(step2.active).to.be.true;
+            });
+
+          });
+        });
+      });
+
+      suite('when calling setFixed in a step', () => {
+        test('should set step as fixed', () => {
+          step1.setFixed();
+
+          expect(step1.fixed).to.be.true;
+        });
+      });
+
+      suite('when calling scrollComplete', () => {
+        test('should set step as active', () => {
+          step1.active = false;
+          step1.scrollComplete(step1);
+
+          step1.async(() => {
+              expect(step1.active).to.be.true;
+          }, step1.activeDelay);
+        });
+      });
+    });
+
+  </script>
+
+</body>
+
+</html>

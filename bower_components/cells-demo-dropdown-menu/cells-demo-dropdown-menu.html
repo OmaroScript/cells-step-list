@@ -1,0 +1,57 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../cells-demos-ui/cells-demos-ui.html">
+<link rel="import" href="../cells-demos-ui/icons.html">
+<link rel="import" href="../cells-dropdown-menu/cells-dropdown-menu.html">
+<link rel="import" href="cells-demo-dropdown-menu-styles.html">
+<!--
+`<cells-demo-dropdown-menu>` applies Cells Platform styles to [cells-dropdown-menu](https://globaldevtools.bbva.com/bitbucket/projects/BGCM/repos/cells-dropdown-menu/browse). The component can be considered as a style wrapper.
+
+__Note:__ [cells-demos-ui](https://globaldevtools.bbva.com/bitbucket/projects/CEL/repos/cells-demos-ui/browse) is included in the component as own dependency (not as devDependency) because the component is meant to be used in _cells-demo-*_ components instead of applications.
+
+Example:
+
+```html
+<cells-demo-dropdown-menu
+  selected="{{selected}}"
+  label="Some label"
+  items='[{
+    "name": "Item one",
+    "value": "item-one"
+  }, {
+    "name": "Item two",
+    "value": "item-two"
+  }, {
+    "name": "Item three",
+    "value": "item-three"
+  }]'>
+</cells-demo-dropdown-menu>
+```
+
+## Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+:--- | :--- | :---
+--cells-demo-dropdown-menu | Mixin applied to :host | {}
+--cells-demo-dropdown-menu-dropdown | Mixin applied to dropdown | {}
+--cells-demo-dropdown-menu-label | Mixin applied to label | {}
+--cells-demo-menu-control-green | color for check icon | #1DFD92
+
+-->
+<dom-module id="cells-demo-dropdown-menu">
+  <template>
+    <style include="cells-demo-dropdown-menu-styles cells-demo-dropdown-menu-shared-styles"></style>
+
+    <div class="label" id="label-[[_uniqueID]]">[[label]]</div>
+    <cells-dropdown-menu class="dropdown"
+      aria-labelledby$="label-[[_uniqueID]]"
+      items="[[items]]"
+      selected="{{selected}}"
+      icon-check="[[iconCheck]]"
+      icon-open="[[iconOpen]]">
+      <slot></slot>
+    </cells-dropdown-menu>
+  </template>
+  <script src="cells-demo-dropdown-menu.js"></script>
+</dom-module>

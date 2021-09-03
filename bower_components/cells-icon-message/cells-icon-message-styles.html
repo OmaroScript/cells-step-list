@@ -1,0 +1,307 @@
+<dom-module id="cells-icon-message-styles"><template><style>
+:host {
+  --icon-margin: var(--cells-icon-message-icon-margin, 1rem);
+  --header-margin: var(--cells-icon-message-header-margin, 0.5rem);
+  --header-font: var(--cells-icon-message-header-font, 1rem);
+  --strong-font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: var(--cells-icon-message-text-align, center);
+  box-sizing: border-box;
+  font-family: var(--cells-fontDefault, sans-serif);
+  font-size: var(--cells-text-size-icon-message, var(--cells-text-size-ml, 0.9375rem));
+  line-height: 1.6;
+  color: var(--cells-icon-message-color-theme, var(--cells-icon-message-color, #121212));
+  --cells-st-button-text-color-link: var(--bbva-white-core-blue, #1464A5);
+  --cells-st-link-color: var(--bbva-white-core-blue, #1464A5);
+  --cells-st-button-text-color-transparent: var(--bbva-white-core-blue, #1464A5);
+  padding: 2rem 1rem 1.5rem;
+  @apply --cells-icon-message;
+}
+
+:host([hidden]), [hidden] {
+  display: none !important;
+}
+
+:host([type=info]) {
+  background-color: var(--cells-icon-message-background-color-info, #D4EDFC);
+  @apply --cells-icon-message-info;
+}
+
+:host([type=info-dark]) {
+  background-color: var(--cells-icon-message-background-color-info-dark, #D4EDFC);
+  @apply --cells-icon-message-info-dark;
+}
+
+:host([type=warning]) {
+  background-color: var(--cells-icon-message-background-color-warning, var(--bbva-white-gold, #F3EBD5));
+  @apply --cells-icon-message-warning;
+}
+
+:host([type=error]) {
+  background-color: var(--cells-icon-message-background-color-error, var(--bbva-white-coral, #FCDFDF));
+  @apply --cells-icon-message-error;
+}
+
+:host([type=success]) {
+  background-color: var(--cells-icon-message-background-color-success, #daefe0);
+  @apply --cells-icon-message-success;
+}
+
+:host(.inline) {
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0;
+  background-color: transparent;
+  @apply --cells-icon-message-inline;
+}
+
+:host(.inline[type=info]) {
+  @apply --cells-icon-message-inline-info;
+}
+
+:host(.inline[type=info-dark]) {
+  @apply --cells-icon-message-inline-info-dark;
+}
+
+:host(.inline[type=warning]) {
+  @apply --cells-icon-message-inline-warning;
+}
+
+:host(.inline[type=error]) {
+  @apply --cells-icon-message-inline-error;
+}
+
+:host(.inline[type=success]) {
+  @apply --cells-icon-message-inline-success;
+}
+
+:host(.in-page) {
+  margin-left: var(--cells-icon-message-in-page-margin-left, 1rem);
+  margin-right: var(--cells-icon-message-in-page-margin-right, 1rem);
+  @apply --cells-icon-message-in-page;
+}
+
+:host(.same-padding) {
+  padding: var(--cells-icon-message-same-padding, 2rem 1rem);
+}
+
+:host(.margin-bottom-xl) {
+  margin-bottom: var(--cells-icon-message-margin-bottom-xl, 2.5625rem);
+}
+
+.icon {
+  flex: 0 0 auto;
+  --iron-icon-fill-color: var(--cells-icon-message-icon-color-theme, var(--cells-icon-message-icon-color, inherit));
+  margin-bottom: var(--icon-margin);
+  @apply --cells-icon-message-icon;
+}
+:host(.inline) .icon {
+  margin-bottom: 0;
+  margin-right: calc(var(--icon-margin) / 2);
+  --iron-icon-fill-color: var(--cells-icon-message-icon-color-theme, var(--cells-icon-message-icon-color, inherit));
+  @apply --cells-icon-message-icon-inline;
+}
+:host([type=info]) .icon {
+  --cells-icon-message-icon-color-theme: var(--cells-icon-message-icon-color-info, #5BBEFF);
+  color: var(--bbva-light-blue, #5BBEFF);
+  width: var(--cells-icon-message-info-width, 1.5rem);
+  height: var(--cells-icon-message-info-height, 1.5rem);
+  @apply --cells-icon-message-icon-info;
+}
+:host([type=info-dark]) .icon {
+  --cells-icon-message-icon-color-theme: var(--cells-icon-message-icon-color-info-dark, #072146);
+  color: var(--bbva-dark-blue, #072146);
+  width: var(--cells-icon-message-info-dark-width, 1.5rem);
+  height: var(--cells-icon-message-info-dark-height, 1.5rem);
+  @apply --cells-icon-message-icon-info-dark;
+}
+:host([type=warning]) .icon {
+  --cells-icon-message-icon-color-theme: var(--cells-icon-message-icon-color-warning, var(--bbva-gold, #D8BE75));
+  width: var(--cells-icon-message-warning-width, 1.5rem);
+  height: var(--cells-icon-message-warning-height, 1.5rem);
+  @apply --cells-icon-message-icon-warning;
+}
+:host([type=error]) .icon {
+  --cells-icon-message-icon-color-theme: var(--cells-icon-message-icon-color-error, var(--bbva-dark-red, #b92a45));
+  width: var(--cells-icon-message-error-width, 1.5rem);
+  height: var(--cells-icon-message-error-height, 1.5rem);
+  @apply --cells-icon-message-icon-error;
+}
+:host([type=success]) .icon {
+  --cells-icon-message-icon-color-theme: var(--cells-icon-message-icon-color-success, #48ae64);
+  width: var(--cells-icon-message-success-width, 1.5rem);
+  height: var(--cells-icon-message-success-height, 1.5rem);
+  @apply --cells-icon-message-icon-success;
+}
+
+.message {
+  @apply --cells-icon-message-message;
+}
+.message strong {
+  font-weight: var(--strong-font-weight);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply --cells-icon-message-message-strong;
+}
+
+.messages-list {
+  line-height: var(--cells-icon-message-messages-list-line-height, 1.5rem);
+  padding-top: var(--cells-icon-message-messages-list-padding-top, 0);
+  @apply --cells-icon-message-messages-list;
+}
+
+.header {
+  margin-bottom: var(--header-margin);
+  font-size: var(--header-font);
+  @apply --cells-icon-message-header;
+}
+.header strong {
+  font-weight: var(--strong-font-weight);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply --cells-icon-message-header-strong;
+}
+
+::slotted(.heading) {
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0;
+}
+
+::slotted(p) {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+
+::slotted([slot=actions]) {
+  margin: 1rem 0;
+}
+
+:host(.help), :host(.message-input) {
+  --cells-text-size-icon-message: var(--cells-text-size-xs, var(--cells-text-size-12, 0.75rem));
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  background-color: transparent;
+  line-height: 1rem;
+  padding: 0.5rem 1rem;
+}
+:host(.help) .icon, :host(.message-input) .icon {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.25rem 0 0;
+  @apply --cells-icon-message-input-icon;
+}
+
+:host(.custom-message-input) {
+  font-size: 0.875rem;
+  background-color: var(--bbva-200, #e9e9e9);
+  padding: 0.9375rem 0 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  line-height: 1rem;
+  @apply --cells-icon-message-input-customized;
+}
+:host(.custom-message-input) .icon {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.625rem 0 0;
+  @apply --cells-icon-custom-message-input-icon;
+}
+
+:host(.help) .icon {
+  margin: 0 0.5rem 0 0;
+}
+
+:host(.on-dark) {
+  --cells-icon-message-color-theme: var(--bbva-white, #fff);
+}
+:host(.on-dark) .icon {
+  --cells-icon-message-icon-color-theme: var(--bbva-white, #fff);
+}
+:host(.on-dark) .message {
+  --cells-icon-message-icon-color-theme: var(--bbva-white, #fff);
+  color: var(--bbva-white, #fff);
+}
+
+:host(.h-gutter) {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  @apply --cells-icon-message-h-gutter;
+}
+
+:host(.h-gutter-top) {
+  margin: 1.5rem 1rem 0 1rem;
+  @apply --cells-icon-message-h-gutter-top-margin;
+}
+
+:host(.h-gutter-clean) {
+  padding-left: 0;
+  margin-right: 0;
+}
+
+:host(.no-padding) {
+  padding: 0;
+}
+
+:host(.margin-top-xxxxl) {
+  margin-top: var(--cells-icon-message-margin-top-xxxxl-margin-top, 1.5rem);
+  @apply --cells-icon-message-margin-top-xxxxl;
+}
+
+:host(.flex-message) {
+  display: var(--cells-icon-message-flex-display, inline);
+  @apply --cells-icon-message-flex;
+}
+:host(.flex-message) .icon {
+  margin: var(--cells-icon-message-flex-icon-margin, -0.1rem 0.25rem 0 0);
+  width: var(--cells-icon-message-flex-icon-width, 1rem);
+  height: var(--cells-icon-message-flex-icon-height, 1rem);
+  display: var(--cells-icon-message-flex-icon-display, inline-flex);
+}
+
+:host(.no-background-color) {
+  --cells-icon-message-background-color-info: #FFF;
+  --cells-icon-message-background-color-warning: #FFF;
+  --cells-icon-message-background-color-error: #FFF;
+  --cells-icon-message-background-color-success: #FFF;
+}
+
+:host(.no-paragraph-margin) {
+  @apply --cells-icon-message-no-paragraph-margin;
+}
+:host(.no-paragraph-margin) ::slotted(p) {
+  margin: var(--cells-icon-message-slotted-p-no-paragraph-margin, 0 0);
+}
+
+:host(.terms-and-conditions) .icon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+:host(.dark-medium-blue-icon) .icon {
+  --cells-icon-message-icon-color-theme: var(--bbva-dark-medium-blue, #1973b8);
+}
+
+:host(.help-message) {
+  --cells-text-size-icon-message: var(--cells-text-size-xs, var(--cells-text-size-12, 0.75rem));
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  background-color: transparent;
+  line-height: 1rem;
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  @apply --cells-icon-message-help-message;
+}
+:host(.help-message) .icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0 0.25rem 0 0;
+  --cells-icon-message-icon-color-theme: var(--bbva-dark-core-blue, #043263);
+  @apply --cells-icon-message-help-message-icon;
+}
+</style></template></dom-module>

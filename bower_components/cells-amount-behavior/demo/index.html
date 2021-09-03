@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>Demo cells-amount-behavior</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    window.I18nMsg = window.I18nMsg || {};
+    window.I18nMsg.url = '../locales';
+  </script>
+  <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+  <link rel="lazy-import" href="../../polymer/lib/elements/dom-bind.html">
+  <link rel="lazy-import" href="../../cells-select/cells-select.html">
+  <link rel="lazy-import" href="../../coronita-icons/coronita-icons.html">
+  <link rel="lazy-import" href="../../cells-molecule-input/cells-molecule-input.html">
+  <link rel="lazy-import" href="x-cells-amount-behavior-demo.html">
+  <link rel="lazy-import" href="css/demo-styles.html">
+</head>
+
+<body unresolved ontouchstart style="margin: 0;">
+  <cells-demo-helper resolution="mobile" available-themes='["cells-coronita-base-theme"]' events='["selected-option-changed"]'>
+    <cells-demo-case heading="Default">
+      <template>
+        <dom-bind>
+          <template>
+            <div class="demo-content">
+              <p>Document language (changes separators and decimal separator of number): </p>
+              <cells-select id="language" label="Language" right-icon="coronita:unfold" placeholder="Select a language"
+                options="[[optionsLanguage]]"></cells-select>
+              <p>
+                <cells-molecule-input type="text" label="Amount" auto-validate prevent-invalid-input error-icon="coronita:alert"
+                  allowed-value="^[0-9]+[\.][0-9]+" allowed-chars="[0-9\.]" value="{{amount}}"></cells-molecule-input>
+              </p>
+              <p>
+                <cells-molecule-input type="text" label="Amount with format" value="[[integerParsed]][[separator]][[fractionalParsed]]"></cells-molecule-input>
+              </p>
+            </div>
+
+            <br>
+            <div class="demo-content">
+              <cells-select id="currency" label="Currency" right-icon="coronita:unfold" placeholder="Select a currency"
+                options="[[optionsCurrency]]"></cells-select>
+              <p>Currency: <span class="explanation"> [[keyTranslation]]</span></p>
+            </div>
+            <br>
+            <div class="demo-content">
+              <cells-select id="localCurrency" label="Local currency" right-icon="coronita:unfold" placeholder="Select a currency"
+                options="[[optionsCurrency]]"></cells-select>
+              <p>Currency symbol: <span class="explanation"> [[currencyParsedAsSymbol]]</span></p>
+            </div>
+
+            <x-cells-amount-behavior-demo id="XCellsAmountBehavior" amount="[[amount]]" integer-parsed="{{integerParsed}}"
+              fractional-parsed="{{fractionalParsed}}" separator="{{separator}}" currency="{{currency}}"
+              key-translation="{{keyTranslation}}" currency-parsed-as-symbol="{{currencyParsedAsSymbol}}">
+            </x-cells-amount-behavior-demo>
+
+          </template>
+        </dom-bind>
+        <script>
+          document.addEventListener('WebComponentsReady', () => {
+            let demo = document.querySelector('dom-bind');
+
+            demo.$.language.addEventListener('selected-option-changed', (e) => {
+              document.documentElement.lang = e.detail.value.label;
+              let amount = demo.amount;
+              demo.amount = '';
+              demo.amount = amount;
+            });
+
+            demo.$.currency.addEventListener('selected-option-changed', (e) => {
+              demo.$.XCellsAmountBehavior.currency = e.detail.value.label;
+            });
+
+            demo.$.localCurrency.addEventListener('selected-option-changed', (e) => {
+              demo.$.XCellsAmountBehavior.localCurrency = e.detail.value.label;
+            });
+
+            demo.optionsLanguage = [
+              { label: 'es' },
+              { label: 'es-ar' },
+              { label: 'es-US' },
+              { label: 'es-ES' },
+              { label: 'en' },
+              { label: 'en-US' }
+            ];
+
+            demo.optionsCurrency = [
+              { label: 'EUR', value: 'España' },
+              { label: 'MXN', value: 'México' },
+              { label: 'PEN', value: 'Peru' },
+              { label: 'USD', value: 'USA' },
+              { label: 'ARS', value: 'ARS' }
+            ];
+
+            demo.$.language.selected = 0;
+            demo.$.currency.selected = 0;
+            demo.$.localCurrency.selected = 0;
+          });
+        </script>
+      </template>
+    </cells-demo-case>
+  </cells-demo-helper>
+</body>
+
+</html>

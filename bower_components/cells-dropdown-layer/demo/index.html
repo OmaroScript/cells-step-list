@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>Demo cells-dropdown-layer</title>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    window.I18nMsg = window.I18nMsg || {};
+    window.I18nMsg.disabled = true;
+  </script>
+
+  <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+  <link rel="lazy-import" href="../../coronita-icons/coronita-icons.html">
+  <link rel="lazy-import" href="../cells-dropdown-layer.html">
+  <link rel="lazy-import" href="css/demo-styles.html">
+</head>
+
+<body unresolved ontouchstart style="margin: 0;">
+  <cells-demo-helper selected="0" resolution="mobile">
+
+    <cells-demo-case heading="Basic cases">
+      <template>
+        <div class="box">
+          <cells-dropdown-layer label="Default">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="Label text" prefix="Prefix text:">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="The dropdown gets min-width equal to control width">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="Short label, long content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero. Quisque porttitor
+              lobortis sapien</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero. Quisque porttitor
+              lobortis sapien</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Layer opens to available space">
+      <template>
+        <custom-style>
+          <style>
+            .box {
+              position: fixed;
+              z-index: 2;
+            }
+
+            .box1 {
+              top: 1rem;
+              left: 1rem;
+            }
+
+            .box2 {
+              top: 1rem;
+              right: 1rem;
+            }
+
+            .box3 {
+              bottom: 1rem;
+              left: 1rem;
+            }
+
+            .box4 {
+              bottom: 1rem;
+              right: 1rem;
+            }
+          </style>
+        </custom-style>
+
+        <div class="box box1">
+          <cells-dropdown-layer label="Top left">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box box2">
+          <cells-dropdown-layer label="Top right">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box box3">
+          <cells-dropdown-layer label="Bottom left">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box box4">
+          <cells-dropdown-layer label="Bottom right">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Forced widths and heights">
+      <template>
+        <custom-style>
+          <style>
+            .layer1 {
+              --cells-dropdown-layer-layer-max-width: 200px;
+            }
+
+            .layer2 {
+              --cells-dropdown-layer-layer-min-width: 300px;
+            }
+
+            .layer3 {
+              --cells-dropdown-layer-layer-max-height: 100px;
+            }
+
+            .layer4 {
+              --cells-dropdown-layer-layer-min-height: 300px;
+            }
+          </style>
+        </custom-style>
+
+        <div class="box">
+          <cells-dropdown-layer class="layer1" label="With max width 200">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero. Quisque porttitor
+              lobortis sapien</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer class="layer2" label="With a min-width of 300">
+            <p>Lorem</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer class="layer3" label="With max height 100">
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer class="layer4" label="With a min-height of 300">
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Force opening directions">
+      <template>
+        <custom-style>
+          <style>
+            .container {
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+          </style>
+        </custom-style>
+
+        <div class="container">
+          <div class="box">
+            <cells-dropdown-layer label="Top-bottom left-right" opening-x="left-to-right" opening-y="top-to-bottom">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+
+          <div class="box">
+            <cells-dropdown-layer label="Top-bottom right-left" opening-x="right-to-left" opening-y="top-to-bottom">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+
+          <div class="box">
+            <cells-dropdown-layer label="Top-bottom centered" opening-x="centered" opening-y="top-to-bottom">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+
+          <div class="box">
+            <cells-dropdown-layer label="Bottom-top left-right" opening-x="left-to-right" opening-y="bottom-to-top">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+
+          <div class="box">
+            <cells-dropdown-layer label="Bottom-top right-left" opening-x="right-to-left" opening-y="bottom-to-top">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+
+          <div class="box">
+            <cells-dropdown-layer label="Bottom-top centered" opening-x="centered" opening-y="bottom-to-top">
+              <p>Lorem ipsum dolor sit amet</p>
+            </cells-dropdown-layer>
+          </div>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With error and disabled">
+      <template>
+        <div class="box">
+          <cells-dropdown-layer label="Disabled dropdown" disabled>
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="With error" error="This has an error">
+            <p>With error</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With icon and small">
+      <template>
+        <div class="box">
+          <cells-dropdown-layer label="With icon and text" icon="coronita:creditcard">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer class="icon-only" label="Icon only" icon="coronita:creditcard">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="Small control" class="small">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+
+        <div class="box">
+          <cells-dropdown-layer label="Small control with icon" class="small icon-only" icon="coronita:creditcard">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With dark class on dark background">
+      <template>
+        <custom-style>
+          <style>
+            #iframeBody {
+              background-color: #1F2532;
+            }
+          </style>
+        </custom-style>
+
+        <div class="box">
+          <cells-dropdown-layer label="With dark class" class="dark">
+            <p>Content</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Without safe margin">
+      <template>
+        <custom-style>
+          <style>
+            .box {
+              display: flex;
+              justify-content: center;
+            }
+          </style>
+        </custom-style>
+
+        <div class="box">
+          <cells-dropdown-layer label="Without safe margin" safe-margin="0" opening-x="centered">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero. Quisque
+              porttitor
+              lobortis sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero.
+              Quisque porttitor
+              lobortis sapien.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero. Quisque
+              porttitor
+              lobortis sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla maximus rutrum libero.
+              Quisque porttitor
+              lobortis sapien.</p>
+          </cells-dropdown-layer>
+        </div>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With coronita look and feel">
+        <template>
+          <div class="box">
+            <cells-dropdown-layer label="company" class="coronita" icon="coronita:unfold">
+              <p>Content</p>
+            </cells-dropdown-layer>
+          </div>
+
+        </template>
+      </cells-demo-case>
+      <cells-demo-case heading="menu coronita look and feel">
+          <template>
+            <div class="box" style="text-align: center;">
+              <cells-dropdown-layer label="" class="coronita icon-only menu"  opening-x="right-to-left" opening-y="top-to-bottom"icon="coronita:configuration">
+                <p>Content</p>
+              </cells-dropdown-layer>
+            </div>
+
+          </template>
+        </cells-demo-case>
+
+  </cells-demo-helper>
+</body>
+
+</html>

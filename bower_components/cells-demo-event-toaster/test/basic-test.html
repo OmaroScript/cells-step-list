@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../cells-demo-event-toaster.html">
+  </head>
+  <body>
+
+    <test-fixture id="default">
+      <template>
+        <cells-demo-event-toaster></cells-demo-event-toaster>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="multiple">
+      <template>
+        <cells-demo-event-toaster multiple events='["a", "b"]'></cells-demo-event-toaster>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="verticalAlign">
+      <template>
+        <cells-demo-event-toaster vertical-align="top"></cells-demo-event-toaster>
+      </template>
+    </test-fixture>
+
+    <script>
+    suite('<cells-demo-event-toaster> tag', () => {
+      var myEl;
+
+      setup(() => {
+        myEl = fixture('default');
+      });
+
+      test('sets an event listener to window for each event in events Array property', () => {
+        var listenStub = sinon.spy(window, 'addEventListener');
+        myEl.events = ['uno', 'dos', 'tres'];
+        myEl.events.forEach((event, index) => {
+          assert.isTrue(listenStub.getCall(index).args[0] === event, 'event is added to window');
+        });
+      });
+
+      test('duration property sets duration to toast', () => {
+        myEl.duration = 1000;
+        assert.equal(myEl.$.toast.duration, myEl.duration, 'duration property is properly binded');
+      });
+
+      test('when an event of events Array is fired, the toast is opened and refit', () => {
+        myEl.events = ['uno'];
+        var openToastStub = sinon.stub(myEl.$.toast, 'open');
+        var refitToastStub = sinon.stub(myEl.$.toast, 'refit');
+        window.dispatchEvent(new CustomEvent('uno'));
+        assert.isTrue(openToastStub.called);
+        assert.isTrue(refitToastStub.called);
+      });
+
+      test('opened toast is cancelled if a new event is fired while the toast is visible', () => {
+        myEl.events = ['cuatro', 'cinco'];
+        var cancelToastStub = sinon.stub(myEl.$.toast, 'cancel');
+        window.dispatchEvent(new CustomEvent('cuatro'));
+        window.dispatchEvent(new CustomEvent('cinco'));
+        assert.isTrue(cancelToastStub.called);
+      });
+
+      test('toast is closed after clicking on it', () => {
+        var closeToastStub = sinon.stub(myEl.$.toast, 'close');
+        myEl.$.toast.click();
+        assert.isTrue(closeToastStub.called);
+      });
+
+      test('toast text contains the event.type', done => {
+        myEl.events = ['uno'];
+        flush(() => {
+          var toastText = myEl.shadowRoot.querySelector('.highlight');
+          window.dispatchEvent(new CustomEvent('uno'));
+          assert.equal(toastText.innerHTML, myEl.events[0]);
+          done();
+        });
+      });
+
+      test('toast text contains the event payload if the event has detail', done => {
+        myEl.events = ['uno'];
+        window.dispatchEvent(new CustomEvent('uno', { detail: 'something' }));
+        flush(() => {
+          var toastTextPayload = myEl.shadowRoot.querySelectorAll('.highlight')[1];
+          assert.equal(toastTextPayload.innerHTML, '"something"');
+          done();
+        });
+      });
+
+      test('toast text does not contain the event payload if the event detail is empty', done => {
+        myEl.events = ['uno'];
+        window.dispatchEvent(new CustomEvent('uno', { detail: {} }));
+        flush(() => {
+          var toastTextPayload = myEl.shadowRoot.querySelectorAll('.highlight')[1];
+          assert.equal(toastTextPayload, undefined, 'payload text is not rendered');
+          done();
+        });
+      });
+
+      test('toast text contains the nodeName if the event detail is a reference to a HTMLElement', done => {
+        myEl.events = ['uno'];
+        var htmlNode = document.createElement('section');
+        window.dispatchEvent(new CustomEvent('uno', { detail: htmlNode }));
+        flush(() => {
+          var toastTextPayload = myEl.shadowRoot.querySelectorAll('.highlight')[1];
+          assert.equal(toastTextPayload.innerHTML, '[HTMLElement] ' + htmlNode.nodeName + ' (more info in console)');
+          done();
+        });
+      });
+
+      test('console.info() is called if the event detail is a reference to a HTMLElement', done => {
+        myEl.events = ['uno'];
+        var consoleInfoStub = sinon.stub(window.console, 'info');
+        var htmlNode = document.createElement('section');
+        window.dispatchEvent(new CustomEvent('uno', { detail: htmlNode }));
+        flush(() => {
+          assert.equal(consoleInfoStub.getCall(0).args[0], '[cells-demo-event-toaster]: Payload of uno', 'console.info is called and contains event.type and event.detail');
+          done();
+        });
+      });
+    });
+
+    suite('<cells-demo-event-toaster multiple>', () => {
+      var el;
+
+      setup(() => {
+        el = fixture('multiple');
+        el.duration = 10;
+      });
+
+      test('toast duration is set to 0 (infinite)', () => {
+        assert.equal(el.$.toast.duration, 0);
+      });
+
+      test('when window fires multiple listened events, multiple toasts are shown', done => {
+        window.dispatchEvent(new CustomEvent('a'));
+        window.dispatchEvent(new CustomEvent('b'));
+
+        flush(() => {
+          var innerToasts = el.shadowRoot.querySelectorAll('.inner-toast');
+          [].forEach.call(innerToasts, (toast) => {
+            // selecting [visible] does not work
+            assert.isAbove(window.getComputedStyle(toast).order, 0, 'order has been set (is above 0), so toast has been shown');
+          });
+          done();
+        });
+      });
+
+      test('internal toast is hidden after a timeout equal to duration property', done => {
+        window.dispatchEvent(new CustomEvent('a'));
+        setTimeout(() => {
+          var innerToast = el.shadowRoot.querySelector('.inner-toast');
+          assert.isFalse(el.$.items.items[0].opened);
+          done();
+        }, 20);
+      });
+    });
+
+    suite('custom vertical align', () => {
+      var el;
+
+      setup(() => {
+        el = fixture('verticalAlign');
+      });
+
+      test('setting "vertical-align" sets "vertical-align" on <paper-toast>', () => {
+        var paperToast = el.$.toast;
+        assert.equal(paperToast.verticalAlign, el.verticalAlign, 'verticalAlign property is properly binded to <paper-toast>');
+      });
+    });
+    </script>
+  </body>
+</html>

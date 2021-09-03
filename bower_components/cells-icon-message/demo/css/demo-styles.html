@@ -1,0 +1,159 @@
+<custom-style>
+  <style is="custom-style">
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      --paper-dropdown-menu-focus-color: var(--bbva-core-blue, #004481);
+    }
+
+    paper-dropdown-menu-light {
+      width: calc(100% - 60px);
+      margin: 30px 30px 15px;
+
+      --paper-dropdown-menu-button: {
+        padding: 0 0.5rem;
+        height: 60px;
+        background-color: #fff;
+        background-color: #F4F4F4;
+      }
+      ;
+      --paper-dropdown-menu-input: {
+        border-bottom: 0;
+      }
+      ;
+      --paper-input-container-label: {
+        padding: .5rem 0.5rem;
+        color: #666;
+      }
+      ;
+      --paper-input-container-label-focus: {
+        color: #666;
+      }
+      ;
+      --paper-input-container-input: {
+        color: #121212;
+      }
+      ;
+      --paper-input-container-underline: {
+        display: none;
+      }
+      ;
+      --paper-input-container-underline-focus: {
+        display: none;
+      }
+      ;
+    }
+
+    paper-listbox {
+      box-shadow: none;
+      --paper-listbox: {
+        background-color: #F4F4F4;
+      }
+      ;
+    }
+
+    cells-demo-helper {
+      --cells-demo-helper-code-pre: {
+        white-space: pre;
+      };
+    }
+
+    cells-icon-message :not(.in-page) {
+      margin: 30px;
+      --cells-icon-message-input-customized: {
+        background-color: trasparent;
+      }
+    }
+
+    .double-btn-group {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-justify-content: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      margin-bottom: -10px;
+      margin-left: -6px;
+      margin-right: -6px;
+    }
+
+    .double-btn-group .btn {
+      margin: 0 6px 10px;
+      -webkit-flex: 1 0 auto;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      max-width: 234px;
+    }
+
+    .double-btn-group .btn>button {
+      min-width: 0;
+      width: 100%;
+    }
+
+
+    /**
+     * demo wrappers
+     */
+
+    .dark-bg {
+      padding: 15px 0;
+      background-color: #072146;
+    }
+
+    /**
+     * iframe > body customization for demo cases
+     */
+
+    .with-title-and-custom-content,
+    .with-buttons {
+      background-color: #F4F4F4;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+
+    .with-title-and-custom-content cells-icon-message,
+    .with-buttons cells-icon-message {
+      margin: 15px 15px 30px;
+    }
+
+    /**
+     * Classes applied to demo element <cells-icon-message>
+     */
+
+    .white-background {
+      background-color: #fff;
+    }
+
+    /**
+     * Theme customizations
+     */
+    .cells-coronita-base-theme {
+      --cells-fontDefault: Benton Sans, sans-serif;
+    }
+    .cells-banking-theme .dark-bg { display: none; }
+
+    .cells-banking-theme.inline cells-icon-message {
+      margin-top: 15px;
+    }
+
+    .cells-banking-theme cells-icon-message .heading {
+      font-family: var(--cells-fontSecondary);
+      font-weight: 300;
+      font-size: 1.125rem;
+      color: #212121;
+    }
+
+    .cells-banking-theme.with-buttons cells-icon-message[type="success"] .heading,
+    .cells-banking-theme.with-buttons cells-icon-message[type="error"] .heading {
+      color: inherit;
+    }
+  </style>
+</custom-style>

@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="x-cells-amount-behavior-test.html">
+</head>
+
+<body>
+
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="default">
+    <template>
+      <x-cells-amount-behavior-test></x-cells-amount-behavior-test>
+    </template>
+  </test-fixture>
+
+  <script>
+    /* eslint-disable---- */
+    suite('CellsBehaviors.AmountsBehavior tag', () => {
+      let el;
+
+      setup(() => {
+        el = fixture('default');
+      });
+
+      suite('general', () => {
+        test('should have a "_getTranslationKeyForCurrency" function', () => {
+          expect(el).to.be.have.a.property('_getTranslationKeyForCurrency');
+          expect(el._getTranslationKeyForCurrency).to.be.a('Function');
+        });
+        test('"_getTranslationKeyForCurrency" is nearly an echo', () => {
+          expect(el._getTranslationKeyForCurrency('EUR')).to.be.equal('cells-amount-behavior-currency-EUR')
+        });
+      });
+
+      suite('hasMinusAfterSymbol method', () => {
+        test('should return true', () => {
+          let returned = el._hasMinusAfterSymbol('MXN');
+          let returned2 = el._hasMinusAfterSymbol('CLP');
+          expect(returned).to.be.true;
+          expect(returned2).to.be.true;
+        });
+
+        test('should return false', () => {
+          let returned = el._hasMinusAfterSymbol('USD');
+          expect(returned).to.be.false;
+        });
+      });
+
+      suite('isNegative method', () => {
+        test('should return true', () => {
+          let returned = el._isNegative(-1);
+          let returned2 = el._isNegative(-0.4);
+          expect(returned).to.be.true;
+          expect(returned2).to.be.true;
+        });
+
+        test('should return false', () => {
+          let returned = el._isNegative(0);
+          expect(returned).to.be.false;
+        });
+      });
+
+      suite('isRightAligned', () => {
+        test('should return true', () => {
+          let returned = el._isRightAligned('EUR', true);
+          expect(returned).to.be.true;
+        });
+        test('should return true', () => {
+          let returned = el._isRightAligned('USD', false);
+          expect(returned).to.be.false;
+        })
+      });
+
+      suite('getCurrencyAsSymbol method', () => {
+        test('localCurrency not found, returns value found in "default"', () => {
+          let returned = el._getCurrencyAsSymbol('', 'USD');
+          expect(returned).to.be.equal('US$');
+        });
+
+        test('localCurrency found, has own way of representing currencyLiteral', () => {
+          let returned = el._getCurrencyAsSymbol('USD', 'USD');
+          expect(returned).to.be.equal('$');
+        });
+
+        test('localCurrency found, does not have own way of representing currencyLiteral, returns value found in default', () => {
+          let returned = el._getCurrencyAsSymbol('MXN', 'USD');
+          expect(returned).to.be.equal('US$');
+        });
+
+        test('localCurrency not found, currencyLiteral not found in default either, return currencyLiteral', () => {
+          let returned = el._getCurrencyAsSymbol('WOOT', 'WAAT');
+          expect(returned).to.be.equal('WAAT');
+        });
+      });
+
+      suite('_startsWith method', () => {
+        test('should return false if the provided string does not start with the searched string', () => {
+          let integer = el._getIntegerPart(27.04, 'es');
+          let returned = el._startsWith(integer, '-');
+          expect(returned).to.be.equal(false);
+        });
+        test('should return true if the provided string does not start with the searched string', () => {
+          let integer = el._getIntegerPart(-27.04, 'es');
+          let returned = el._startsWith(integer, '-');
+          expect(returned).to.be.equal(true);
+        });
+      });
+      suite('getIntegerPart method', () => {
+        test('should return the integer part of a number', () => {
+          let returned = el._getIntegerPart(-27.04, 'es');
+          let returnedPositive = el._getIntegerPart(27.04, 'es');
+          expect(returned).to.be.equal('-27');
+          expect(returnedPositive).to.be.equal('27');
+        });
+
+        test('should return -0 if input a negative number', () => {
+          let returned = el._getIntegerPart(-0.04, 'es');
+          expect(returned).to.be.equal('-0');
+        });
+
+        test('should skip function while number param isNaN', () => {
+          let returned = el._getIntegerPart('test', 'es');
+          expect(returned).to.be.undefined;
+        });
+      });
+
+      suite('getAbsIntegerPart() method', () => {
+        test('should return the integer part of a number in abs', () => {
+          let returned = el._getAbsIntegerPart(-27.049, 'es');
+          expect(returned).to.be.equal('27');
+        });
+        test('should skip function while number param isNaN', () => {
+          let returned = el._getAbsIntegerPart('test', 'es');
+          expect(returned).to.be.undefined;
+        });
+      });
+
+      suite('getFractionalPart method', () => {
+        test('should return the fractional part of a number', () => {
+          let returned = el._getFractionalPart(-27.049);
+          let returned2 = el._getFractionalPart(27.4);
+          let returned3 = el._getFractionalPart(27);
+          expect(returned).to.be.equal('04');
+          expect(returned2).to.be.equal('40');
+          expect(returned3).to.be.equal('00');
+        });
+
+        test('should skip function while number param isNaN', () => {
+          let returned = el._getFractionalPart('test');
+          expect(returned).to.be.undefined;
+        });
+      });
+
+      suite('getSeparator method', () => {
+        test('should return the separator of integer and fractional parts of a number for a given language', () => {
+          document.documentElement.lang = '';
+
+          let returned = el._getSeparator('es-ES');
+          let returned2 = el._getSeparator('en');
+          let returned3 = el._getSeparator();
+          let returned4 = el._getSeparator('');
+          expect(returned).to.be.equal(',');
+          expect(returned2).to.be.equal('.');
+          expect(returned3).to.be.equal('.');
+          expect(returned4).to.be.equal('.');
+
+          document.documentElement.lang = 'es-UY';
+
+          let returned5 = el._getSeparator('es-ES');
+          let returned6 = el._getSeparator('en');
+          let returned7 = el._getSeparator();
+          let returned8 = el._getSeparator('');
+          expect(returned5).to.be.equal(',');
+          expect(returned6).to.be.equal('.');
+          expect(returned7).to.be.equal(',');
+          expect(returned8).to.be.equal(',');
+        });
+
+        test('should return the separator of fractional part of a dollar value with "UY" locale', () => {
+          let returned = el._getSeparator('en-uy');
+          expect(returned).to.be.equal(',');
+        });
+
+      });
+
+      suite('_commafy method', () => {
+        test('should return number separated by hundreds with (,) with lang=en, lang=en-US and lang=es-US', () => {
+          let returned;
+          let language = 'en';
+          returned = el.__commafy('10000000000', language);
+          expect(returned).to.be.equal('10,000,000,000');
+          language = 'en-US';
+          returned = el.__commafy('10000000000', language);
+          expect(returned).to.be.equal('10,000,000,000');
+          language = 'es-US';
+          returned = el.__commafy('10000000000', language);
+          expect(returned).to.be.equal('10,000,000,000');
+        });
+        test('should return number separated by hundreds with (.) with lang=es', () => {
+          let language = 'es';
+          let returned = el.__commafy('10000000000', language);
+          expect(returned).to.be.equal('10.000.000.000');
+        });
+      });
+
+      suite('getGroupChars method', () => {
+        test('should return the separator of integer and fractional parts of a number for a given language', () => {
+          document.documentElement.lang = '';
+          const returned = el._getGroupChars('es-UY');
+          const returned2 = el._getGroupChars('en');
+          const returned3 = el._getGroupChars();
+          const returned4 = el._getGroupChars('es-VE');
+          expect(returned).to.be.equal('.');
+          expect(returned2).to.be.equal(',');
+          expect(returned3).to.be.equal(',');
+          expect(returned4).to.be.equal('.');
+
+          document.documentElement.lang = 'es-UY';
+          const returned5 = el._getGroupChars('es-UY');
+          const returned6 = el._getGroupChars('en');
+          const returned7 = el._getGroupChars();
+          const returned8 = el._getGroupChars('en-GB');
+          expect(returned5).to.be.equal('.');
+          expect(returned6).to.be.equal(',');
+          expect(returned7).to.be.equal('.');
+          expect(returned8).to.be.equal(',');
+        });
+
+        test('should return the group separator of fractional part of a dollar value with "UY" locale', () => {
+          let returned = el._getGroupChars('en-uy');
+          expect(returned).to.be.equal('.');
+        });
+
+      });
+
+      suite('_getSeparator and _getGroupChars while document.documentElement.lang is seted', () => {
+        setup(() => {
+          document.documentElement.lang = 'es-ES';
+        });
+        test('_getSeparatorshould return separator of integer', () => {
+          let returned = el._getSeparator();
+          expect(returned).to.be.equal(',');
+        });
+        test('_getGroupChars should return the group separator of freactional parts', () => {
+          let returned = el._getGroupChars();
+          expect(returned).to.be.equal('.');
+        });
+      });
+
+      suite('getFormattedAmount method', () => {
+        test('Should return formatted amount whit decimals and symbol', () => {
+          let decimal = separator = symbol = true;
+          expect(el.getFormattedAmount(5000, 'MXN', 'MXN', 'es-mx', decimal, separator, symbol)).to.eql('$5,000.00');
+          expect(el.getFormattedAmount(-5000, 'MXN', 'MXN', 'es-mx', decimal, separator, symbol)).to.eql('$-5,000.00');
+          expect(el.getFormattedAmount(50.21, 'USD', 'UYU', 'es-uy', decimal, separator, symbol)).to.eql('U$S50,21');
+          expect(el.getFormattedAmount(5000, 'EUR', 'EUR', 'es', decimal, separator, symbol)).to.eql('5.000,00€');
+          expect(el.getFormattedAmount(0, 'EUR', 'EUR', 'es', decimal, separator, symbol)).to.eql('0,00€');
+        });
+        test('Should return formatted amount whitout decimals and symbol', () => {
+          expect(el.getFormattedAmount(90000, 'MXN', 'MXN', 'es-mx')).to.eql('90,000');
+          expect(el.getFormattedAmount(-90000, 'MXN', 'MXN', 'es-mx')).to.eql('-90,000');
+          expect(el.getFormattedAmount(90000, 'UYU', 'UYU', 'es-uy')).to.eql('90.000');
+          expect(el.getFormattedAmount(90000, 'EUR', 'EUR', 'es')).to.eql('90.000');
+          expect(el.getFormattedAmount(0, 'EUR', 'EUR', 'es')).to.eql('0');
+        });
+        test('should skip functions while amount parama is null', () => {
+          let returned = el.getFormattedAmount(null, 'MXN', 'MXN', 'es-mx');
+          expect(returned).to.be.undefined;
+        });
+        test('Should return amount with or without an space on it between symbol and number', () =>{
+          let decimal = separator = symbol = true;
+          let addSpace = true;
+          let noSpace = false;
+          expect(el.getFormattedAmount(10, 'ARS', 'ARS', 'es-ar', decimal, separator, symbol, addSpace)).to.eql('$ 10,00');
+          expect(el.getFormattedAmount(10, 'ARS', 'ARS', 'es-ar', decimal, separator, symbol, noSpace)).to.eql('$10,00');
+          expect(el.getFormattedAmount(10, 'ARS', 'ARS', 'es-ar', decimal, separator, symbol)).to.eql('$10,00');
+        })
+      });
+
+      suite('_hasDecimalPart method', () => {
+        test('should return true while currency is not included in currenciesWithoutDecimals', () => {
+          let returned = el._hasDecimalPart('MXN');
+          expect(returned).to.be.true;
+        });
+        test('should return false while currency is included in currenciesWithoutDecimals', () => {
+          let returned = el._hasDecimalPart('PYG');
+          expect(returned).to.be.false;
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

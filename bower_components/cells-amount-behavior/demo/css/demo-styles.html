@@ -1,0 +1,48 @@
+<custom-style>
+  <style>
+    body {
+      margin: 0;
+      font-family: var(--cells-fontDefault, Benton Sans, sans-serif);
+    }
+
+    #iframeBody {
+      padding: 20px;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    #iframeBody.different-colors {
+      padding: 0;
+      background-color: #043263;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .p20 {
+      padding: 20px;
+      flex: 1 1 auto;
+    }
+
+    .p20 p {
+      font-size: 13px;
+    }
+
+    .p20 cells-select:not(:last-of-type) {
+      margin-bottom: 20px;
+    }
+
+    b,
+    strong {
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+
+      *,
+      *:before,
+      *:after {
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+  </style>
+</custom-style>

@@ -1,0 +1,9 @@
+{
+  "hola-key": "Hello, I'm an English message.",
+  "prueba-uno": "Test message 1 <b>with HTML</b>",
+  "placeholder-text": "Example text in placeholder.",
+  "prueba-dos": "Text translated in attached.",
+  "explicit-text": "Hello, ${name}!",
+  "array-text": ["First text of Array ", "Second text of Array"],
+  "self-property": "Property value is: ${propertyValue}"
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>Demo cells-demo-dropdown-menu</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+    <link rel="import" href="../cells-demo-dropdown-menu.html">
+    <link rel="import" href="css/demo-styles.html">
+  </head>
+  <body unresolved ontouchstart>
+    <cells-demo-helper>
+      <cells-demo-case heading="Basic" description="A basic example">
+        <template>
+          <dom-bind>
+            <template>
+              <style>
+                body {
+                  margin: 20px;
+                  font-family: var(--cells-fontDefault, Lato, sans-serif);
+                }
+                cells-demo-dropdown-menu {
+                  width: 120px;
+                }
+              </style>
+              <p>Selected: [[selected]]</p>
+              <cells-demo-dropdown-menu
+                selected="{{selected}}"
+                label="Some label"
+                items='[{
+                  "name": "Item one",
+                  "value": "item-one"
+                }, {
+                  "name": "Item two",
+                  "value": "item-two"
+                }, {
+                  "name": "Item three",
+                  "value": "item-three"
+                }]'>
+              </cells-demo-dropdown-menu>
+            </template>
+          </dom-bind>
+        </template>
+      </cells-demo-case>
+    </cells-demo-helper>
+  </body>
+</html>

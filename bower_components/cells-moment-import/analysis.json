@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "# Wrapper of `moment.js` javaScript library\n\nThis component provides a simple wrapper for parse and validate dates and times.\n\nExample:\n```html\n<link rel=\"import\" href=\"cells-moment-import.html\">\n```\n\nRead more about [Moment.js](https://momentjs.com/docs/)",
+      "summary": "Wrapper of moment.js javaScript library",
+      "path": "cells-moment-import.js",
+      "properties": [],
+      "methods": [],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "Polymer.Element",
+      "name": "CellsMomentImportDocs",
+      "attributes": [],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "cells-moment-import-docs"
+    }
+  ]
+}

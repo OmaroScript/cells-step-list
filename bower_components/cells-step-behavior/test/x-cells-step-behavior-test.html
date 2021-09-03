@@ -1,0 +1,27 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../cells-step-behavior.html">
+
+<dom-module id="x-cells-step-behavior-test">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    class XCellsStepBehaviorTest extends Polymer.mixinBehaviors([ CellsBehaviors.StepBehavior ], Polymer.Element) {
+
+      static get is() {
+        return 'x-cells-step-behavior-test';
+      }
+
+      static get properties() {
+        return {};
+      }
+    }
+
+    customElements.define(XCellsStepBehaviorTest.is, XCellsStepBehaviorTest);
+  </script>
+</dom-module>

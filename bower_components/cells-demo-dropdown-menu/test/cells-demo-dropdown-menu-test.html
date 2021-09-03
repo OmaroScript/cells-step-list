@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../cells-demo-dropdown-menu.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <cells-demo-dropdown-menu></cells-demo-dropdown-menu>
+      <cells-demo-dropdown-menu></cells-demo-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('<cells-demo-dropdown-menu>', function() {
+      var el;
+      var dropdown;
+
+      setup(function() {
+        el = fixture('default')[0];
+        dropdown = el.shadowRoot.querySelector('.dropdown');
+      });
+
+      suite('Data binding and properties', function() {
+        test('properties are properly binded', function() {
+          el.items = [{
+            name: 'something',
+            value: '1'
+          }, {
+            name: 'something 2',
+            value: '2'
+          }];
+          el.selected = 1;
+          el.iconCheck = 'icon-check';
+          el.iconOpen = 'icon-open';
+
+          ['items', 'selected', 'iconOpen', 'iconCheck'].forEach(function(prop) {
+            assert.deepEqual(dropdown[prop], el[prop], `property ${prop} is binded to dropdown.${prop}`);
+          });
+        });
+
+        test('setting label property sets the text over the dropdown', function() {
+          el.label = 'Any';
+          assert.equal(el.shadowRoot.querySelector('.label').innerText, el.label);
+        });
+      });
+
+      test('has a unique ID for the label / aria-labelledby', function() {
+        var el2 = fixture('default')[1];
+        var label1 = el.shadowRoot.querySelector('.label').id;
+        var label2 = el2.shadowRoot.querySelector('.label').id;
+        assert.notEqual(label1, label2, 'each label gets an unique ID');
+      });
+    });
+  </script>
+</body>
+
+</html>

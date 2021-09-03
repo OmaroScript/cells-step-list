@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>Demo cells-demo-resizable-viewport</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../cells-demo-resizable-viewport.html">
+  <link rel="import" href="css/demo-styles.html">
+</head>
+
+<body unresolved ontouchstart>
+  <dom-bind>
+    <template>
+      <cells-demo-resizable-viewport selected-breakpoint="{{selectedBreakpoint}}"></cells-demo-resizable-viewport>
+      <iframe src="demo-frame.html" id="iframe" frameborder="0" width="[[selectedBreakpoint.width]]px" height="[[selectedBreakpoint.height]]px"></iframe>
+    </template>
+  </dom-bind>
+
+</body>
+
+</html>

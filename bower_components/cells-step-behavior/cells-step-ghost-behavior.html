@@ -1,0 +1,23 @@
+<script>
+  window.CellsBehaviors = window.CellsBehaviors || {};
+  window.CellsBehaviors.StepGhostBehavior = {
+    properties: {
+      isGhost: {
+        type: Boolean,
+        value: false,
+        observer: '_isGhostHandler'
+      }
+    },
+
+    _isGhostHandler: function(isGhost, oldGhostValue) {
+      if (isGhost || (!isGhost && oldGhostValue !== undefined)) {
+        this.setProperties({
+          active: isGhost,
+          skip: isGhost,
+          disableChange: isGhost,
+          collapsed: isGhost,
+        });
+      }
+    }
+  };
+</script>

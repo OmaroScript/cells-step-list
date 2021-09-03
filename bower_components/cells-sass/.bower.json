@@ -1,0 +1,19 @@
+{
+  "name": "cells-sass",
+  "version": "2.2.2",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_source": "art://cel/cells-sass",
+  "_target": "^2.0.0",
+  "_release": "2.2.2",
+  "_originalSource": "cells-sass"
+}

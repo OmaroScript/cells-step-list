@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../cells-demo-resizable-viewport/cells-demo-resizable-viewport.html">
+<link rel="import" href="../cells-demo-event-toaster/cells-demo-event-toaster.html">
+<link rel="import" href="../cells-demo-dropdown-menu/cells-demo-dropdown-menu.html">
+<link rel="import" href="../cells-demo-lang-switcher/cells-demo-lang-switcher.html">
+<link rel="import" href="../cells-demo-case/cells-demo-case.html">
+<link rel="import" href="../cells-codemirror/codemirror-imports.html">
+<link rel="import" href="../cells-codemirror/cells-codemirror.html">
+<link rel="import" href="../cells-radio-tabs/cells-radio-tabs.html">
+<link rel="import" href="../cells-demos-ui/prism-theme-cells.html">
+<link rel="import" href="../cells-demos-ui/spinner.html">
+<link rel="import" href="../cells-log-utils/cells-log-utils.html">
+<link rel="import" href="cells-demo-helper-styles.html">
+
+<dom-module id="cells-demo-helper">
+  <template>
+    <style include="cells-demo-helper-styles cells-demo-helper-shared-styles spinner-styles prism-theme-cells"></style>
+
+    <cells-demo-event-toaster multiple$="[[multiToast]]" vertical-align="[[_toastAlign]]" position-target="[[_toastPositionTarget]]"
+      events="[[events]]" id="eventToaster"></cells-demo-event-toaster>
+
+    <div class="ui-checkbox">
+      <label class="ui-checkbox__label">
+        <input type="checkbox" checked="{{hideUi::change}}" class="ui-checkbox__input">
+        <span>Hide UI</span>
+      </label>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="heading">
+          <h1 class="heading-title">[[_caseTitle]]</h1>
+          <p class="heading-description" hidden$="[[!_description]]">[[_description]]</p>
+        </div>
+
+        <cells-radio-tabs class="tabs" options="[[_tabs]]" selected="{{_selectedTab}}">
+        </cells-radio-tabs>
+
+        <div class="selectors">
+          <cells-demo-dropdown-menu class="dropdown case-selector" tabindex$="[[_tabindex]]" label="Demo" items="[[_cases]]"
+            selected="{{selected}}">
+          </cells-demo-dropdown-menu>
+
+          <dom-if if="[[availableThemes]]">
+            <template>
+              <cells-demo-dropdown-menu class="dropdown theme-selector" tabindex$="[[_tabindex]]" label="Theme" items="[[_themes]]"
+                selected="{{selectedTheme}}">
+              </cells-demo-dropdown-menu>
+            </template>
+          </dom-if>
+
+          <dom-if if="[[i18n]]">
+            <template>
+              <cells-demo-lang-switcher class="dropdown lang-selector" tabindex$="[[_tabindex]]" langs="[[langs]]"
+                locales-path="[[localesPath]]" selected="0" lang="{{_lang}}">
+              </cells-demo-lang-switcher>
+            </template>
+          </dom-if>
+        </div>
+      </div>
+    </div>
+    <!-- /.header -->
+
+    <div class="main" id="main">
+      <cells-demo-resizable-viewport class="resizer" breakpoints="[[breakpoints]]" selected-breakpoint="{{_resolution}}"
+        selected-key="[[resolution]]">
+      </cells-demo-resizable-viewport>
+
+      <div id="iframeContainer" class="iframe-container" style$="width:[[_resolution.width]]px; height:[[_computeHeight(_resolution.height)]]px;">
+        <div id="spinner" hidden="[[!_firstRender]]">
+          <div class="loader-container ball-chasing">
+            <div class="loader">
+              <div class="ball-1"></div>
+              <div class="ball-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class$="overlay [[_isActiveTab(_selectedTab, 'Code')]]">
+        <div class="overlay-inner">
+          <p class="disclaimer">
+            <span>
+              Live Editor
+            </span>
+            <span>
+              Modify the code and go back to preview tab
+            </span>
+          </p>
+          <button id="copyButton" class="copy-button" on-click="_copyToClipboard">Copy</button>
+          <div class="code-wrapper">
+            <cells-codemirror theme="monokai" line-numbers id="editor" content="[[_editorHtml]]"></cells-codemirror>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.main -->
+  </template>
+  <script src="cells-demo-helper.js"></script>
+</dom-module>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../bbva-badge-notification.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <bbva-badge-notification></bbva-badge-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('<bbva-badge-notification>', () => {
+      var el;
+
+      setup(() => {
+        el = fixture('default');
+      });
+
+      test('It shows a text when text is set', () => {
+        const badge = el.$.badge;
+        
+        el.text = 'hello world';
+        assert.equal(badge.textContent.trim(), el.text);
+      });
+
+      test('It shows a aria-label when accessibilityText is set', () => {
+        const badge = el.$.badge;
+        
+        el.accessibilityText = "accessibility text";
+        assert.equal(badge.getAttribute('aria-label'), el.accessibilityText);
+      });
+    });
+  </script>
+</body>
+
+</html>

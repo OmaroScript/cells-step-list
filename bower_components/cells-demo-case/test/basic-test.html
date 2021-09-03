@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../cells-demo-case.html">
+</head>
+
+<body>
+  <test-fixture id="myEl">
+    <template>
+        <cells-demo-case heading="Test case" description="Test description"><template>Test content</template></cells-demo-case>
+    </template>
+  </test-fixture>
+
+
+  <script>
+    suite('<cells-demo-helper> tag', () => {
+      var myEl;
+
+      setup(() => {
+        myEl = fixture('myEl');
+      });
+
+      suite('in general', () => {
+
+        test('getInner returns the innerHTML of the template', () => {
+          var inner = myEl.getInner();
+          expect(myEl.inner).to.be.equal(inner);
+        });
+
+      });
+    });
+  </script>
+</body>
+
+</html>

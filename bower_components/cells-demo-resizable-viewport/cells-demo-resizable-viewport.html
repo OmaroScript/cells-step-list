@@ -1,0 +1,68 @@
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<link rel="import" href="cells-demo-resizable-viewport-styles.html">
+
+<!--
+`<cells-demo-resizable-viewport>` allows you to showcase other components at different viewport sizes (breakpoints) in a similar manner that the Google Chrome Inspector does in the device toolbar.
+
+__Example:__
+
+```html
+<cells-demo-resizable-viewport
+  breakpoints='{
+    "mobile": { "width": 360, "height": 640, "name": "Mobile" },
+    "tablet": { "width": 768, "height": 1024, "name": "Tablet" }}'
+  selected-key="tablet">
+</cells-demo-resizable-viewport>
+```
+
+## Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+:--- | :--- | :---
+--cells-demo-resizable-viewport-background-color | background-color of the bar container | #f0f0f0
+--cells-demo-resizable-viewport-bar | Mixin applied to each viewport bar | {}
+--cells-demo-resizable-viewport-bar-hover | Mixin applied to each viewport bar on :hover | {}
+--cells-demo-resizable-viewport-bar-hover-label | Mixin applied to bar label on :hover | {}
+--cells-demo-resizable-viewport-bar-hover-label-siblings | Mixin applied to siblings bar labels on :hover | {}
+--cells-demo-resizable-viewport-bar-hover-siblings | Mixin applied to bar siblings on :hover | {}
+--cells-demo-resizable-viewport-bar-label | Mixin applied to bar labels | {}
+--cells-demo-resizable-viewport-bar-selected | Mixin applied to selected bar | {}
+--cells-demo-resizable-viewport-bar-selected-label | Mixin applied to selected bar label | {}
+--cells-demo-resizable-viewport-bar-selected-siblings | Mixin applied to selected bar siblings | {}
+--cells-demo-resizable-viewport-bar-selected-siblings-hover | Mixin applied to selected bar siblings on :hover | {}
+--cells-demo-resizable-viewport-bar-wrapper | Mixin applied to bars wrapper | {}
+--cells-demo-resizable-viewport-button-reset | Mixin applied to reset button | {}
+--cells-demo-resizable-viewport-button-reset-active | Mixin applied to reset button for :hover, :active and :focus states | {}
+--cells-demo-resizable-viewport-dragger | Mixin applied to dragger icon | {}
+--cells-demo-resizable-viewport-dragger-color | Dragger icon color | #A9ABAD
+--cells-demo-resizable-viewport-dragger-inactive-color | Inactive dragger icon color | #fff
+
+@hero cells-demo-resizable-viewport.png
+-->
+<dom-module id="cells-demo-resizable-viewport">
+  <template>
+    <style include="cells-demo-resizable-viewport-styles cells-demo-resizable-viewport-shared-styles"></style>
+
+    <div class="bp">
+      <iron-selector selected="{{selectedKey}}" attr-for-selected="data-id" id="list">
+        <template is="dom-repeat" items="[[_sortedBreakpoints]]">
+          <div class="bp__bar" style$="width: [[item.width]]px; z-index: [[index]];" data-id$="[[item.id]]" on-track="_onTrack">
+            <div class="bp__label">[[item.name]] – [[item.width]]px</div>
+            <svg width="10" height="10" viewBox="0 0 10 10" class="dragger">
+              <path class="dragger-path" d="M8.293.293c.39-.39 1.024-.39 1.414 0 .39.39.39 1.024 0 1.414l-8 8c-.39.39-1.024.39-1.414 0-.39-.39-.39-1.024 0-1.414l8-8zm0 6c.39-.39 1.024-.39 1.414 0 .39.39.39 1.024 0 1.414l-2 2c-.39.39-1.024.39-1.414 0-.39-.39-.39-1.024 0-1.414l2-2z" fill-rule="nonzero"/>
+            </svg>
+          </div>
+        </template>
+      </iron-selector>
+
+      <button hidden="[[!_breakpointsChanged]]" on-click="reset" class="btn-reset">reset</button>
+    </div>
+
+  </template>
+  <script src="cells-demo-resizable-viewport.js"></script>
+</dom-module>

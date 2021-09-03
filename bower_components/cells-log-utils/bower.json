@@ -1,0 +1,13 @@
+{
+  "name": "cells-log-utils",
+  "version": "0.2.0",
+  "description": "window.console utils for Cells Component demos",
+  "main": [
+    "cells-log-utils.html"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}

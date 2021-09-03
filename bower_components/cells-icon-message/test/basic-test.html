@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../cells-icon-message.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <cells-icon-message></cells-icon-message>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('<cells-icon-message> tag', function() {
+      var el;
+      var icon;
+
+      setup(function() {
+        el = fixture('default');
+        icon = el.shadowRoot.querySelector('.icon')
+      });
+
+      suite('icon', function() {
+        test('setting "sizes" sets icon width, must be square', function() {
+          el.sizes = { "width": 33 };
+
+          assert.equal(icon.getComputedStyleValue('width'), '33px');
+          assert.equal(icon.getComputedStyleValue('height'), '33px');
+        });
+
+        test('no setting "sizes" gets default', function() {
+          assert.equal(icon.getComputedStyleValue('width'), '24px');
+          assert.equal(icon.getComputedStyleValue('height'), '24px');
+        });
+
+        test('setting "sizes" sets icon height, must be square', function() {
+          el.sizes = { "height": 33 };
+
+          assert.equal(icon.getComputedStyleValue('width'), '33px');
+          assert.equal(icon.getComputedStyleValue('height'), '33px');
+        });
+
+        test('setting "sizes" sets numeric height, must render as pixels', function() {
+          el.sizes = { "height": 55 };
+
+          assert.equal(icon.getComputedStyleValue('width'), '55px');
+          assert.equal(icon.getComputedStyleValue('height'), '55px');
+        });
+
+        test('setting "sizes" sets auto height, must render as auto', function() {
+          el.sizes = { "height": "auto" };
+
+          assert.equal(icon.getComputedStyleValue('width'), 'auto');
+          assert.equal(icon.getComputedStyleValue('height'), 'auto');
+        });
+
+        test('setting "sizes" sets precentage values, must render as percentages', function() {
+          el.sizes = { "height": "45%", "width": "20%" };
+
+          assert.equal(icon.getComputedStyleValue('width'), '20%');
+          assert.equal(icon.getComputedStyleValue('height'), '45%');
+        });
+
+        test('setting "sizes" sets different numeric values', function() {
+          el.sizes = { "height": 45, "width": 20 };
+
+          assert.equal(icon.getComputedStyleValue('width'), '20px');
+          assert.equal(icon.getComputedStyleValue('height'), '45px');
+        });
+
+        // test that properties are properly binded in HTML
+        test('setting "icon" displays an icon', function() {
+          el.icon = 'any';
+
+          assert.equal(icon.icon, el.icon);
+          assert.isFalse(icon.hidden);
+        });
+
+        // test that properties are properly binded in HTML
+        test('setting "src" displays an image', function() {
+          el.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+          assert.equal(icon.src, el.src);
+          assert.isFalse(icon.hidden);
+        });
+
+        test('is hidden if "icon" or "src" are not set', function() {
+          assert.isTrue(icon.hidden);
+        });
+
+        test('setting "full-size" to true to allow original img size and avoid sizes', function() {
+          el.sizes = { width: "auto" };
+
+          assert.equal(icon.getComputedStyleValue('width'), 'auto');
+          assert.equal(icon.getComputedStyleValue('height'), 'auto');
+        });
+      });
+
+      suite('icon "aria-label"', function() {
+        test('setting a valid type sets the corresponding "aria-label" to the icon', function() {
+          ['info', 'warning', 'error'].forEach(function(validType) {
+            el.type = validType;
+
+            assert.equal(icon.getAttribute('aria-label'), 'cells-icon-message-' + validType);
+          });
+        });
+
+        test('setting "success" type does not set "aria-label" to the icon', function() {
+          el.type = 'success';
+
+          assert.isFalse(icon.hasAttribute('aria-label'));
+        });
+
+        test('setting "icon-label" sets that value for the icon "aria-label" regardless of its type', function() {
+          el.type = 'info';
+          el.iconLabel = 'any';
+
+          assert.equal(icon.getAttribute('aria-label'), 'any');
+        });
+
+        test('the icon has "aria-hidden" set to true if it does not have "aria-label"', function() {
+          assert.isFalse(icon.hasAttribute('aria-label'));
+          assert.equal(icon.getAttribute('aria-hidden'), 'true');
+        });
+      });
+
+      // test that properties are properly binded in HTML
+      suite('message', function() {
+
+        test('is hidden if is not set', (done) => {
+          flush(() => {
+            let message = el.shadowRoot.querySelector('.message');
+            assert.isTrue(message.hidden);
+            done();
+          });
+        });
+
+        test('is not hidden if is set', (done) => {
+          flush(() => {
+            let message = el.shadowRoot.querySelector('.message');
+            el.message = 'any';
+            assert.isFalse(message.hasAttribute('hidden'));
+            done();
+          });
+        });
+
+        test('inline level tags are parsed', (done) => {
+          flush(() => {
+            let message = el.shadowRoot.querySelector('.message');
+            el.message = 'some <b>message</b>';
+            assert.equal(message.innerHTML, el.message);
+            done();
+          });
+        });
+        
+      });
+    });
+  </script>
+</body>
+
+</html>

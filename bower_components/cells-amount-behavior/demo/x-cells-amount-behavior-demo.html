@@ -1,0 +1,97 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="lazy-import" href="../../cells-i18n-behavior/cells-i18n-behavior.html">
+<link rel="import" href="../cells-amount-behavior.html">
+
+<dom-module id="x-cells-amount-behavior-demo">
+  <template>
+  </template>
+
+  <script>
+    // eslint-disable-next-line
+    class XCellsAmountBehaviorDemo extends Polymer.mixinBehaviors([ CellsBehaviors.i18nBehavior ], CellsBehaviors.AmountBehavior(Polymer.Element)) {
+      static get is() {
+        return 'x-cells-amount-behavior-demo';
+      }
+
+      static get properties() {
+        return {
+          amount: {
+            type: Number
+          },
+          number: {
+            type: Number
+          },
+          decimal: {
+            type: Number
+          },
+          currency: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          localCurrency: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          _decimalFilled: {
+            type: String,
+            computed: '_computedDecimalFilled(decimal)'
+          },
+          currencyParsedAsSymbol: {
+            type: String,
+            computed: '_computedCurrencyParsedAsSymbol(currency,localCurrency)',
+            notify: true
+          },
+          integerParsed: {
+            type: Number,
+            computed: '_computedIntegerParsed(amount)',
+            notify: true
+
+          },
+          fractionalParsed: {
+            type: Number,
+            computed: '_computedFractionalParsed(amount)',
+            notify: true
+          },
+          separator: {
+            type: String,
+            computed: '_computedSeparator(amount)',
+            notify: true
+          },
+          keyTranslation: {
+            type: String,
+            computed: '_computedKeyTranslation(currency)',
+            notify: true
+          }
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      _computedDecimalFilled(decimal) {
+        return this.fillDecimal(decimal);
+      }
+      _computedCurrencyParsedAsSymbol(currency, localCurrency) {
+        currency = this._getCurrencyAsSymbol(currency, localCurrency);
+        return currency;
+      }
+      _computedIntegerParsed(amount) {
+        return this._getIntegerPart(amount, document.documentElement.lang);
+      }
+      _computedFractionalParsed(amount) {
+        return this._getFractionalPart(amount);
+      }
+      _computedSeparator(amount) {
+        return this._getSeparator(document.documentElement.lang);
+      }
+      _computedKeyTranslation(currency) {
+        return this.t(this._getTranslationKeyForCurrency(currency));
+      }
+    }
+
+    customElements.define(XCellsAmountBehaviorDemo.is, XCellsAmountBehaviorDemo);
+  </script>
+</dom-module>

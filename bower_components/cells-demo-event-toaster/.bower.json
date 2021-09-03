@@ -1,0 +1,28 @@
+{
+  "name": "cells-demo-event-toaster",
+  "version": "12.0.6",
+  "description": "It adds events listeners to open paper-toast elements when triggered",
+  "keywords": [
+    "demo",
+    "event",
+    "toast",
+    "listen"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "paper-toast": "^2.0.0",
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0",
+    "cells-demo-helper": "^12.0.0"
+  },
+  "main": [
+    "cells-demo-event-toaster.html"
+  ],
+  "_source": "art://cel/cells-demo-event-toaster",
+  "_target": "^12.0.0",
+  "_release": "12.0.6",
+  "_originalSource": "cells-demo-event-toaster"
+}

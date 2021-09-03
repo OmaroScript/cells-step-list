@@ -1,0 +1,30 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../cells-state-behavior.html">
+
+<dom-module id="x-cells-state-behavior-demo">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+
+  // eslint-disable-next-line new-cap
+  class XCellsStateBehaviorDemo extends CellsBehaviors.CellsStateBehavior(Polymer.Element) {
+
+    static get is() {
+      return 'x-cells-state-behavior-demo';
+    }
+
+    static get properties() {
+      return {};
+    }
+  }
+
+  customElements.define(XCellsStateBehaviorDemo.is, XCellsStateBehaviorDemo);
+
+  </script>
+</dom-module>

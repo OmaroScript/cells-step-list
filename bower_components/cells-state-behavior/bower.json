@@ -1,0 +1,17 @@
+{
+    "name": "cells-state-behavior",
+    "version": "1.0.2",
+    "description": "Behavior to manage state. It can store state in a property through a method and reset state value to component props",
+    "keywords": ["behavior"],
+    "ignore": [],
+    "dependencies": {"polymer": "Polymer/polymer#^2.0.0"},
+    "devDependencies":     {
+        "cells-demo-helper": "^12.0.0",
+        "iron-component-page": "PolymerElements/iron-component-page#^3.0.0",
+        "web-component-tester": "^6.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    },
+    "resolutions": {"webcomponentsjs": "^1.0.0"},
+    "main": ["cells-state-behavior.html"],
+    "composer": {}
+}

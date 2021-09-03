@@ -1,0 +1,21 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../cells-amount-behavior.html">
+
+<dom-module id="x-cells-amount-behavior-test">
+  <template>
+  </template>
+
+  <script>
+    class XCellsAmountBehaviorTest extends CellsBehaviors.AmountBehavior(Polymer.Element) {
+      static get is() {
+        return 'x-cells-amount-behavior-test';
+      }
+
+      static get properties() {
+        return {};
+      }
+    }
+
+    customElements.define(XCellsAmountBehaviorTest.is, XCellsAmountBehaviorTest);
+  </script>
+</dom-module>

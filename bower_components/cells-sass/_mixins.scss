@@ -1,0 +1,237 @@
+$base-font-size:      16px;
+//*---------------
+// Convert pixels to ems
+// eg. for a relational value of 12px write em(12px) when the parent is 16px
+// if the parent is another value say 24px write em(12px, 24px)
+@function em($font-size, $context:$base-font-size) {
+  @return ($font-size / $context) * 1em;
+}
+//*---------------
+//*---------------
+// Convert pixels to rems
+// eg. for a relational value of 12px write rem(12px)
+// Assumes $base-font-size is the font-size of <html>
+//*---------------
+@function rem($font-size) {
+  @return ($font-size / $base-font-size) * 1rem;
+}
+
+@function strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+//*---------------
+//*---------------
+// Returns a CSS calc function with a custom CSS property with its fallback value
+// multiplied by a number. 
+// Example: calc(var(--bbva-global-spacer, 0.5rem) * 2)
+// 
+// @param $finalValue Desired value with or without unit (px)
+// @param $customPropertyName Name of the custom CSS property. Default: --bbva-global-spacer
+// @param $customPropertyFallbackValue Fallback value (unitless) of the custom CSS property. Default: 8
+// 
+// How to override the CSS custom property name and fallback value.
+// Create a new function inside your component scss that calls this function with the desired params.
+// 
+// Example:
+// @function custom($finalValue) {
+//   @return calcWithSpacer($finalValue, --my-custom-property-name, 10);
+// }
+// 
+// Using it (default function):
+// .selector {
+//   padding: calcWithSpacer(16px);
+// }
+// 
+// Using it (custom function):
+// .selector {
+//   padding: custom(20px)
+// }
+//*---------------
+@function calcWithSpacer($finalValue, $customPropertyName: --bbva-global-spacer, $customPropertyFallbackValue: 8) {
+  $multiplyBy: strip-units($finalValue) / $customPropertyFallbackValue;
+  $fallbackValueRem: $customPropertyFallbackValue / 16;
+  @return calc(var(#{$customPropertyName}, #{$fallbackValueRem}rem) * #{$multiplyBy});
+}
+
+//*---------------
+//Convert font-size pixel to rem and fallback version px
+// @include font-size(12px);
+//*---------------
+@mixin font-size($font-size, $line-height: false) {
+    font-size: $font-size;
+    font-size: $font-size / $base-font-size * 1rem;
+    @if $line-height == true {
+        line-height: ceil($font-size / $base-line-height) * $base-line-height / $font-size;
+    }
+    @if $line-height == normal {
+        line-height: normal;
+    }
+}
+
+//*---------------
+//Convert margin-top pixel to rem and fallback version px
+// @include margin-top(12px);
+//*---------------
+@mixin margin-top($margin-top: 0) {
+    margin-top: $margin-top;
+    margin-top: $margin-top / $base-font-size + rem;
+}
+
+//*---------------
+//Convert margin-bottom pixel to rem and fallback version px
+// @include margin-bottom(12px);
+//*---------------
+@mixin margin-bottom($margin-bottom: 0) {
+    margin-bottom: $margin-bottom;
+    margin-bottom: $margin-bottom / $base-font-size + rem;
+}
+
+//*---------------
+//Convert 'margin-top and margin-bottom' pixel to rem and fallback version px
+// @include margin(12px);
+// @include margin(12px,24px);
+//*---------------
+@mixin margin($margin: 0, $marginb: $margin) {
+    margin: $margin 0 $marginb 0;
+    margin: $margin / $base-font-size + rem 0 $marginb / $base-font-size + rem 0;
+}
+
+//*---------------
+// Clear inner floats
+//*---------------
+@mixin clearfix {
+    &:after {
+        clear: both;
+        content: "";
+        display: table;
+    }
+}
+
+//*---------------
+// Hide element while making it readable for screen readers
+// Shamelessly borrowed from HTML5Boilerplate:
+// https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css#L119-L133
+//*---------------
+@mixin visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+//*---------------
+// Sizing shortcuts
+//----------------*/
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+@mixin square($size) {
+    @include size($size, $size);
+}
+
+//*---------------
+// Ellipsis on overflow
+//----------------*/
+@mixin ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+//*---------------
+// Reset for list elements
+// Must be applied to <ul> or <ol> elements
+//
+// Usage:
+// ul { @include list-unstyled; }
+//----------------*/
+@mixin list-unstyled {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+//*---------------
+// Reset margin and padding to the elements passed as param
+//
+// Usage:
+// @include reset(h1, h2, p, "ul.my-class");
+//----------------*/
+@mixin reset($elements...) {
+  %reset { margin: 0; padding: 0; }
+  @each $element in $elements {
+    #{$element} {
+      @extend %reset;
+    }
+  }
+}
+
+//*---------------
+// Resets user-select: none to its initial value
+// user-select: none; is applyed to the body in the app styles
+// 
+// Usage:
+// .my-element { @include reset-user-select; }
+//----------------*/
+@mixin reset-user-select {
+  user-select: initial;
+}
+
+//*---------------
+// Generates fractal background for element through multiple background images with 10% opacity
+// Blend mode of images is "multiply" by default
+// 
+// Usage:
+// @include bg-fractals(#004481)
+//----------------*/
+@mixin bg-fractals($color, $blend-mode: multiply) {
+  background-image:
+    (linear-gradient(to top left, rgba($color,.1) 50%, transparent 50%)),
+    (linear-gradient(to top left, rgba($color,.1) 50%, transparent 50%)),
+    (linear-gradient(to bottom left, rgba($color,.1) 50%, transparent 50%)),
+    (linear-gradient(to top left, rgba($color,.1) 50%, transparent 50%)),
+    (linear-gradient(rgba($color,1) 100%, transparent 0));
+  background-size:
+    92.5% 12%,
+    92.5% 30%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  background-repeat: no-repeat;
+  background-position:
+    right bottom,
+    right bottom,
+    left top,
+    left top,
+    0 0;
+  background-blend-mode: $blend-mode;
+}
+
+//*---------------
+// Multiline ellipsis on overflow.
+// IE and Firefox has no support. As there is no specification and
+// the property is dependent on an outdated implementation of flexbox (hence display: -webkit-box)
+// it is unlikely that other browsers will support the property as-is, although an alternative solution may at some point replace it.
+//
+// Usage:
+// @include ellipsis-multiline;
+// or:
+// @include ellipsis-multiline(3);
+//----------------*/
+$base-elipsis-lines: 2;
+
+@mixin ellipsis-multiline($lines:$base-elipsis-lines) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $lines;
+  /* autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+}

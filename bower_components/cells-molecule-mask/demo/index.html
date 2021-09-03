@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" name="viewport">
+  <title>cells-molecule-mask Demo</title>
+  <script>
+    window.I18nMsg = {};
+    window.I18nMsg.url = '../locales';
+  </script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+  <link rel="lazy-import" href="../../coronita-icons/coronita-icons.html">
+  <link rel="lazy-import" href="../cells-molecule-mask.html">
+  <link rel="lazy-import" href="css/demo-styles.html">
+</head>
+
+<body unresolved style="margin: 0;">
+  <cells-demo-helper i18n langs='["en","es"]' locales-path="../locales" available-themes='["cells-coronita-base-theme"]'>
+    
+    <cells-demo-case heading="Default configuration (not masked)">
+      <template>
+        <cells-molecule-mask value="ES54029990012312321" icon-masked="coronita:visualize" icon-not-masked="coronita:hide">
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Masked without icons">
+      <template>
+        <cells-molecule-mask masked value="ES54029990012312321">
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Full Masked">
+      <template>
+        <cells-molecule-mask masked value="ES54029990012312321" show-full-mask="true" visible-chars="0" icon-masked="coronita:visualize" icon-not-masked="coronita:hide">
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Custom number of visible characters">
+      <template>
+        <cells-molecule-mask value="ES54029990012312321" mask-chars="•" visible-chars="6" icon-masked="coronita:visualize" icon-not-masked="coronita:hide" masked>
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Multiple mask chars">
+      <template>
+        <cells-molecule-mask value="ES54029990012312321" mask-chars="••••" visible-chars="6" icon-masked="coronita:visualize" icon-not-masked="coronita:hide" masked>
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With content in light DOM and custom styles">
+      <template>
+        <custom-style>
+          <style is="custom-style">
+            .custom {
+              align-items: flex-end;
+              --cells-molecule-mask-icon-color: var(--bbva-dark-coral);
+              --cells-molecule-mask-icon-button: {
+                outline: 0;
+              }
+              ;
+            }
+
+            .custom[masked] {
+              --cells-molecule-mask-icon-color: var(--bbva-dark-green);
+            }
+
+            .custom p { 
+              margin: 0;
+              @apply --secondary-heading;
+            }
+          </style>
+        </custom-style>
+
+        <cells-molecule-mask class="custom" value="ES54029990012312321" mask-chars="•" icon-masked="coronita:visualize" icon-not-masked="coronita:hide" icon-size="20"
+          masked>
+          <p>Lorem ipsum</p>
+        </cells-molecule-mask>
+      </template>
+    </cells-demo-case>
+  </cells-demo-helper>
+</body>
+
+</html>

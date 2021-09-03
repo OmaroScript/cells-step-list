@@ -1,0 +1,68 @@
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+
+<dom-module id="cells-demo-event-toaster">
+  <template>
+    <style>
+      :host {
+        @apply --cells-demo-event-toaster;
+      }
+      :host(.full-width) paper-toast {
+        width: 100%;
+        min-width: 0;
+        border-radius: 0;
+        margin: 0;
+      }
+      .highlight {
+        font-family: Consolas, Menlo, Monaco, monospace;
+        font-size: 14px;
+        font-size: inherit;
+        color: var(--cells-demo-event-toaster-highlight-color, yellow);
+        @apply --cells-demo-event-toaster-highlight;
+      }
+      paper-toast {
+        font-family: sans-serif;
+        letter-spacing: normal;
+        background: transparent;
+        box-shadow: none;
+        padding: 0 !important;
+        display: flex;
+        flex-direction: column-reverse; /* display toasts in reverse order without reversing the array */
+      }
+
+      :host([toast-vertical-align='top']) paper-toast {
+        margin-top: var(--cells-demo-event-toaster-vertical-top, 160px);
+      }
+
+      p { margin: 0; }
+
+      .inner-toast {
+        display: none;
+        background: #323232;
+        color: #f1f1f1;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        font-size: 14px;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      [visible] {
+        display: block;
+      }
+    </style>
+
+    <paper-toast id="toast" opened="{{opened}}" duration="[[_duration]]" vertical-align="[[verticalAlign]]" position-target="[[positionTarget]]" on-opened-changed="_setOpenedState" on-click="_closeToast">
+      <template is="dom-repeat" items="[[_events]]" id="items">
+        <div class="inner-toast" visible$="[[item.opened]]" style$="order: [[item.order]]">
+          <p>Fired: <span class="highlight">[[item.name]]</span></p>
+          <template is="dom-if" if="[[item.payload]]">
+            <p>With payload: <span class="highlight">[[item.payload]]</span></p>
+          </template>
+        </div>
+      </template>
+    </paper-toast>
+  </template>
+  <script src="cells-demo-event-toaster.js"></script>
+</dom-module>

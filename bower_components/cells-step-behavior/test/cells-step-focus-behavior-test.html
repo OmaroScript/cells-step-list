@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="x-cells-step-manager-behavior-test.html">
+  <link rel="import" href="x-cells-step-focus-behavior-test.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <x-cells-step-manager-behavior-test id="manager">
+      </x-cells-step-manager-behavior-test>
+      <x-cells-step-focus-behavior-test
+        id="step1"
+        index="1"
+        current-step="1"
+        not-initialize-with-attached
+      ></x-cells-step-focus-behavior-test>
+      <x-cells-step-focus-behavior-test
+        id="step2"
+        index="2"
+        current-step="2"
+        not-initialize-with-attached
+      ></x-cells-step-focus-behavior-test>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    suite('initial setup', function() {
+      let manager;
+
+      setup(function() {
+        manager = fixture('default')[0];
+        manager.autoActivateStep = true;
+        sinon.spy(step1, 'focusIn');
+
+        document.addEventListener('register-step', manager.registerStep.bind(manager));
+        step1.initialize();
+        step2.initialize();
+        step1.active = true;
+      });
+
+      teardown(() => {
+        step1.focusIn.restore();
+      });
+
+      test('manager should have the two steps in _steps prop', () => {
+        expect(manager._steps[step1.currentStep]).to.eql(step1);
+        expect(manager._steps[step2.currentStep]).to.eql(step2);
+      });
+
+      test('step1 isCurrent should be true', () => {
+        expect(step1.isCurrent).to.be.true;
+      });
+
+      test('step1 focusIn should be executed', () => {
+        expect(step1.focusIn).called;
+      });
+
+      suite('when going to next step', () => {
+
+        test('step1 isCurrent should be false', () => {
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(step1.isCurrent).to.be.false;
+        });
+
+        test('step1 focusOut should be called with a false', () => {
+          sinon.spy(step1, 'focusOut');
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(step1.focusOut).called;
+          expect(step1.focusOut.args[0][0]).to.be.falsy;
+
+          step1.focusOut.restore();
+        });
+
+        test('step1 focusOut should be called with a true when step isValid', () => {
+          sinon.spy(step1, 'focusOut');
+          step1.isValid = () => true;
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(step1.focusOut).called;
+          expect(step1.focusOut.args[0][0]).to.be.true;
+
+          step1.focusOut.restore();
+        });
+
+        test('step2 isCurrent should be true', () => {
+          step1.collapsed = true;
+
+          manager.__nextStep();
+
+          expect(step2.isCurrent).to.be.true;
+        });
+
+        test('step2 focusIn should be called', () => {
+          sinon.spy(step2, 'focusIn');
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(step2.focusIn).called;
+
+          step2.focusIn.restore();
+        });
+
+        test('step2 should emit event focus in with detail.currentStep = 2', ()=> {
+          let eventName = 'cells-step-focus-in';
+          let callback = sinon.spy();
+          step2.addEventListener(eventName, (e) => callback(e), {once: true});
+
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(callback).called;          
+          expect(callback.args[0][0].detail.currentStep).to.equal(2);
+        })
+
+        test('step1 should emit event focus out with detail.currentStep = 1', ()=> {
+          let eventName = 'cells-step-focus-out';
+          let callback = sinon.spy();
+          step1.addEventListener(eventName, (e) => callback(e), {once: true});
+
+          step1.collapsed = true;
+          manager.__nextStep();
+
+          expect(callback).called;          
+          expect(callback.args[0][0].detail.currentStep).to.equal(1);
+        })
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>

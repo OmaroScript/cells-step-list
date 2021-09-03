@@ -1,0 +1,27 @@
+{
+  "name": "cells-demos-ui",
+  "version": "2.1.0",
+  "keywords": [
+    "theme",
+    "styles",
+    "icons",
+    "ui",
+    "Cells Platform"
+  ],
+  "description": "Includes common UI elements like icons or color vars for Cells demos.",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-icon": "^2.0.0",
+    "iron-iconset-svg": "^2.0.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "main": [
+    "cells-demos-ui.html"
+  ],
+  "_source": "art://cells-demos-ui/cells-demos-ui",
+  "_target": "^2.0.0",
+  "_release": "2.1.0",
+  "_originalSource": "cells-demos-ui"
+}

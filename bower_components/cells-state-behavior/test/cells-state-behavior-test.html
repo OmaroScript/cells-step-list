@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="x-cells-state-behavior-test.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <x-cells-state-behavior-test></x-cells-state-behavior-test>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('CellsBehaviors.CellsStateBehavior', function() {
+      var el;
+
+      setup(function() {
+        el = fixture('default');
+      });
+
+      suite('__isObject', () => {
+
+        test('should return true when an object is passed', () => {
+          expect(el.__isObject({})).to.eql(true);
+          expect(el.__isObject({a: 1})).to.eql(true);
+        });
+
+        test('should return false when something different than an object is passed', () => {
+          expect(el.__isObject(0)).to.eql(false);
+          expect(el.__isObject(1)).to.eql(false);
+          expect(el.__isObject([])).to.eql(false);
+          expect(el.__isObject([{a: 1}])).to.eql(false);
+          expect(el.__isObject('test')).to.eql(false);
+          expect(el.__isObject('')).to.eql(false);
+          expect(el.__isObject()).to.eql(false);
+          expect(el.__isObject(null)).to.eql(false);
+        });
+      });
+
+      suite('__computeEmptyState', () => {
+        test('should return an empty object', () => {
+          expect(el.__computeEmptyState()).to.eql({});
+        });
+      });
+
+      suite('__computeState', () =>{
+        suite('when an object is passed', () => {
+
+          test('should return a merged object between object passed and _state', () => {
+            el._state = {a: 1, b: 2};
+
+            expect(el.__computeState({b: 3, c: 4})).to.eql({a: 1, b: 3, c: 4});
+          });
+        });
+      });
+
+      suite('_setState', () => {
+
+        suite('when object is received', () => {
+
+          test('should set a new state and return a new reference', () => {
+            const state = el._state;
+
+            el._setState({b: 2});
+
+            expect(el._state).to.eql({b: 2});
+            expect(el._state).to.not.be.equals(state);
+          });
+
+          test('and should return new references for objects inside the state', () => {
+            const state = {test: {a: {b: 2}}};
+
+            el._setState(state);
+
+            expect(el._state).to.deep.equals(state);
+            expect(el._state.test).to.not.equal(state.test);
+          });
+          test('and should not return new references for objects inside objects inside the state', () => {
+            const state = {test: {a: {b: 2}}};
+
+            el._setState(state);
+
+            expect(el._state).to.deep.equals(state);
+            expect(el._state.test).to.not.equal(state.test);
+            expect(el._state.test.a).to.equal(state.test.a);
+          });
+
+          test('should merge state with object received and return a new reference', () => {
+            const state = {a: 1};
+            el._state = state;
+
+            el._setState({b: 2});
+
+            expect(el._state).to.eql({a: 1, b: 2});
+            expect(el._state).to.not.be.equals(state);
+          });
+        });
+
+        suite('when something different than an object is received', () => {
+
+          test('should do nothing', () => {
+            const state = {a: 1};
+            el._setState(state);
+
+            el._setState([{test: 1}]);
+            el._setState(1);
+            el._setState('test');
+
+            expect(el._state).to.eql(state);
+          });
+        });
+
+        suite('when null is received', () => {
+
+          test('should reset state', () => {
+            const state = {a: 1};
+            el._setState(state);
+
+            el._setState(null);
+            expect(el._state).to.eql({});
+          });
+        });
+
+        suite('when undefined is received', () => {
+
+          test('should reset state', () => {
+            const state = {a: 1};
+            el._setState(state);
+
+            el._setState();
+            expect(el._state).to.eql({});
+          })
+        });
+      });
+
+      suite('_resetStateToProps', () => {
+        test('should reset all props to the references in _state', () => {
+          el.a = {test: 1};
+          el.b = {test: 2};
+          el.c = {test: 3};
+          el._setState({a: el.a, b: el.b});
+          el.a = {test: 2};
+          el.b = {test: 3};
+          el.c = {test: 4};
+          const unmodifiedProp = el.c;
+
+          el._resetStateToProps();
+
+          expect(el.a).to.eql({test: 1});
+          expect(el.b).to.eql({test: 2});
+          expect(el.c).to.be.equals(unmodifiedProp);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

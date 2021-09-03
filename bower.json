@@ -1,0 +1,29 @@
+{
+    "name": "cells-step-list",
+    "version": "1.4.0",
+    "description": "This component is a step to view a list of items from a product detail.",
+    "keywords":     [
+        "i18n",
+        "web-component"
+    ],
+    "main": ["cells-step-list.html"],
+    "dependencies":     {
+        "cells-i18n-behavior": "^13.0.0",
+        "cells-key-values": "^12.0.0",
+        "cells-moment-import": "^13.0.0",
+        "cells-state-behavior": "^1.0.0",
+        "cells-step": "^3.0.0",
+        "cells-step-behavior": "^4.0.0",
+        "polymer": "Polymer/polymer#^2.0.0"
+    },
+    "devDependencies":     {
+        "cells-demo-helper": "^12.0.0",
+        "cells-sass": "^2.0.0",
+        "iron-component-page": "PolymerElements/iron-component-page#^3.0.0",
+        "web-component-tester": "^6.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    },
+    "composer": {},
+    "ignore": [],
+    "resolutions": {"cells-i18n-behavior": "^13.0.0"}
+}

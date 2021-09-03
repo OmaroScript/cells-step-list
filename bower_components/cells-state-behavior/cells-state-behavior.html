@@ -1,0 +1,84 @@
+<script>
+  /*
+  * This mixin lets you travel faster than light speed, almost.
+  * @polymer
+  * @mixinFunction
+  *
+  */
+
+  window.CellsBehaviors = window.CellsBehaviors || {};
+
+  CellsBehaviors.CellsStateBehavior = superClass => class extends superClass {
+
+    static get properties() {
+      return {
+        _state: {
+          type: Object,
+          value: () => ({})
+        },
+      };
+    }
+
+    /**
+     * Sets a new object with a new reference in _state, depending on value passed.
+     * If it is an object, merges this object with current _state.
+     * If it is a null, sets a new empty state.
+     * If it is not an object or a null, shows a console warning.
+     */
+    _setState(obj) {
+      if (this.__isObject(obj)) {
+        this.set('_state', this.__computeState(obj));
+      } else if (!obj) {
+        this.set('_state', this.__computeEmptyState());
+      } else {
+        console.warn('Please, set a state with a proper object');
+      }
+    }
+
+    /**
+     * Returns a merged object between object passed and this._state
+     */
+    __computeState(obj) {
+      const state = Object.assign({}, this._state);
+      Object.keys(obj).forEach(prop => {
+        state[prop] = this.__getNewRefOrValue(obj[prop]);
+      });
+      return state;
+    }
+
+    /**
+     * Returns an empty state.
+     */
+    __computeEmptyState() {
+      return {};
+    }
+
+    __getNewRefOrValue(source) {
+      // If the source isn't an Object or Array, return it.
+      if (!(source instanceof Object) || source instanceof Date || source instanceof String) {
+        return source;
+      }
+      if (source instanceof Array) {
+        return [ ...source ];
+      }
+      return Object.assign({}, source);
+    }
+
+    /**
+     * Returns true if value passed is an object
+     */
+    __isObject(o) {
+      return Object.prototype.toString.call(o) === '[object Object]';
+    }
+
+    /**
+     * Propagates all values from state properties to this.
+     */
+    _resetStateToProps() {
+      Object.keys(this._state).forEach(prop => {
+        this[prop] = this._state[prop];
+      });
+    }
+  };
+
+</script>

@@ -1,0 +1,175 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../cells-molecule-mask.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <cells-molecule-mask></cells-molecule-mask>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('<cells-molecule-mask>', function() {
+      var el;
+      var shownValue;
+
+      setup(function(done) {
+        el = fixture('default');
+        flush(function() {
+          shownValue = el.shadowRoot.querySelector('.number');
+          done();
+        });
+      });
+
+      test('"value" is not masked if "masked" is not set to true', function() {
+        el.value = 'AABBCC1122';
+        assert.equal(shownValue.innerHTML, el.value);
+      });
+
+      suite('masked', function() {
+        setup(function() {
+          el.masked = true;
+          el.value = 'AABBCC1122';
+        });
+
+        test('displays the last 4 chars of a value', function() {
+          assert.equal(shownValue.innerHTML, '1122');
+        });
+
+        test('setting "visibleChars" to 2 displays the last 2 chars of a value', function() {
+          el.visibleChars = 2;
+          assert.equal(shownValue.innerHTML, '22');
+        });
+
+        test('setting "maskChars" to "---" displays that mask chars', function() {
+          el.maskChars = '---';
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '---');
+        });
+
+        test('setting "showFullMask" to true and "visibleChars" to 0 displays full length of maks chars', function(){
+          el.showFullMask = true;
+          el.visibleChars = 0;
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '**********');
+          assert.equal(shownValue.innerHTML, '');
+        });
+        
+        test('setting "showFullMask" to true and "visibleChars" to 2 displays the last 2 chars of value and rest of mask chars', function(){
+          el.showFullMask = true;
+          el.visibleChars = 2;
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '********');
+          assert.equal(shownValue.innerHTML, '22');
+        });
+        
+        test('setting "showFullMask" to true, "visibleChars" to 2 and "maskChars" to null should display the last 2 chars of value and no mask.', function(){
+          el.showFullMask = true;
+          el.visibleChars = 2;
+          el._displayedMask = '';
+          el.maskChars = null;
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '');
+          assert.equal(shownValue.innerHTML, '22');
+        });
+
+        test('setting "showFullMask" to true, "visibleChars" to 2, "maskChars" to default and value to null should display empty both in value and mask', function(){
+          el.showFullMask = true;
+          el.visibleChars = 2;
+          el._displayedMask = '';
+          el.value = null;
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '');
+          assert.equal(shownValue.innerHTML, '');
+        });
+
+        test('setting "showFullMask" to true, "visibleChars" to 2, "maskChars" to null and value to null should display empty both in value and mask', function(){
+          el.showFullMask = true;
+          el.visibleChars = 2;
+          el._displayedMask = '';
+          el.value = null;
+          el.maskChars = null;
+          assert.equal(el.shadowRoot.querySelector('.mask').innerHTML, '');
+          assert.equal(shownValue.innerHTML, '');
+        });
+      });
+
+      suite('mask/unmask button', function() {
+        var btn;
+
+        setup(function() {
+          btn = el.shadowRoot.querySelector('.btn-transparent');
+        });
+
+        test('is hidden if both, "iconMasked" and "iconNotMasked" are not defined', function() {
+          el.masked = true;
+          el.iconMasked = 'any';
+          assert.isTrue(btn.hidden);
+        });
+
+        test('is not hidden if both, "iconMasked" and "iconNotMasked" are defined', function() {
+          el.masked = true;
+          el.iconMasked = 'any';
+          el.iconNotMasked = 'other';
+          assert.isFalse(btn.hidden);
+        });
+
+        test('clicking the button sets "masked" boolean value to the opposite', function() {
+          [true, false].forEach(function(state) {
+            el.masked = state;
+            btn.click();
+            assert.notEqual(el.masked, state);
+          });
+        });
+
+        test('"aria-label" translation key is "cells-molecule-mask-unmask" when the value is masked', function() {
+          el.masked = true;
+          assert.equal(btn.getAttribute('aria-label'), 'cells-molecule-mask-unmask');
+        });
+
+        test('"aria-label" translation key is "cells-molecule-mask-mask" when the value is not masked', function() {
+          assert.equal(btn.getAttribute('aria-label'), 'cells-molecule-mask-mask');
+        });
+      });
+
+      suite('mask/unmask icon', function() {
+        var icon;
+
+        setup(function() {
+          icon = el.shadowRoot.querySelector('.icon');
+        });
+
+        test('"iconMasked" sets that icon when the mask is masked', function() {
+          el.masked = true;
+          el.iconMasked = 'any';
+          assert.equal(icon.icon, el.iconMasked);
+        });
+
+        test('"iconNotMasked" sets that icon when the mask is not masked', function() {
+          el.iconMasked = 'other';
+          assert.equal(icon.icon, el.iconNotMasked);
+        });
+
+        test('setting "iconSize" sets that size to the icon', function() {
+          el.iconSize = 18;
+          let style;
+          if (window.ShadyCSS) {
+            style = ShadyCSS.getComputedStyleValue(icon, 'width');
+          } else {
+            style = getComputedStyle(icon).getPropertyValue('width');
+          }
+          assert.equal(style, '18px');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "cells-amount-behavior",
+  "version": "12.2.0",
+  "description": "Methods and constants to format monetary amounts",
+  "keywords": [
+    "behavior",
+    "amount",
+    "format",
+    "decimal",
+    "currency",
+    "integer",
+    "decimal",
+    "fractional"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "cells-coronita-base-theme": "^12.0.0",
+    "cells-demo-helper": "^12.0.0",
+    "cells-i18n-behavior": "^13.0.0",
+    "cells-molecule-input": "^12.0.0",
+    "cells-select": "^12.0.0",
+    "coronita-icons": "^12.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0"
+  },
+  "main": [
+    "cells-amount-behavior.html"
+  ]
+}

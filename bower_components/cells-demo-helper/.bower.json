@@ -1,0 +1,47 @@
+{
+  "name": "cells-demo-helper",
+  "version": "12.4.0",
+  "description": "Showcases components demo cases, with multiple options such as i18n or resizable viewport",
+  "keywords": [
+    "demo",
+    "helper",
+    "showcase",
+    "cases",
+    "viewport",
+    "resizable",
+    "responsive"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "polymer": "^2.0.0",
+    "cells-codemirror": "^12.0.0",
+    "cells-demo-lang-switcher": "^12.0.0",
+    "cells-demo-resizable-viewport": "^12.0.0",
+    "cells-demo-event-toaster": "^12.0.0",
+    "cells-demo-case": "^12.0.0",
+    "cells-demo-dropdown-menu": "^2.0.0",
+    "cells-radio-tabs": "^13.0.0",
+    "cells-demos-ui": "^2.0.0",
+    "cells-log-utils": "^0.2.0"
+  },
+  "devDependencies": {
+    "cells-banking-theme": "^12.0.0",
+    "cells-coronita-base-theme": "^12.0.0",
+    "cells-i18n-behavior": "^13.0.0",
+    "cells-navigation-bar": "^12.0.0",
+    "cells-sass": "^2.0.0",
+    "cells-switch": "^12.0.0",
+    "coronita-icons": "^12.0.0",
+    "banking-icons": "^12.0.0",
+    "cells-login-view": "^12.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0"
+  },
+  "main": [
+    "cells-demo-helper.html"
+  ],
+  "_source": "art://cel/cells-demo-helper",
+  "_target": "^12.0.0",
+  "_release": "12.4.0",
+  "_originalSource": "cells-demo-helper"
+}

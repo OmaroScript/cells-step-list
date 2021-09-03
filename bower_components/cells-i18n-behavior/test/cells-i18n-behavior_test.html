@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="mock-locales.js"></script>
+  <link rel="import" href="../cells-i18n-behavior.html">
+  <link rel="import" href="simple-element.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <simple-element></simple-element>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('CellsBehaviors.i18nBehavior', () => {
+      let el;
+
+      setup(() => {
+        el = fixture('default');
+      });
+
+      test('An element with i18nBehavior has "has-i18n" attribute', () => {
+        assert.isTrue(el.hasAttribute('has-i18n'));
+      });
+
+      suite('Translation methods: doTranslation() and t() alias', () => {
+        const translations = {
+          t: [],
+          doTranslation: []
+        };
+
+        suiteSetup((done) => {
+          window.I18nMsg.lang = 'es';
+
+          document.addEventListener('i18n-language-ready', () => {
+            ['t', 'doTranslation'].forEach((method) => {
+              translations[method]['simple-element-info'] = el[method]('simple-element-info');
+              translations[method]['non-existent'] = el[method]('non-existent');
+              translations[method]['fallback'] = el[method]('non-existent', 'Does not exist');
+              translations[method]['interpolated-object'] = el[method]('simple-element-interpolated', '', { interpolated: 'Any' });
+              translations[method]['interpolated-object-stringified'] = el[method]('simple-element-interpolated', '', '{ "interpolated": "String" }');
+            });
+
+            done();
+          });
+        });
+
+        test('Called with an existing key as first param returns the translation for that key', () => {
+          assert.equal(translations.doTranslation['simple-element-info'], 'Informacion');
+          assert.equal(translations.t['simple-element-info'], 'Informacion');
+        });
+
+        test('Called with a non existing key as first param returns the key', () => {
+          assert.equal(translations.doTranslation['non-existent'], 'non-existent');
+          assert.equal(translations.t['non-existent'], 'non-existent');
+        });
+
+        test('Called with a non existing key as first param and a fallback text as a second param returns the fallback', () => {
+          assert.equal(translations.doTranslation['fallback'], 'Does not exist');
+          assert.equal(translations.t['fallback'], 'Does not exist');
+        });
+
+        test('Called with an object as third param for a translation key that contains a variable returns the translation with the interpolated text', () => {
+          assert.equal(translations.doTranslation['interpolated-object'], 'texto Any');
+          assert.equal(translations.t['interpolated-object'], 'texto Any');
+        });
+
+        test('Called with an object stringified as third param for a translation key that contains a variable returns the translation with the interpolated text', () => {
+          assert.equal(translations.doTranslation['interpolated-object-stringified'], 'texto String');
+          assert.equal(translations.t['interpolated-object-stringified'], 'texto String');
+        });
+      });
+
+      suite('Async translation methods: getAsyncTranslation() and getMsg() alias', () => {
+        test('getAsyncTranslation() returns a resolved promise with the translated key', () => {
+          const expected = 'Informacion';
+          return el.getAsyncTranslation('simple-element-info').then((result) => {
+            assert.equal(result, expected);
+          });
+        });
+
+        test('Calling getMsg() calls getAsyncTranslation() with the same params', () => {
+          const getAsyncTranslationStub = sinon.stub(el, 'getAsyncTranslation');
+          const interpolation = { interpolated: 'Any' };
+          el.getMsg('simple-element-interpolated', interpolation);
+          assert.isTrue(getAsyncTranslationStub.calledWith('simple-element-interpolated'));
+          assert.deepEqual(getAsyncTranslationStub.getCall(0).args[1], interpolation);
+        });
+      });
+
+      suite('Language changes', () => {
+        test('Document fires "i18n-lang-changed" event with I18nMsg.lang as payload when I18nMsg.lang changes', (done) => {
+          const onLangChanged = function(e) {
+            document.removeEventListener('i18n-lang-changed', onLangChanged);
+            assert.equal(e.detail.language, window.I18nMsg.lang);
+            done();
+          };
+
+          document.addEventListener('i18n-lang-changed', onLangChanged);
+          window.I18nMsg.lang = 'en';
+          window.I18nMsg.lang = 'es';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

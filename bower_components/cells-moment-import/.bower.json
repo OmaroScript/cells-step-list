@@ -1,0 +1,21 @@
+{
+  "name": "cells-moment-import",
+  "version": "13.1.2",
+  "main": "cells-moment-import.html",
+  "description": "html-import wrapper for parse and validate dates and times",
+  "keywords": [
+    "moment",
+    "date",
+    "time"
+  ],
+  "dependencies": {
+    "moment": "moment#^2.18.1"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "_source": "art://cellscomponentscataloglegacy/cells-moment-import",
+  "_target": "^13.0.0",
+  "_release": "13.1.2",
+  "_originalSource": "cells-moment-import"
+}

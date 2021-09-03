@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assemblies>
+  <assembly name="WCT Unit tests [chrome.72]" environment="chrome.72" test-framework="web-component-tester" run-date="2020-06-11" run-time="18:49:05" total="6" passed="6" failed="0" skipped="0">
+    <collection passed="6" failed="0" skipped="0">
+      <test name="has a unique ID for the label / aria-labelledby" method="&lt;cells-demo-dropdown-menu>.has a unique ID for the label / aria-labelledby" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="4"/>
+      <test name="properties are properly binded" method="&lt;cells-demo-dropdown-menu>.Data binding and properties.properties are properly binded" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="7"/>
+      <test name="setting label property sets the text over the dropdown" method="&lt;cells-demo-dropdown-menu>.Data binding and properties.setting label property sets the text over the dropdown" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="11"/>
+      <test name="has a unique ID for the label / aria-labelledby" method="&lt;cells-demo-dropdown-menu>.has a unique ID for the label / aria-labelledby" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="9"/>
+      <test name="properties are properly binded" method="&lt;cells-demo-dropdown-menu>.Data binding and properties.properties are properly binded" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="7"/>
+      <test name="setting label property sets the text over the dropdown" method="&lt;cells-demo-dropdown-menu>.Data binding and properties.setting label property sets the text over the dropdown" type="test/cells-demo-dropdown-menu-test.html" result="Pass" time="1"/>
+    </collection>
+  </assembly>
+</assemblies>

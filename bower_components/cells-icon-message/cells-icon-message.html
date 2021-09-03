@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../cells-i18n-behavior/cells-i18n-behavior.html">
+<link rel="import" href="cells-icon-message-styles.html">
+
+<dom-module id="cells-icon-message" hidden$="[[hidden]]">
+  <template strip-whitespace>
+    <style include="cells-icon-message-styles cells-icon-message-shared-styles"></style>
+    <iron-icon class="icon" icon="[[icon]]" src="[[src]]" hidden$="[[!_hasIconOrImage]]" aria-hidden$="[[_computeIconLabelHidden(_iconLabel)]]" aria-label$="[[t(_iconLabel)]]">
+    </iron-icon>
+    <span class="header" inner-h-t-m-l="[[t(heading)]]" hidden$="[[!heading]]"></span>
+    <template is="dom-if" if="[[!inlineContentWithText]]">
+      <span class="message" inner-h-t-m-l="[[t(message)]]" hidden$="[[!message]]"></span>
+      <slot></slot>
+    </template>
+    <template is="dom-if" if="[[inlineContentWithText]]">
+      <div>
+        <span class="message" inner-h-t-m-l="[[t(message)]]" hidden$="[[!message]]"></span>
+        <slot></slot>
+      </div>
+    </template>
+    <dom-repeat items="[[messages]]">
+      <template>
+        <div class="messages">
+          <span class="message messages-list" inner-h-t-m-l="[[t(item)]]"></span>
+        </div>
+      </template>
+    </dom-repeat>
+    <slot></slot>
+    <slot name="actions"></slot>
+  </template>
+
+  <script src="cells-icon-message.js"></script>
+</dom-module>

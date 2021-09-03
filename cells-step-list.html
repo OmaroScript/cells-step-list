@@ -1,0 +1,90 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../cells-i18n-behavior/cells-i18n-behavior.html">
+<link rel="import" href="../cells-state-behavior/cells-state-behavior.html">
+<link rel="import" href="../cells-step/cells-step.html">
+<link rel="import" href="../cells-step-behavior/cells-step-behavior.html">
+<link rel="import" href="../cells-key-values/cells-key-values.html">
+<link rel="import" href="cells-step-list-styles.html">
+
+<!--
+`<cells-step-list>` description.
+
+Example:
+
+```html
+<cells-step-list></cells-step-list>
+```
+
+@demo demo/index.html
+-->
+<dom-module id="cells-step-list">
+  <template>
+    <style include="cells-step-list-styles cells-step-list-shared-styles"></style>
+
+    <cells-step id="StepListContainer"
+      active="{{active}}"
+      step-title="[[t(stepTitle)]]"
+      hide-header="{{hiddenHeader}}"
+      collapsed="{{collapsed}}"
+      current-step="[[currentStep]]"
+      max-steps="[[maxSteps]]"
+      change-label="[[stepChangeLabel]]"
+      hide-current-step-label="[[hideCurrentStep]]"
+      last-step="[[lastStep]]"
+      previous="[[previous]]"
+      next="[[next]]"
+      scrolled="[[scrolled]]"
+      disable-change="[[disableChange]]"
+      on-change-pressed="onChangePressed"
+      decorated="[[decorated]]">
+
+      <div slot="filled" class="filled">
+        <template is="dom-repeat" items="[[data]]">
+          <cells-key-values
+            class="inline on-dark"
+            key="[[item.key]]"
+            value="[[item.value]]"
+            masked="[[item.masked]]"
+            mask-chars="[[item.maskChars]]"
+            visible-chars="[[item.visibleChars]]">
+          </cells-key-values>
+        </template>
+      </div>
+
+      <div slot="full">
+        <div class="full">
+          <template is="dom-if" if="[[description]]">
+            <p  class="cells-step-list__description">[[t(description)]]</p>
+          </template>
+
+          <template is="dom-if" if="[[isSkeleton]]">
+            <cells-skeleton-custom  hide-box-shadow> 
+              <cells-skeleton-item show-header show-item></cells-skeleton-item>
+            </cells-skeleton-custom>
+          </template>
+
+          <template is="dom-repeat" items="[[data]]">
+              <cells-key-values
+                class="inline"
+                key="[[item.key]]"
+                value="[[item.value]]"
+                masked="[[item.masked]]"
+                mask-chars="[[item.maskChars]]"
+                visible-chars="[[item.visibleChars]]">
+              </cells-key-values>
+          </template>
+        </div>
+
+        <cells-st-button class="secondary size-m" hidden$="[[!isButton]]">
+          <button disabled="[[disableButton]]" on-click="onContinue">[[t(continueButton, 'Continue')]]
+          </button>
+        </cells-st-button>
+      </div>
+      
+    </cells-step>
+
+  </template>
+  <script src="cells-step-list.js"></script>
+</dom-module>
+
+

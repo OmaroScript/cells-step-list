@@ -1,0 +1,28 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../cells-step-behavior.html">
+<link rel="import" href="../cells-step-focus-behavior.html">
+
+<dom-module id="x-cells-step-focus-behavior-test">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    class XCellsStepFocusBehaviorTest extends Polymer.mixinBehaviors([ CellsBehaviors.StepBehavior, CellsBehaviors.StepFocusBehavior ], Polymer.Element) {
+
+      static get is() {
+        return 'x-cells-step-focus-behavior-test';
+      }
+
+      static get properties() {
+        return {};
+      }
+    }
+
+    customElements.define(XCellsStepFocusBehaviorTest.is, XCellsStepFocusBehaviorTest);
+  </script>
+</dom-module>

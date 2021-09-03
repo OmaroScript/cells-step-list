@@ -1,0 +1,64 @@
+<dom-module id="cells-step-list-styles"><template><style>
+:host {
+  display: block;
+  box-sizing: border-box;
+  font-family: var(--cells-fontDefault, sans-serif);
+  @apply --cells-step-list;
+  --cells-step-step-separator__wedge: {     display: none;   };
+}
+:host cells-st-button {
+  display: flex;
+  margin: 2rem 0 0.5rem 0;
+}
+:host cells-st-button button {
+  margin: auto;
+  font-size: var(--cells-text-size-15, 0.9375rem);
+  font-weight: var(--cells-fontDefaultMedium, 500);
+}
+
+:host([collapsed]) {
+  color: var(--bbva-white, #FFF);
+}
+:host([collapsed]) cells-key-values {
+  font-size: var(--cells-text-size-15, 0.9375rem);
+  --cells-key-values-value-font-size: var(--cells-text-size-15, rem(15px));
+  --cells-key-values-color: var(--bbva-white, #fff);
+  --cells-key-values-key-color: var(--bbva-white, #fff);
+  @apply --cells-fontDefaultLight;
+  --cells-key-values-inline-value: {       font-size: var(--cells-text-size-15, 0.9375rem);     };
+  --cells-key-values-value: {       font-size: var(--cells-text-size-15, 0.9375rem);     };
+  --cells-key-values: {       margin-bottom: 0.75rem;     };
+}
+:host([collapsed]) cells-key-values.value-italic {
+  --cells-key-values-value: {         font-style: italic;       };
+}
+:host([collapsed]) cells-key-values.key-bold {
+  --cells-key-values-key: {         font-weight: 500;         @apply --cells-fontDefaultMedium;       };
+  --cells-key-values-inline-key: {         font-weight: 500;         @apply --cells-fontDefaultMedium;       };
+}
+:host([collapsed]) cells-key-values:not(.inline) {
+  display: block;
+}
+
+:host(.no-padding-button-top) {
+  --cells-step-header: { padding: 0 1rem; };
+  --cells-step-filled: { padding: 1rem 1rem 0 1rem ; } ;
+}
+
+.full {
+  padding: 0 1rem;
+  @apply --cells-step-list-full;
+}
+.full .cells-step-list__description {
+  line-height: 1.75;
+  margin-top: 0;
+  @apply --cells-step-list-description;
+}
+.full cells-key-values {
+  --cells-key-values: {       margin-bottom: 0.75rem;     };
+}
+
+:host(:not([active])) p {
+  opacity: 0.1;
+}
+</style></template></dom-module>

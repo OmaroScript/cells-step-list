@@ -1,0 +1,36 @@
+#!groovy
+
+@Library("workflowlibs@1.8.0") _
+
+pipeline {
+
+    agent any
+
+    options {
+        ansiColor colorMapName: 'XTerm'
+        timestamps()
+    }
+
+    stages {
+        stage('Checkout Global Library') {
+            steps {
+                script{
+                    globalBootstrap {
+                        libraryName   = "cellsworkflowlibs"
+                        libraryBranch = "master"
+
+                        entrypointParams = [
+                            type         : "cellsComponent",
+                            lint         :  true,
+                            sonarQube    :  true,
+                            test         :  true,
+                            publish      :  false,
+                            deploySecGCP :  true,
+                            slackChannel : "https://hooks.slack.com/services/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"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

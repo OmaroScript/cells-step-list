@@ -1,0 +1,1463 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "# cells-demo-helper\n\n![Certificated](https://img.shields.io/badge/certificated-yes-brightgreen.svg)\n![Polymer 2.x](https://img.shields.io/badge/Polymer-2.x-green.svg)\n\n[Demo of component in Cells Catalog](https://catalogs.platform.bbva.com/cells)\n\n`cells-demo-helper` allows to generate a demo page for multiple demo cases of a component.\n\nIt automatically populates a dropdown with all the available cases.\nIt also inserts the demo in a resizable iframe to ease showing responsive features of the component.\n\nFinally, it places each demo case's code in the code area, so the final user can copy/paste it.\n\n## Usage\n\n`cells-demo-helper` expects to have one or more `cells-demo-case` instances inside it, each instance will be a 'demo case'.\n\nThe component will get the __content__ of each demo case, which must be wrapped in a `<template>` tag, and it will generate dynamically an iframe with the code inside each demo case's template.\n\n__Important:__ the `template` that must be put as child of `cells-demo-case`, and which wraps all the code for the case, won't be passed to the iframe. So, don't use it for `dom-bind` purpose. You can add template tags with dom-bind inside this template tag.\n\n__Important:__ all dependencies inside the iframe will be retrieved from the `<head>` tag of the page in which `cells-demo-helper` is used (that is, the demo html).\n\nAlternatively, you can specify which dependencies should be imported in the demo cases but not in the demo main page using 'rel=\"lazy-import\"' instead of 'rel=\"import\"' for them. This way, just the dependencies with 'lazy-import' will be used inside the demo cases.\n\nIf you want to use some component in the demo but that component is not necessary for the demo case, you can prevent it to be imported by adding the boolean attribute `no-import` to the `<link rel=\"import\">`.\n\n**Example**\n```html\n<link rel=\"import\" href=\"../some-component-used-only-in-the-top-level-frame.html\" no-import>\n```\n\nEach demo should have a `heading` attribute with the title of the case, and an optional `description` attribute with an extended text if necessary.\n\nExample:\n```html\n<head>\n...\n  <link rel=\"import\" href=\"mycomponent/mycomponent.html\">\n</head>\n<body>\n...\n<cells-demo-helper>\n  <cells-demo-case heading=\"Case 1\">\n    <template> <!-- do not use dom-bind in this template tag -->\n      Demo content here\n      <my-component>...</my-component>\n    </template>\n  </cells-demo-case>\n  <cells-demo-case heading=\"Case 2\" description=\"Optional description text\">\n    <template>\n      Demo content here\n      <my-component>...</my-component>\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n...\n</body>\n```\n\n## Resizable viewport\n\n`cells-demo-helper` uses `cells-demo-resizable-viewport` to provide resizable features to the iframe, and will use its default values and properties. You can use the following attributes to customize how it behaves:\n\n- __resolution__: initial selected resolution.\n- __breakpoints__: object containing the viewport options, as describen in `cells-demo-resizable-viewport` docs.\n\nExamples:\n```html\n<cells-demo-helper resolution=\"tablet\">\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n```html\n<cells-demo-helper resolution=\"Mobile\" breakpoints='{\n    \"mobile\": { \"width\": 360, \"height\": 640, \"name\": \"Mobile\" },\n    \"tablet\": { \"width\": 768, \"height\": 1024, \"name\": \"Tablet\" }}'>\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n## i18n\n\nUsing the `i18n` attribute will insert a `cells-demo-lang-switcher` component. It will receive the default values of that component, although you can customize them using the attributes `langs` and `locales-path`. The lang selection will be propagated to the demo case iframe.\n\nExamples:\n```html\n<cells-demo-helper i18n>\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n```html\n<cells-demo-helper i18n langs='[\"en\",\"es\"]' locales-path=\"../locales\">\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n## Events\n\nYou can pass an Array of event names to the `events` attribute, it will be the same than passing them to `cells-demo-event-toaster`, which will add event listeners for all of them.\n\nSo each time one of those events is fired inside the demo cases iframe, a paper-toast element will be fired with the event's information.\n\nExample:\n```html\n<cells-demo-helper events='[\"my-component-event-open\",\"my-component-event-close\"]'>\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n## Extra Themes\n\nPassing an `available-themes` attribute with an array of strings will generate a dropdown to add the specified themes to your demos. It will add an import to a component with that name (you must have the adequate devDependencies for that component in your bower.json), and will apply it to the demo, without the need to manually add an import in your demo HTML.\n\nOn demo page load, the default theme selected will be the first one of the available themes. If you want to set a different available theme as the demo default one, you can pass its name to the attribute `default-theme`.\n\nExamples:\n```html\n<cells-demo-helper available-themes='[\"cells-coronita-theme\",\"cells-banking-theme\"]'>\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n```html\n<cells-demo-helper available-themes='[\"cells-coronita-theme\",\"cells-banking-theme\"]' default-theme=\"cells-banking-theme\">\n  <cells-demo-case heading=\"Case 1\">\n    <template>\n      Demo content here\n    </template>\n  </cells-demo-case>\n</cells-demo-helper>\n```\n\n## Hiding header and sidebar for development purposes\n\nThe header and sidebar can be hidden by adding the attribute \"hide-ui\" to the component. This feature may be useful when you need to test the demo in a mobile device.\n\nExample:\n\n```html\n<cells-demo-helper hide-ui></cells-demo-helper>\n```\n\n## Styling\n\nThe following custom properties and mixins are available for styling:\n\n### Custom Properties\n| Custom Property                | Selector | CSS Property                      | Value               |\n| ------------------------------ | -------- | --------------------------------- | ------------------- |\n| --cells-fontDefault            | :host    | font-family                       | Lato, sans-serif    |\n| --cells-demo-helper-text-color | :host    | color                             | `No fallback value` |\n| --cells-demo-helper-text-color | .tabs    | --cells-radio-tabs-color-selected | `No fallback value` |\n### @apply\n| Mixins                                       | Selector                                      | Value |\n| -------------------------------------------- | --------------------------------------------- | ----- |\n| --cells-demo-helper                          | :host                                         | {}    |\n| --cells-demo-helper-ui-checkbox              | .ui-checkbox                                  | {}    |\n| --cells-demo-helper-header                   | .header                                       | {}    |\n| --cells-demo-helper-tabs                     | .tabs                                         | {}    |\n| --cells-demo-helper-top                      | .top-row                                      | {}    |\n| --cells-demo-helper-case-heading             | .heading                                      | {}    |\n| --cells-demo-helper-case-heading-title       | .heading-title                                | {}    |\n| --cells-demo-helper-case-heading-description | .heading-description                          | {}    |\n| --cells-demo-helper-selectors                | .selectors                                    | {}    |\n| --cells-demo-helper-dropdown                 | .dropdown                                     | {}    |\n| --cells-demo-helper-main                     | .main                                         | {}    |\n| --cells-demo-helper-resize-ui                | .resizer                                      | {}    |\n| --cells-demo-helper-small-resize-ui          | @media (max-width: 767px) > .resizer          | {}    |\n| --cells-demo-helper-iframe-container         | .iframe-container                             | {}    |\n| --cells-demo-helper-small-iframe-container   | @media (max-width: 767px) > .iframe-container | {}    |\n| --cells-demo-helper-medium-iframe-container  | @media (min-width: 768px) > .iframe-container | {}    |\n| --cells-demo-helper-iframe                   | .iframe-container iframe                      | {}    |\n| --cells-demo-helper-iframe-mobile-frame      | .iframe-container:before                      | {}    |\n| --cells-demo-helper-overlay                  | .overlay                                      | {}    |\n| --cells-demo-helper-overlay-visible          | .overlay.visible                              | {}    |\n| --cells-demo-helper-code-wrapper             | .code-wrapper                                 | {}    |\n| --cells-demo-helper-code-wrapper-visible     | .visible .code-wrapper                        | {}    |\n| --cells-demo-helper-code-overlay-inner       | .overlay-inner                                | {}    |\n| --cells-demo-helper-code-copy-button         | .copy-button                                  | {}    |\n| --cells-demo-helper-code                     | .code                                         | {}    |\n| --cells-demo-helper-code-pre                 | .code > pre                                   | {}    |",
+      "summary": "Showcases components demo cases, with multiple options such as i18n or resizable viewport.",
+      "path": "cells-demo-helper.js",
+      "properties": [
+        {
+          "name": "_cases",
+          "type": "Array | null | undefined",
+          "description": "Array with the demo cases",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 227,
+              "column": 6
+            },
+            "end": {
+              "line": 229,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Array"
+            }
+          }
+        },
+        {
+          "name": "_markdown",
+          "type": "string | null | undefined",
+          "description": "Current markdown code to show in code snippet bar",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 234,
+              "column": 6
+            },
+            "end": {
+              "line": 237,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_caseTitle",
+          "type": "string | null | undefined",
+          "description": "Current case title",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 242,
+              "column": 6
+            },
+            "end": {
+              "line": 245,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_description",
+          "type": "string | null | undefined",
+          "description": "Current case description",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 250,
+              "column": 6
+            },
+            "end": {
+              "line": 253,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "i18n",
+          "type": "boolean | null | undefined",
+          "description": "Whether the demo must show the lang switcher",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 258,
+              "column": 6
+            },
+            "end": {
+              "line": 261,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "langs",
+          "type": "Array | null | undefined",
+          "description": "Array of custom langs to pass to cells-lang-demo-switcher",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 266,
+              "column": 6
+            },
+            "end": {
+              "line": 268,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Array"
+            }
+          }
+        },
+        {
+          "name": "_lang",
+          "type": "string | null | undefined",
+          "description": "Current selected lang",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 273,
+              "column": 6
+            },
+            "end": {
+              "line": 278,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_setIframeLang\"",
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"en\""
+        },
+        {
+          "name": "localesPath",
+          "type": "string | null | undefined",
+          "description": "Path of custom locales folder to pass to cells-lang-demo-switcher",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 283,
+              "column": 6
+            },
+            "end": {
+              "line": 285,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "events",
+          "type": "Array | null | undefined",
+          "description": "Array of events which cells-demo-event-toaster should listen for",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 290,
+              "column": 6
+            },
+            "end": {
+              "line": 292,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Array"
+            }
+          }
+        },
+        {
+          "name": "resolution",
+          "type": "string | null | undefined",
+          "description": "Default resolution key for the iframe",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 297,
+              "column": 6
+            },
+            "end": {
+              "line": 300,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"mobile\""
+        },
+        {
+          "name": "_resolution",
+          "type": "Object | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 302,
+              "column": 6
+            },
+            "end": {
+              "line": 304,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Object"
+            }
+          }
+        },
+        {
+          "name": "breakpoints",
+          "type": "Object | null | undefined",
+          "description": "Custom breakpoints for cells-demo-resizable-viewport",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 309,
+              "column": 6
+            },
+            "end": {
+              "line": 311,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Object"
+            }
+          }
+        },
+        {
+          "name": "_noTheme",
+          "type": "string | null | undefined",
+          "description": "Default \"no theme\" option text",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 316,
+              "column": 6
+            },
+            "end": {
+              "line": 319,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"standalone (no theme)\""
+        },
+        {
+          "name": "availableThemes",
+          "type": "Array | null | undefined",
+          "description": "Additional available themes for the demo",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 324,
+              "column": 6
+            },
+            "end": {
+              "line": 326,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Array"
+            }
+          }
+        },
+        {
+          "name": "_themes",
+          "type": "Array | null | undefined",
+          "description": "Full list of themes used",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 331,
+              "column": 6
+            },
+            "end": {
+              "line": 334,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "Array"
+            }
+          }
+        },
+        {
+          "name": "defaultTheme",
+          "type": "string | null | undefined",
+          "description": "Selected theme on page load",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 339,
+              "column": 6
+            },
+            "end": {
+              "line": 342,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "selectedTheme",
+          "type": "number | null | undefined",
+          "description": "Index of the selected theme",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 347,
+              "column": 6
+            },
+            "end": {
+              "line": 351,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "_currentTheme",
+          "type": "string | null | undefined",
+          "description": "Stores current selected theme",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 356,
+              "column": 6
+            },
+            "end": {
+              "line": 358,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "_tpl",
+          "type": "string | null | undefined",
+          "description": "Stores current iframe template",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 363,
+              "column": 6
+            },
+            "end": {
+              "line": 365,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "selected",
+          "type": "number | null | undefined",
+          "description": "Index of the selected demo-case.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 370,
+              "column": 6
+            },
+            "end": {
+              "line": 374,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "_noHead",
+          "type": "boolean | null | undefined",
+          "description": "Prevents current document head to be passed on to the iframe. Useful for testing purposes",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 379,
+              "column": 6
+            },
+            "end": {
+              "line": 382,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "multiToast",
+          "type": "boolean | null | undefined",
+          "description": "Allow to show multiple toasts simultaneously",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 387,
+              "column": 6
+            },
+            "end": {
+              "line": 390,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_toastAlign",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 392,
+              "column": 6
+            },
+            "end": {
+              "line": 395,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"bottom\""
+        },
+        {
+          "name": "_toastPositionTarget",
+          "type": "Element | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 397,
+              "column": 6
+            },
+            "end": {
+              "line": 399,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Element"
+            }
+          }
+        },
+        {
+          "name": "_tabs",
+          "type": "Array | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 401,
+              "column": 6
+            },
+            "end": {
+              "line": 406,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Array"
+            }
+          },
+          "defaultValue": "[\"Preview\",\"Code\"]"
+        },
+        {
+          "name": "_tabindex",
+          "type": "number | null | undefined",
+          "description": "Used to set a negative tabindex to focusable elements\nwhen the code tab is active.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 412,
+              "column": 6
+            },
+            "end": {
+              "line": 414,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
+        },
+        {
+          "name": "_selectedTab",
+          "type": "number | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 416,
+              "column": 6
+            },
+            "end": {
+              "line": 421,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_selectedTabChanged\"",
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "hideUi",
+          "type": "boolean | null | undefined",
+          "description": "Set to true to hide all the UI elements except the preview for development purposes.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 426,
+              "column": 6
+            },
+            "end": {
+              "line": 430,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_firstRender",
+          "type": "boolean | null | undefined",
+          "description": "Used to show the spinner only the first time (not between demos).",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 435,
+              "column": 6
+            },
+            "end": {
+              "line": 438,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "showStyleModuleWarnings",
+          "type": "boolean | null | undefined",
+          "description": "Show console warnings about style modules not found in components (shared-styles).",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 443,
+              "column": 6
+            },
+            "end": {
+              "line": 446,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_polymerGlobalSettingsScript",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 448,
+              "column": 6
+            },
+            "end": {
+              "line": 451,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_editorValue",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 452,
+              "column": 6
+            },
+            "end": {
+              "line": 455,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_updateDemo\"",
+              "attributeType": "String"
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 467,
+              "column": 2
+            },
+            "end": {
+              "line": 479,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_onSelectedCaseIndexChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 481,
+              "column": 2
+            },
+            "end": {
+              "line": 487,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "index"
+            },
+            {
+              "name": "cases"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_onSelectedThemeIndexChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 489,
+              "column": 2
+            },
+            "end": {
+              "line": 495,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "index"
+            },
+            {
+              "name": "cases"
+            },
+            {
+              "name": "themes"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_onDefaultThemeChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 497,
+              "column": 2
+            },
+            "end": {
+              "line": 509,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "defaultTheme"
+            },
+            {
+              "name": "themes"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_isActiveTab",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 511,
+              "column": 2
+            },
+            "end": {
+              "line": 513,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "selectedTab"
+            },
+            {
+              "name": "tabName"
+            }
+          ]
+        },
+        {
+          "name": "_selectedTabChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 515,
+              "column": 2
+            },
+            "end": {
+              "line": 523,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "tab"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_updateDemo",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 525,
+              "column": 2
+            },
+            "end": {
+              "line": 531,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "editorValue"
+            },
+            {
+              "name": "previousValue"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_computedThemes",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 533,
+              "column": 2
+            },
+            "end": {
+              "line": 547,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "theme"
+            },
+            {
+              "name": "availableThemes"
+            }
+          ]
+        },
+        {
+          "name": "_langAdder",
+          "description": "Returns the script of initial i18n values to insert in the iframe",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 552,
+              "column": 2
+            },
+            "end": {
+              "line": 559,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_setIframeLang",
+          "description": "Changes dinamically the lang attribute and i18n variables in the iframe",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 565,
+              "column": 2
+            },
+            "end": {
+              "line": 578,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "lng",
+              "type": "String",
+              "description": "lang code"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_setCasesDropdown",
+          "description": "Populates cases array based on available cells-demo-case contents",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 583,
+              "column": 2
+            },
+            "end": {
+              "line": 593,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_getHeadForIframe",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 595,
+              "column": 2
+            },
+            "end": {
+              "line": 643,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_setIframe",
+          "description": "Generates iframe for selected case",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 648,
+              "column": 2
+            },
+            "end": {
+              "line": 680,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "elem"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_setCurrentCase",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 682,
+              "column": 2
+            },
+            "end": {
+              "line": 686,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "elem"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_getDemoCaseHtml",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 688,
+              "column": 2
+            },
+            "end": {
+              "line": 690,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "elem"
+            }
+          ]
+        },
+        {
+          "name": "_generateIframe",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 692,
+              "column": 2
+            },
+            "end": {
+              "line": 742,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "elem"
+            }
+          ]
+        },
+        {
+          "name": "_cleanIframe",
+          "description": "Removes existing iframes",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 747,
+              "column": 2
+            },
+            "end": {
+              "line": 753,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_parseContent",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 754,
+              "column": 2
+            },
+            "end": {
+              "line": 766,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "str"
+            }
+          ]
+        },
+        {
+          "name": "_passEvents",
+          "description": "Creates listener for events inside iframe and propagates events firing to cells-demo-event-toaster",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 772,
+              "column": 2
+            },
+            "end": {
+              "line": 786,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "iframe"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_copyToClipboard",
+          "description": "Copies code snippet to clipboard",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 791,
+              "column": 2
+            },
+            "end": {
+              "line": 815,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_resetCopyButtonState",
+          "description": "Reset copy button text",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 820,
+              "column": 2
+            },
+            "end": {
+              "line": 822,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_computeHeight",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 824,
+              "column": 2
+            },
+            "end": {
+              "line": 826,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "height"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 218,
+          "column": 0
+        },
+        "end": {
+          "line": 827,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "Polymer.Element",
+      "name": "CellsDemoHelper",
+      "attributes": [
+        {
+          "name": "i18n",
+          "description": "Whether the demo must show the lang switcher",
+          "sourceRange": {
+            "start": {
+              "line": 258,
+              "column": 6
+            },
+            "end": {
+              "line": 261,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "langs",
+          "description": "Array of custom langs to pass to cells-lang-demo-switcher",
+          "sourceRange": {
+            "start": {
+              "line": 266,
+              "column": 6
+            },
+            "end": {
+              "line": 268,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Array | null | undefined"
+        },
+        {
+          "name": "locales-path",
+          "description": "Path of custom locales folder to pass to cells-lang-demo-switcher",
+          "sourceRange": {
+            "start": {
+              "line": 283,
+              "column": 6
+            },
+            "end": {
+              "line": 285,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "events",
+          "description": "Array of events which cells-demo-event-toaster should listen for",
+          "sourceRange": {
+            "start": {
+              "line": 290,
+              "column": 6
+            },
+            "end": {
+              "line": 292,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Array | null | undefined"
+        },
+        {
+          "name": "resolution",
+          "description": "Default resolution key for the iframe",
+          "sourceRange": {
+            "start": {
+              "line": 297,
+              "column": 6
+            },
+            "end": {
+              "line": 300,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "breakpoints",
+          "description": "Custom breakpoints for cells-demo-resizable-viewport",
+          "sourceRange": {
+            "start": {
+              "line": 309,
+              "column": 6
+            },
+            "end": {
+              "line": 311,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object | null | undefined"
+        },
+        {
+          "name": "available-themes",
+          "description": "Additional available themes for the demo",
+          "sourceRange": {
+            "start": {
+              "line": 324,
+              "column": 6
+            },
+            "end": {
+              "line": 326,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Array | null | undefined"
+        },
+        {
+          "name": "default-theme",
+          "description": "Selected theme on page load",
+          "sourceRange": {
+            "start": {
+              "line": 339,
+              "column": 6
+            },
+            "end": {
+              "line": 342,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "selected-theme",
+          "description": "Index of the selected theme",
+          "sourceRange": {
+            "start": {
+              "line": 347,
+              "column": 6
+            },
+            "end": {
+              "line": 351,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "selected",
+          "description": "Index of the selected demo-case.",
+          "sourceRange": {
+            "start": {
+              "line": 370,
+              "column": 6
+            },
+            "end": {
+              "line": 374,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "multi-toast",
+          "description": "Allow to show multiple toasts simultaneously",
+          "sourceRange": {
+            "start": {
+              "line": 387,
+              "column": 6
+            },
+            "end": {
+              "line": 390,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "hide-ui",
+          "description": "Set to true to hide all the UI elements except the preview for development purposes.",
+          "sourceRange": {
+            "start": {
+              "line": 426,
+              "column": 6
+            },
+            "end": {
+              "line": 430,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "show-style-module-warnings",
+          "description": "Show console warnings about style modules not found in components (shared-styles).",
+          "sourceRange": {
+            "start": {
+              "line": 443,
+              "column": 6
+            },
+            "end": {
+              "line": 446,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "selected-theme-changed",
+          "description": "Fired when the `selectedTheme` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "selected-changed",
+          "description": "Fired when the `selected` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "cells-demo-helper"
+    }
+  ]
+}

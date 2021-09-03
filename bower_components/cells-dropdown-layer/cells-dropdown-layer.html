@@ -1,0 +1,45 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="cells-dropdown-layer-styles.html">
+
+<dom-module id="cells-dropdown-layer">
+  <template>
+    <style include="cells-dropdown-layer-styles cells-dropdown-layer-shared-styles"></style>
+
+    <div class="opener" on-click="_clickHandler">
+
+      <div class="control">
+        <div class="control-icon" hidden="[[!icon]]">
+          <iron-icon class="icon" icon="[[icon]]"></iron-icon>
+        </div>
+        <button class="control-text" disabled="[[disabled]]" on-focus="_focus" on-blur="_blur">
+          <span class="control-prefix">[[prefix]]</span>
+          [[label]]
+        </button>
+      </div>
+
+      <div class="line">
+        <div class="underline"></div>
+        <div class="icons">
+          <iron-icon class="icon icon-disabled" icon="[[iconDisabled]]"></iron-icon>
+          <iron-icon class="icon icon-open" icon="[[iconOpen]]"></iron-icon>
+        </div>
+      </div>
+
+      <div class="error-text">
+        <span>[[error]]</span>
+      </div>
+
+    </div>
+
+    <div class$="layer [[_layerDirection]]" style$="[[_checkMaxWidth(_maxWidth)]] [[_checkMaxHeight(_maxHeight)]]" on-transitionend="_fixSize">
+      <div class="layer-wrapper">
+        <div class="layer-content" style$="min-width:[[_minWidth]]px;">
+          <slot></slot>
+        </div>
+      </div>
+    </div>
+
+  </template>
+  <script src="cells-dropdown-layer.js"></script>
+</dom-module>

@@ -1,0 +1,24 @@
+{
+  "name": "cells-demo-resizable-viewport",
+  "version": "12.0.5",
+  "description": "Utility component to showcase components at different browser viewport sizes",
+  "keywords": [
+    "demo",
+    "responsive"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "cells-sass": "^2.0.0",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^2.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "main": [
+    "cells-demo-resizable-viewport.html"
+  ]
+}

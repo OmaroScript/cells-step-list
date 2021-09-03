@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../cells-dropdown-layer.html">
+  </head>
+  <body>
+
+    <test-fixture id="myEl">
+      <template>
+        <cells-dropdown-layer label="Lorem"></cells-dropdown-layer>
+      </template>
+    </test-fixture>
+
+    <script>
+    suite('<cells-dropdown-menu> tag', function() {
+      var myEl;
+
+      suite('in general', function() {
+        setup(function() {
+          myEl = fixture('myEl');
+        });
+
+        test('click on control opens layer', function(done) {
+          assert.isFalse(myEl.opened);
+          const control = myEl.shadowRoot.querySelector('.control-text');
+          control.click();
+          setTimeout(() => {
+            assert.isTrue(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('click on control closes open layer', function(done) {
+          myEl.opened = true;
+          assert.isTrue(myEl.opened);
+          const control = myEl.shadowRoot.querySelector('.control-text');
+          control.click();
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('click on disabled control does not open the layer', function(done) {
+          myEl.disabled = true;
+          assert.isFalse(myEl.opened);
+          const control = myEl.shadowRoot.querySelector('.control-text');
+          control.click();
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('click event on opener when disabled does not open the layer', function(done) {
+          myEl.disabled = true;
+          assert.isFalse(myEl.opened);
+          const opener = myEl.shadowRoot.querySelector('.opener');
+          opener.dispatchEvent(new CustomEvent('click'));
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('pressing Esc key with dropdown open closes the dropdown', function(done) {
+          myEl.opened = true;
+          const event = new CustomEvent('keydown');
+          event.keyCode = 27;
+          myEl.dispatchEvent(event);
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('pressing a different key from Esc with dropdown open does not close the dropdown', function(done) {
+          myEl.opened = true;
+          const event = new CustomEvent('keydown');
+          event.keyCode = 28;
+          myEl.dispatchEvent(event);
+          setTimeout(() => {
+            assert.isTrue(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('passing error string set hasError property', function() {
+          assert.isFalse(myEl.hasError);
+          myEl.error = 'Test';
+          assert.isTrue(myEl.hasError);
+        });
+
+        test('passing empty error string does not set hasError property', function() {
+          assert.isFalse(myEl.hasError);
+          myEl.error = '';
+          assert.isFalse(myEl.hasError);
+        });
+
+        test('clicking outside layer when it is open does close it', function(done) {
+          myEl.opened = true;
+          document.body.click();
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('clicking directly on layer div does close it', function(done) {
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          layer.dispatchEvent(new CustomEvent('click', {
+            bubbles: true,
+            composed: true
+          }))
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 160);
+        });
+
+        test('clicking on layer content does not close it', function(done) {
+          myEl.opened = true;
+          const layerContent = myEl.shadowRoot.querySelector('.layer-content');
+          layerContent.click();
+          setTimeout(() => {
+            assert.isTrue(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('layer min width is equal to control width', function(done) {
+          myEl.label = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+          const control = myEl.offsetWidth;
+          myEl.opened = true;
+          requestAnimationFrame(() => {
+            const layer = myEl.shadowRoot.querySelector('.layer-content').offsetWidth;
+            assert.equal(layer, control);
+            done();
+          });
+        });
+
+        test('using controlAsMinWidthOff property allows layer to be smaller than control', function() {
+          myEl.label = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+          myEl.controlAsMinWidthOff = true;
+          const control = myEl.offsetWidth;
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer-content').offsetWidth;
+          assert.isBelow(layer, control);
+        });
+
+        test('open method opens the layer', function(done) {
+          assert.isFalse(myEl.opened);
+          myEl.open();
+          setTimeout(() => {
+            assert.isTrue(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('close method does not modify an already closed layer', function(done) {
+          assert.isFalse(myEl.opened);
+          myEl.close();
+          setTimeout(() => {
+            assert.isFalse(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('open method does not modify an already opened layer', function(done) {
+          myEl.opened = true;
+          assert.isTrue(myEl.opened);
+          myEl.open();
+          setTimeout(() => {
+            assert.isTrue(myEl.opened);
+            done();
+          }, 16);
+        });
+
+        test('opening-x left-to-right assigns correct direction class to layer', function() {
+          myEl.openingX = 'left-to-right';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('left'));
+        });
+
+        test('opening-x right-to-left assigns correct direction class to layer', function() {
+          myEl.openingX = 'right-to-left';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('right'));
+        });
+
+        test('opening-x centered assigns correct direction class to layer', function() {
+          myEl.openingX = 'centered';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('centered'));
+        });
+
+        test('not enough space to the right defaults layer to right-to-left opening', function(done) {
+          requestAnimationFrame(() => {
+            myEl.style = 'float: right';
+            myEl.opened = true;
+            const layer = myEl.shadowRoot.querySelector('.layer');
+            assert.isTrue(layer.classList.contains('right'));
+            done();
+          });
+        });
+
+        test('opening-y top-to-bottom assigns correct direction class to layer', function() {
+          myEl.openingY = 'top-to-bottom';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('top'));
+        });
+
+        test('opening-y bottom-to-top assigns correct direction class to layer', function() {
+          myEl.openingY = 'bottom-to-top';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('bottom'));
+        });
+
+        test('not enough space to the bottom defaults layer to bottom-to-top opening', function() {
+          myEl.style = 'position: fixed; bottom: 0;';
+          myEl.opened = true;
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.isTrue(layer.classList.contains('bottom'));
+        });
+
+        test('transitionend on layer set layer width', function() {
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          assert.equal(layer.style.width, '');
+          myEl.opened = true;
+          layer.dispatchEvent(new CustomEvent('transitionend'));
+          assert.notEqual(layer.style.width, '');
+        });
+
+        test('transitionend on closed layer clears direction classes from layer div', function() {
+          const layer = myEl.shadowRoot.querySelector('.layer');
+          myEl.opened = true;
+          assert.isTrue(layer.classList.contains('left'));
+          myEl.opened = false;
+          layer.dispatchEvent(new CustomEvent('transitionend'));
+          assert.isFalse(layer.classList.contains('left'));
+        });
+
+        test('focus method set focus on control button', function() {
+          const innerButton = myEl.shadowRoot.querySelector('.control-text');
+          myEl.focus();
+          assert.equal(myEl.shadowRoot.activeElement, innerButton);
+        });
+      })
+    });
+    </script>
+  </body>
+</html>

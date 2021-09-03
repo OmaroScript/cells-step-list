@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>Demo cells-icon-message</title>
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="lazy-import" href="../../coronita-icons/coronita-icons.html">
+    <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+    <link rel="lazy-import" href="../../cells-demo-mocker-selector/cells-demo-mocker-selector.html">
+    <link rel="lazy-import" href="../../cells-st-button/cells-st-button.html">
+    <link rel="lazy-import" href="../../cells-atom-icon/cells-atom-icon.html">
+    <link rel="lazy-import" href="../../cells-coronita-base-theme/cells-coronita-base-theme.html">
+    <link rel="lazy-import" href="../cells-icon-message.html">
+    <link rel="lazy-import" href="css/demo-styles.html">
+  </head>
+  <body unresolved ontouchstart style="margin: 0;">
+  <cells-demo-helper i18n langs='["en", "es"]' locales-path="locales" remember-resizable-bars-preference available-themes='["cells-coronita-base-theme", "cells-banking-theme"]'>
+    <cells-demo-case heading="Default" description="Icon above the text.">
+      <template>
+        <dom-bind>
+          <template>
+            <cells-demo-mocker-selector json-file="mock/mock.json" selected="{{selected}}" label="Type"></cells-demo-mocker-selector>
+            <cells-icon-message sizes='{"height": 100, "width": 24}' type="[[selected.type]]" icon="[[selected.icon]]" icon-label="[[selected.iconLabel]]" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est.">
+            </cells-icon-message>
+          </template>
+        </dom-bind>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Full size" description="Use auto sizes attribute to allow original img size">
+      <template>
+        <dom-bind>
+          <template>
+            <cells-demo-mocker-selector label="Type" selected="{{selected}}" data='{
+              "info": {
+                "type": "info",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "info-dark": {
+                "type": "info-dark",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "warning": {
+                "type": "warning",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "error": {
+                "type": "error",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet, consectetur."
+              },
+              "success": {
+                "type": "success",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              }
+            }'></cells-demo-mocker-selector>
+
+            <cells-icon-message sizes='{"height": "auto"}' class="message-input" type="[[selected.type]]" full-size="true" src="[[selected.src]]"  message="[[selected.message]]"></cells-icon-message>
+
+            <div class="dark-bg">
+              <cells-icon-message class="message-input on-dark" type="[[selected.type]]" full-size src="[[selected.src]]" message="[[selected.message]]"></cells-icon-message>
+            </div>
+          </template>
+        </dom-bind>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Full size customized" description="Use auto sizes attribute to allow original img size">
+      <template>
+        <dom-bind>
+          <template>
+            <cells-demo-mocker-selector label="Type" selected="{{selected}}" data='{
+              "info": {
+                "type": "info",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "info-dark": {
+                "type": "info-dark",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "warning": {
+                "type": "warning",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "error": {
+                "type": "error",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet, consectetur."
+              },
+              "success": {
+                "type": "success",
+                "src": "./card.png",
+                "message": "Lorem ipsum dolor sit amet."
+              }
+            }'></cells-demo-mocker-selector>
+
+            <cells-icon-message sizes='{"height": "auto"}' class="custom-message-input" type="[[selected.type]]" full-size="true" src="[[selected.src]]"  message="[[selected.message]]"></cells-icon-message>
+
+            <div class="dark-bg">
+              <cells-icon-message class="custom-message-input on-dark" type="[[selected.type]]" full-size src="[[selected.src]]" message="[[selected.message]]"></cells-icon-message>
+            </div>
+          </template>
+        </dom-bind>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Inline and input message" description="Use the class &quot;inline&quot; to display the icon to the left of the text.">
+      <template>
+        <dom-bind>
+          <template>
+            <cells-demo-mocker-selector label="Type" selected="{{selected}}" data='{
+              "info": {
+                "type": "info",
+                "icon": "coronita:info",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              info-dark": {
+                "type": "info-dark",
+                "icon": "coronita:info",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "warning": {
+                "type": "warning",
+                "icon": "coronita:alert",
+                "message": "Lorem ipsum dolor sit amet."
+              },
+              "error": {
+                "type": "error",
+                "icon": "coronita:alert",
+                "message": "Lorem ipsum dolor sit amet, consectetur."
+              },
+              "success": {
+                "type": "success",
+                "icon": "coronita:correct",
+                "message": "Lorem ipsum dolor sit amet."
+              }
+            }'></cells-demo-mocker-selector>
+
+            <cells-icon-message class="inline" type="[[selected.type]]" icon="[[selected.icon]]" message="[[selected.message]]">
+            </cells-icon-message>
+
+            <div class="dark-bg">
+              <cells-icon-message class="inline on-dark" type="[[selected.type]]" icon="[[selected.icon]]" message="[[selected.message]]">
+              </cells-icon-message>
+            </div>
+
+            <h3 style="margin:32px 16px 8px">.help</h3>
+            <p style="margin:8px 16px">Use the class &quot;help&quot; to display the icon and the text for messages of inline notifications."</p>
+            <h3 style="margin:32px 16px 8px">.message-input</h3>
+            <p style="margin:8px 16px">Use the class &quot;help&quot; to display the icon and the text for messages of components input."</p>
+            <p style="margin:8px 16px"><b>Help text does not have any functionality</b>, it is strictly used to provide information to the user. More info: <a href="https://ui.bbvaexperience.com/ui_element/help/" title="go to bbvaexperience for more information">ui.bbvaexperience</a></p>
+            <cells-icon-message class="help" type="[[selected.type]]" icon="[[selected.icon]]" message="[[selected.message]]"></cells-icon-message>
+            <cells-icon-message class="help" type="[[selected.type]]" icon="[[selected.icon]]" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est."></cells-icon-message>
+
+            <div class="dark-bg">
+              <cells-icon-message class="help on-dark" type="[[selected.type]]" icon="[[selected.icon]]" message="[[selected.message]]"></cells-icon-message>
+              <cells-icon-message class="help on-dark" type="[[selected.type]]" icon="[[selected.icon]]" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est."></cells-icon-message>
+            </div>
+          </template>
+        </dom-bind>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With an image used as icon" description="Use &quot;src&quot; attribute instead of &quot;icon&quot; to display an image.">
+      <template>
+        <cells-icon-message src="http://icons.iconarchive.com/icons/dakirby309/simply-styled/128/Google-Drive-icon.png" icon-label="Google Drive" message="Lorem ipsum dolor sit amet">
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Without icon">
+      <template>
+        <cells-icon-message message="Lorem ipsum dolor sit amet">
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Message with format" description="Inline level HTML tags are allowed for the &quot;message&quot; attribute.">
+      <template>
+        <cells-icon-message
+          icon="coronita:info"
+          message="I'm a <i>message with inline</i> level <strong>formatting</strong> tags">
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With title and custom content" description="Custom HTML can be place inside component when you need more than a single paragraph or the message includes a heading. Elements with &quot;heading&quot; class (ideally heading tags) and paragraphs have some basic styles applied that you can override from the :host component.">
+      <template>
+        <cells-icon-message type="info" icon="coronita:info">
+          <h2 class="heading">Message heading</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos.</p>
+        </cells-icon-message>
+
+        <cells-icon-message class="white-background" type="info" icon="coronita:info">
+          <h2 class="heading">Alternative style</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos.</p>
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="With buttons" description="Buttons can be placed inside an element with slot=&quot;actions&quot;. Button styles come from &quot;cells-layout-styles&quot;.">
+      <template>
+        <cells-icon-message class="white-background" type="info" icon="coronita:info">
+          <h2 class="heading">One button</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur in, ut beatae maiores fuga non quia iusto cupiditate.</p>
+          <div slot="actions" class="double-btn-group">
+            <cells-st-button class="btn secondary size-s">
+              <button>Single action</button>
+            </cells-st-button>
+          </div>
+        </cells-icon-message>
+
+        <cells-icon-message class="white-background" type="warning" icon="coronita:alert">
+          <h2 class="heading">Two actions with the same relevance</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur in, ut beatae maiores fuga non quia iusto cupiditate.</p>
+          <div slot="actions" class="double-btn-group">
+            <cells-st-button class="btn secondary size-s">
+              <button>Action one</button>
+            </cells-st-button>
+            <cells-st-button class="btn secondary size-s">
+              <button>Action two</button>
+            </cells-st-button>
+          </div>
+        </cells-icon-message>
+
+        <cells-icon-message class="white-background" type="success" icon="coronita:correct">
+          <h2 class="heading">Two buttons with long text</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur in, ut beatae maiores fuga non quia iusto cupiditate.</p>
+          <div slot="actions" class="double-btn-group">
+            <cells-st-button class="btn secondary size-s">
+              <button>Action one with long text</button>
+            </cells-st-button>
+            <cells-st-button class="btn secondary size-s">
+              <button>Action two with long text</button>
+            </cells-st-button>
+          </div>
+        </cells-icon-message>
+
+        <cells-icon-message class="white-background" type="error" icon="coronita:error">
+          <h2 class="heading">Primary and secondary actions</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur in, ut beatae maiores fuga non quia iusto cupiditate.</p>
+          <div slot="actions" class="double-btn-group">
+            <cells-st-button class="btn secondary size-s">
+              <button>Primary action</button>
+            </cells-st-button>
+            <cells-st-button class="btn link size-s">
+              <button>Secondary action</button>
+            </cells-st-button>
+          </div>
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Other uses &amp; styling posibilities">
+      <template>
+        <custom-style>
+          <style is="custom-style">
+            .demo-heading {
+              font-size: 18px;
+              font-weight: 400;
+              margin: 15px 0 0;
+              padding: 15px 30px 0;
+            }
+
+            .demo-heading:not(:first-of-type) {
+              padding-top: 30px;
+              border-top: 1px solid #c3c1c1;
+            }
+
+            .user-avatar {
+              display: flex;
+              align-items: center;
+
+              --cells-icon-message-icon: {
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #004481;
+                background-color: #004481;
+              }
+              ;
+            }
+
+            .inline-reversed {
+              flex-direction: row-reverse;
+              text-align: right;
+
+              --cells-icon-message-icon: {
+                margin-left: 10px;
+                margin-right: 0;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #004481;
+                background-color: #004481;
+              }
+              ;
+            }
+
+            a>cells-icon-message,
+            .user-avatar a {
+              color: #1464A5 !important;
+            }
+          </style>
+        </custom-style>
+
+        <h2 class="demo-heading">Media Object pattern</h2>
+        <cells-icon-message class="inline user-avatar" src="https://randomuser.me/api/portraits/men/84.jpg">
+          <div>
+            <div>FirstName LastName</div>
+            <a href="mailto:user@email.com">user@email.com</a>
+          </div>
+        </cells-icon-message>
+
+        <h2 class="demo-heading">Reversed direction via styles</h2>
+        <cells-icon-message class="inline inline-reversed user-avatar" src="https://randomuser.me/api/portraits/men/84.jpg">
+          <div>
+            <div>FirstName LastName</div>
+            <a href="mailto:user@email.com">user@email.com</a>
+          </div>
+        </cells-icon-message>
+
+        <h2 class="demo-heading">Linked example</h2>
+        <a href="#">
+          <cells-icon-message class="inline" icon="coronita:info" message="I'm a linked message">
+          </cells-icon-message>
+        </a>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Message with heading and message" description="Inline level HTML tags are allowed for the &quot;message&quot; attribute.">
+      <template>
+        <cells-icon-message
+          type="error"
+          icon="coronita:alert"
+          heading="Message heading"
+          message="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos.">
+        </cells-icon-message>
+        <!-- Temp workaround to pass Cells validation -->
+        <cells-icon-message hidden></cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="i18n Translation" description="Using i18n behavior for Internationalization purposes">
+      <template>
+        <cells-icon-message
+          type="info"
+          icon="coronita:info"
+          heading="cells-icon-message-title"
+          message="cells-icon-message-message">
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Icon, message and action" description="Inline level HTML tags are allowed for the &quot;message&quot; attribute.">
+      <template>
+        <cells-icon-message
+          type="error"
+          icon="coronita:alert"
+          message="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos.">
+            <div slot="actions">
+              <cells-st-button class="link transparent full" >
+                <button>Action</button>
+              </cells-st-button>
+            </div>
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="No background-color and padding" description="Icon above the text without background color and padding">
+      <template>
+        <dom-bind>
+          <template>
+            <cells-demo-mocker-selector json-file="mock/mock.json" selected="{{selected}}" label="Type"></cells-demo-mocker-selector>
+            <cells-icon-message 
+              class="no-background-color no-padding"
+              type="[[selected.type]]"
+              icon="[[selected.icon]]"
+              icon-label="[[selected.iconLabel]]"
+              message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est."
+            ></cells-icon-message>
+          </template>
+        </dom-bind>
+      </template>
+    </cells-demo-case>
+    <cells-demo-case heading="Icon, message with button inline" description="Icon, message with icon action or other content inline.">
+      <template>
+        <custom-style>
+          <style is="custom-style">
+            .custom-style {
+              display: grid;
+              grid-template-columns: auto auto;
+              color: #666666;
+            }
+            .transparent-button {
+              border: 0;
+              background: transparent;
+              --iron-icon-fill-color: #004481;
+            }
+          </style>
+        </custom-style>
+        <cells-icon-message
+          type="info"
+          icon="coronita:info"
+          class="help custom-style"
+          message="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos."
+          inline-content-with-text>
+          <button class="transparent-button">
+            <cells-atom-icon icon="coronita:help"></cells-atom-icon>
+          </button>
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="Multi message"  description="Multiple messages">
+      <template>
+        <cells-icon-message id="el"></cells-icon-message>
+        <script>
+          document.addEventListener('WebComponentsReady', function() {
+            const el = document.querySelector('#el');
+            el.messages = [
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est.',
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nibh lacus, rutrum vehicula dignissim eget, laoreet vel est.'];
+            el.icon = 'coronita:info';
+          });
+        </script>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="In page styles" description="Custom styles to put the component directly in page.">
+      <template>
+        <cells-icon-message type="info" icon="coronita:info" class="in-page">
+          <h2 class="heading">Message heading</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos.</p>
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+    <cells-demo-case heading="help message styles" description="Custom styles to put the component directly in page.">
+      <template>
+        <cells-icon-message 
+          type="info"
+          icon="coronita:info"
+          class="help-message"
+          message="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga aut omnis dignissimos, reprehenderit facilis eos">
+        </cells-icon-message>
+      </template>
+    </cells-demo-case>
+
+  </cells-demo-helper>
+</body>
+
+</html>

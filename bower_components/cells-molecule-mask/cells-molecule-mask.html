@@ -1,0 +1,25 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../cells-i18n-behavior/cells-i18n-behavior.html">
+<link rel="import" href="../cells-atom-icon/cells-atom-icon.html">
+<link rel="import" href="cells-molecule-mask-styles.html">
+
+<dom-module id="cells-molecule-mask">
+  <template strip-whitespace="">
+    <style include="cells-molecule-mask-styles cells-molecule-mask-shared-styles"></style>
+
+    <div class="content" slot="content">
+      <slot></slot>
+    </div>
+
+    <div class="wrapper">
+      <span class="mask" inner-h-t-m-l="[[_displayedMask]]" hidden="[[!masked]]"></span>
+      <span class="number" data-selector="cells-molecule-mask-number">[[_displayedValue]]</span>
+
+      <button on-click="_onClickIcon" class="btn-transparent" hidden$="[[_iconHidden]]" aria-label$="[[t(_buttonLabel)]]">
+        <cells-atom-icon icon="[[_displayedIcon]]" class$="icon icon-size-[[iconSize]]" aria-hidden="true"></cells-atom-icon>
+      </button>
+    </div>
+
+  </template>
+  <script src="cells-molecule-mask.js"></script>
+</dom-module>

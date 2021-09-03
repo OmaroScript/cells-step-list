@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="lazy-import" href="../../cells-i18n-behavior/cells-i18n-behavior.html">
+
+  <link rel="import" href="../cells-demo-helper.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <cells-demo-helper>
+        <cells-demo-case heading="Case 1"><template>Demo case 0</template></cells-demo-case>
+        <cells-demo-case heading="Case 2"><template>Demo case 1</template></cells-demo-case>
+        <cells-demo-case heading="Case 3"><template>Demo case 2</template></cells-demo-case>
+      </cells-demo-helper>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="themes">
+    <template>
+      <cells-demo-helper available-themes='["cells-coronita-theme","cells-banking-theme"]'>
+        <cells-demo-case heading="Case 1"><template>Demo case 0</template></cells-demo-case>
+        <cells-demo-case heading="Case 2"><template>Demo case 1</template></cells-demo-case>
+        <cells-demo-case heading="Case 3"><template>Demo case 2</template></cells-demo-case>
+      </cells-demo-helper>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="i18n">
+    <template>
+      <cells-demo-helper i18n langs='["en", "es", "fr"]' locales-path="../demo/locales">
+        <cells-demo-case heading="Case 1"><template></template></cells-demo-case>
+        <cells-demo-case heading="Case 2"><template>Demo case 2</template></cells-demo-case>
+        <cells-demo-case heading="Case 3"><template>Demo case 3</template></cells-demo-case>
+      </cells-demo-helper>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="events">
+    <template>
+      <cells-demo-helper events='["event1"]'>
+        <cells-demo-case heading="Case 1"><template></template></cells-demo-case>
+        <cells-demo-case heading="Case 2"><template>Demo case 2</template></cells-demo-case>
+        <cells-demo-case heading="Case 3"><template>Demo case 3</template></cells-demo-case>
+      </cells-demo-helper>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('<cells-demo-helper> basic', () => {
+      let el;
+
+      setup(() => {
+        replace('cells-demo-dropdown-menu').with('fake-cells-demo-dropdown-menu');
+        el = fixture('default');
+        el._noHead = true;
+      });
+
+      suite('Demo cases', () => {
+        test('Loads the first case by default', (done) => {
+          el.addEventListener('iframe-loaded', () => {
+            const iframe = el.shadowRoot.querySelector('iframe');
+            const iframeDoc = iframe.contentDocument;
+            const iframeHtml = iframeDoc.body.innerHTML;
+            assert.equal(iframeHtml, 'Demo case 0');
+            done();
+          });
+        });
+
+        test('Demo selector shows the heading of each cells-demo-case in light DOM', (done) => {
+          let childrens = el.querySelectorAll('cells-demo-case');
+          el.addEventListener('iframe-loaded', () => {
+            [].forEach.call(childrens, (child, index) => {
+              assert.equal(el._cases[ index ].name, child.heading);
+            });
+            done();
+          });
+        });
+
+        test('Changing the case in demo selector changes iframe content', (done) => {
+          el.selected = 1;
+          el.addEventListener('iframe-loaded', () => {
+            const iframe = el.shadowRoot.querySelector('iframe');
+            const iframeDoc = iframe.contentDocument;
+            const iframeHtml = iframeDoc.body.innerHTML;
+            assert.equal(iframeHtml, 'Demo case 1');
+            done();
+          });
+        });
+      });
+
+      suite('Code', () => {
+        test('Generates the code for the selected case', (done) => {
+          el.addEventListener('iframe-loaded', () => {
+            assert.equal(el.$.editor.content, 'Demo case 0');
+            done();
+          });
+        });
+
+        test('Changing the editor code updates the current demo case', (done) => {
+          el.addEventListener('iframe-loaded', () => {
+            const tabs = Polymer.dom(el.root).querySelector('.tabs');
+
+            // wait for second iframe-lodaed event
+            el.addEventListener('iframe-loaded', () => {
+              const iframe = Polymer.dom(el.root).querySelector('iframe');
+              const iframeDoc = iframe.contentDocument;
+              const iframeHtml = iframeDoc.body.innerHTML;
+              assert.equal(iframeHtml, 'Demo case 0 changed');
+              done();
+            });
+
+            // select code tab
+            tabs.selected = 1;
+
+            // simulate editor content change
+            el.$.editor.content = 'Demo case 0 changed';
+
+            // back to demo tab
+            tabs.selected = 0;
+          });
+        });
+        test('clicking on copy button copies the code into clipboard', () => {
+          const execCommandStub = document.execCommand = sinon.stub().returns(true);
+          el.$.copyButton.click();
+          assert.equal(el.$.copyButton.textContent, 'Copied!', 'text button changes to "Copied!"');
+          assert.equal(execCommandStub.getCall(0).args[ 0 ], 'copy', 'execCommand is called with copy as param');
+        });
+
+        test('copy button text is reset after 1 second', () => {
+          const timeoutStub = sinon.stub(window, 'setTimeout', cb => cb.call(el));
+          el.$.copyButton.click();
+          assert.equal(el.$.copyButton.textContent, 'Copy');
+          timeoutStub.restore();
+        });
+      });
+
+      suite('Tabs', () => {
+        let tabs;
+        let codeSection;
+
+        setup(() => {
+          tabs = el.shadowRoot.querySelector('.tabs');
+          codeSection = el.shadowRoot.querySelector('.overlay');
+        });
+
+        test('Preview tab is selected by default', () => {
+          assert.equal(tabs.selected, 0);
+          assert.equal(el._tabs[ el._selectedTab ], 'Preview');
+        });
+
+        test('Code is not visible by default', () => {
+          assert.isFalse(codeSection.classList.contains('visible'));
+        });
+
+        test('Click on Code tab shows code', () => {
+          tabs.selected = 1;
+          assert.isTrue(codeSection.classList.contains('visible'));
+        });
+
+        test('Click on Code tab disables :focus on iframe and selectors', (done) => {
+          el.addEventListener('iframe-loaded', () => {
+            tabs.selected = 1;
+            const iframe = el.shadowRoot.querySelector('iframe');
+            assert.equal(iframe.getAttribute('tabindex'), -1, 'iframe is not focusable');
+            flush(() => {
+              const dropdowns = el.shadowRoot.querySelectorAll('.dropdown');
+              for (const [index, dropdown] of dropdowns.entries()) {
+                assert.equal(dropdown.getAttribute('tabindex'), -1, `selector ${index} is not focusable`);
+              }
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    suite('<cells-demo-helper> themes', () => {
+      let el;
+
+      setup(() => {
+        replace('cells-demo-dropdown-menu').with('fake-cells-demo-dropdown-menu');
+        el = fixture('themes');
+        el._noHead = true;
+      });
+
+      test('Setting "default-theme" selects that theme', () => {
+        el.defaultTheme = 'cells-coronita-theme';
+        assert.equal(el.selectedTheme, el.availableThemes.indexOf(el.defaultTheme));
+      });
+
+      test('Setting "selected-theme" changes theme inside iframe', (done) => {
+        flush(() => {
+          el.addEventListener('iframe-loaded', () => {
+            el.selectedTheme = 1;
+            const iframe = el.shadowRoot.querySelector('iframe');
+            const iframeContent = iframe.contentWindow.document;
+            const iframeThemeLink = iframeContent.head.querySelector('link[href*="cells-banking-theme"]');
+            assert.isOk(iframeThemeLink);
+          });
+          done();
+        });
+      });
+    });
+
+    suite('<cells-demo-helper> i18n', () => {
+      let el;
+
+      setup(() => {
+        replace('cells-demo-dropdown-menu').with('fake-cells-demo-dropdown-menu');
+        el = fixture('i18n');
+        el._noHead = true;
+      });
+
+      test('shows a lang switcher which receives correct locales and available langs', (done) => {
+        flush(() => {
+          const langSwitcher = el.shadowRoot.querySelector('.lang-selector');
+          assert.equal(langSwitcher.langs.length, 3);
+          assert.equal(langSwitcher.localesPath, '../demo/locales');
+          done();
+        })
+      });
+
+      test('changing lang changes lang inside iframe', (done) => {
+        el.addEventListener('iframe-loaded', () => {
+          flush(() => {
+            const langSwitcher = el.shadowRoot.querySelector('.lang-selector');
+            langSwitcher.selected = 1;
+            const iframe = el.shadowRoot.querySelector('iframe');
+            const iframeContent = iframe.contentWindow.document;
+            const iframeLang = iframeContent.documentElement.lang;
+            assert.equal(iframeLang, 'es');
+            done();
+          });
+        });
+      });
+    });
+
+    suite('<cells-demo-helper> events', () => {
+      let el;
+
+      setup(() => {
+        replace('cells-demo-dropdown-menu').with('fake-cells-demo-dropdown-menu');
+        el = fixture('events');
+        el._noHead = true;
+      });
+
+      test('firing event inside iframe reaches event toaster outside iframe', (done) => {
+        const spy = sinon.spy();
+        el.addEventListener('iframe-loaded', () => {
+          flush(()=> {
+            const toast = el.shadowRoot.querySelector('#eventToaster');
+            const iframe = el.shadowRoot.querySelector('iframe');
+            const iframeDoc = iframe.contentDocument;
+            iframeDoc.dispatchEvent(new CustomEvent('WebComponentsReady'));
+            const event = new CustomEvent('event1', {
+              bubbles: true,
+              composed: true
+            });
+            toast.addEventListener('event1', spy);
+            iframeDoc.dispatchEvent(event);
+            assert.isTrue(spy.calledOnce);
+            done();
+          });
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

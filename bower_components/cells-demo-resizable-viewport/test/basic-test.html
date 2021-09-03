@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <link rel="import" href="../cells-demo-resizable-viewport.html">
+  </head>
+  <body>
+    <test-fixture id="default">
+      <template>
+        <cells-demo-resizable-viewport></cells-demo-resizable-viewport>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('<cells-demo-resizable-viewport>', () => {
+        let el;
+        let firstBar;
+        let secondBar;
+        let spy;
+        let clock;
+
+        setup(done => {
+          el = fixture('default');
+          el.breakpoints = {'a': { width: 100 }, 'b': { width: 200 }};
+          spy = sinon.spy();
+          el.addEventListener('selected-breakpoint-changed', spy);
+
+          clock = sinon.useFakeTimers();
+
+          flush(() => {
+            firstBar = el.shadowRoot.querySelector('.bp__bar');
+            secondBar = el.shadowRoot.querySelectorAll('.bp__bar')[1];
+            done();
+          });
+        });
+
+        teardown(() => {
+          clock.restore();
+        });
+
+        suite('setting breakpoints property', () => {
+          test('breakpoints are sorted by width in descending order', () => {
+            assert.equal(firstBar.dataset.id, 'b');
+            assert.equal(secondBar.dataset.id, 'a');
+          });
+        });
+
+        suite('selecting a breakpoint', () => {
+          test('selected-breakpoint-changed event is fired', () => {
+            firstBar.click();
+            clock.tick(100);
+            assert.isTrue(spy.called, 'selected-breakpoint-changed event is fired');
+          });
+        });
+
+        suite('dragging', () => {
+          setup(() => {
+            el.selectedKey = 'a'; // secondBar
+          });
+
+          test('vertical dragging does not change breakpoint width', () => {
+            MockInteractions.track(secondBar, 0, 10);
+            clock.tick(100);
+            assert.isTrue(spy.called, 'selected-breakpoint-changed event is fired');
+          });
+
+          test('horizontal dragging changes breakpoint width', () => {
+            MockInteractions.track(secondBar, 10, 0);
+            assert.isTrue(spy.called, 'selected-breakpoint-changed event is fired');
+            assert.equal(spy.getCall(1).args[0].detail.value.width, 120, 'event detail width is 120');
+          });
+        });
+
+        suite('reset button', () => {
+          let btn;
+
+          setup(() => {
+            btn = el.shadowRoot.querySelector('button');
+          });
+
+          test('is hidden by default', () => {
+            assert.isTrue(btn.hidden);
+          });
+
+          test('is visible after changing a breakpoint width', () => {
+            let resetBtnInitialState = btn.hidden;
+
+            MockInteractions.track(secondBar, 10, 0);
+
+            assert.notEqual(btn.hidden, resetBtnInitialState);
+            assert.isFalse(btn.hidden);
+          });
+
+          test('clicking on it resets breakpoints', () => {
+            sinon.spy(el, 'reset');
+            btn.click();
+            clock.tick(100);
+            assert.isTrue(el.reset.calledOnce);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../cells-step-manager-behavior.html">
+
+<dom-module id="x-cells-step-manager-behavior-test">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    class XCellsStepManagerBehaviorTest extends Polymer.mixinBehaviors([ CellsBehaviors.StepManagerBehavior ], Polymer.Element) {
+
+      static get is() {
+        return 'x-cells-step-manager-behavior-test';
+      }
+
+      static get properties() {
+        return {};
+      }
+    }
+
+    customElements.define(XCellsStepManagerBehaviorTest.is, XCellsStepManagerBehaviorTest);
+  </script>
+</dom-module>

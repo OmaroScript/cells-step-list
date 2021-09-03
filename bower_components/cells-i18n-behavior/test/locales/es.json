@@ -1,0 +1,16 @@
+{
+  "simple-element-info": {
+    "message": "Informacion"
+  },
+  "simple-element-cancel": {
+    "message": "Cancelar"
+  },
+  "simple-element-warn": {
+    "message": "Alerta"
+  },
+  "simple-element-interpolated": {
+    "message": "texto ${interpolated}"
+  },
+  "simple-element-array-text": ["Text1 + ", "Text2"],
+  "simple-element-property-value-text": "El valor es ${propertyValue}"
+}

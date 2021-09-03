@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" name="viewport">
+    <title>cells-i18n-msg-behavior demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../cells-demo-helper/cells-demo-helper.html">
+    <link rel="import" href="../cells-i18n-behavior.html">
+    <link rel="import" href="css/demo-styles.html">
+  </head>
+  <body>
+    <cells-demo-helper i18n langs='["en", "es"]' locales-path="locales" resolution="tablet"
+        breakpoints='{ "tablet": { "width": 768, "height": 760, "name": "Tablet" } }' events='["i18n-lang-changed"]'>
+      <cells-demo-case heading="Basic" description="Different cases of translating">
+        <template>
+          <dom-module id="demo-i18n">
+            <template>
+              <style>
+                :host {
+                  display: block;
+                  padding: 15px;
+                  font-size: 14px;
+                  color: #121212;
+                }
+                h2 {
+                  color: #000;
+                  font-weight: 300;
+                  font-size: 18px;
+                  margin: 0 0 0.5em;
+                }
+                p { margin: 0; }
+                input { min-height: 2rem; font-size: 1rem; width: 100%; }
+                .sample {
+                  padding: 15px;
+                  margin-bottom: 20px;
+                  background-color: #F4F4F4;
+                  border: 1px solid #E9E9E9;
+                }
+                .sample:last-of-type {
+                  margin-bottom: 0;
+                }
+              </style>
+              <div class="sample">
+                <h2>Example in input's placeholder</h2>
+                <p><input type="text" placeholder="[[t('placeholder-text')]]"></p>
+              </div>
+
+              <div class="sample">
+                <h2>With doTranslation()</h2>
+                <p>[[doTranslation('hola-key')]]</p>
+              </div>
+
+              <div class="sample">
+                <h2>With t(), using innerHTML to print HTML from locales</h2>
+                <p inner-h-t-m-l="[[t('prueba-uno')]]"></p>
+              </div>
+
+              <div class="sample">
+                <h2>Fallback string in case your missing key has no corresponding locale</h2>
+                <p>[[t('missing-key-in-locales',
+                  'Fallback of missing-key-in-locales')]]</p>
+                <p>[[t('missing-key')]]</p>
+              </div>
+
+              <div class="sample">
+                <h2>Interpolated translation</h2>
+                <p>[[t('explicit-text', '', '{"name": "Roberto"}')]]</p>
+              </div>
+
+              <div class="sample">
+                <h2>Print array of translations</h2>
+                <p>[[t('array-text')]]</p>
+              </div>
+
+              <div class="sample">
+                <h2>Translations made in attached (don't update)</h2>
+                <p>[[readyTranslation]]</p>
+                <p>[[explicitInterpolatedText]]</p>
+              </div>
+
+              <div class="sample">
+                <h2>Translation value uses a component property as an interpolated translation.</h2>
+                <p>[[t('self-property')]]</p>
+              </div>
+            </template>
+          </dom-module>
+
+          <script>
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'demo-i18n',
+
+                behaviors: [
+                  window.CellsBehaviors.i18nBehavior
+                ],
+
+                properties: {
+                  readyTranslation: {
+                    type: String,
+                    notify: true
+                  },
+                  explicitInterpolatedText: {
+                    type: String,
+                    notify: true
+                  },
+                  /**
+                   * This property is bind to translation key: 'self-property';
+                   * `"self-property": "Property value is ${propertyValue}"`
+                   */
+                  propertyValue: {
+                    type: Number,
+                    value: 1000
+                  }
+                },
+
+                attached: function() {
+                  this.getMsg().then(function() {
+                    this.readyTranslation = this.t('prueba-dos');
+                    this.explicitInterpolatedText = this.t('explicit-text', '', {name: 'Roberto'});
+                  }.bind(this));
+                }
+              });
+            });
+          </script>
+          <demo-i18n></demo-i18n>
+        </template>
+      </cells-demo-case>
+    </cells-demo-helper>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+{
+    "schema_version": "1.0.0",
+    "elements": [
+        {
+            "description": "`<bbva-badge-notification>` Badge of notifications. When it is red it is simply informative of the number of notifications you have pending. When it is green or blue it is associated with a panel action.\n\nAvailable classes: \nabs: Absolute position of component. When use, add `position: relative` to the father. Extra classes:\ntop-left: Top left position. Translate -8px/-8px.\ntop-right: Top right position. Translate 8px/-8px.\nbottom-left: Bottom left position. Translate -8px/8px.\nbottom-right: Bottom right position. Translate 8px/8px.\n\nExample:\n\n```html\n<bbva-badge-notification \n  accessibility-text=\"8 Notificaciones\"\n  text=\"8\"></bbva-badge-notification>\n\n<bbva-badge-notification \n  accessibility-text=\"8 Notificaciones\" \n  class=\"abs top-right\" \n  text=\"8\"></bbva-badge-notification>\n```\n\n## Styling\n\nThe following custom properties and mixins are available for styling:\n\n| Custom Property                               | Description                      | Default                              |\n| :-------------------------------------------- | :------------------------------- | :----------------------------------- |\n| --bbva-badge-notification                     | Mixin applied to :host           | {}                                   |\n| --bbva-badge-notification-bg-color            | Background color                 | var(--bbva-dark-red, #B92A45)        |\n| --bbva-badge-notification-boder-color         | Border color                     | var(--bbva-white, #FFFFFF)           |\n| --bbva-badge-notification-color               | Text color                       | var(--bbva-white, #FFFFFF)           |\n| --bbva-badge-notification-span                | Mixin applied to span            | {}                                   |\n| --bbva-badge-notification-boder-color-dark    | Border color with class dark     | var(--bbva-core-blue, #004481)       |\n| --bbva-badge-notification-boder-bg-color-dark | Background color with class dark | var(--bbva-white-core-blue, #1464A5) |\n| --bbva-badge-notification-position            | Position                         | absolute                             |",
+            "summary": "",
+            "path": "bbva-badge-notification.js",
+            "properties": [
+                {
+                    "name": "accessibilityText",
+                    "type": "string",
+                    "description": "",
+                    "privacy": "public",
+                    "sourceRange": {
+                        "start": {
+                            "line": 14,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 16,
+                            "column": 9
+                        }
+                    },
+                    "metadata": {
+                        "polymer": {}
+                    }
+                },
+                {
+                    "name": "text",
+                    "type": "string",
+                    "description": "",
+                    "privacy": "public",
+                    "sourceRange": {
+                        "start": {
+                            "line": 17,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 19,
+                            "column": 9
+                        }
+                    },
+                    "metadata": {
+                        "polymer": {}
+                    }
+                }
+            ],
+            "methods": [],
+            "staticMethods": [],
+            "demos": [
+                {
+                    "url": "demo/index.html",
+                    "description": ""
+                }
+            ],
+            "metadata": {},
+            "sourceRange": {
+                "start": {
+                    "line": 7,
+                    "column": 2
+                },
+                "end": {
+                    "line": 30,
+                    "column": 3
+                }
+            },
+            "privacy": "public",
+            "superclass": "Element",
+            "name": "BbvaBadgeNotification",
+            "attributes": [
+                {
+                    "name": "accessibility-text",
+                    "description": "",
+                    "sourceRange": {
+                        "start": {
+                            "line": 14,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 16,
+                            "column": 9
+                        }
+                    },
+                    "metadata": {},
+                    "type": "string"
+                },
+                {
+                    "name": "text",
+                    "description": "",
+                    "sourceRange": {
+                        "start": {
+                            "line": 17,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 19,
+                            "column": 9
+                        }
+                    },
+                    "metadata": {},
+                    "type": "string"
+                }
+            ],
+            "events": [],
+            "styling": {
+                "cssVariables": [],
+                "selectors": []
+            },
+            "slots": [],
+            "tagname": "bbva-badge-notification"
+        }
+    ]
+}

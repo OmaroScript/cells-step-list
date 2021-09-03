@@ -1,0 +1,35 @@
+<custom-style>
+  <style>
+    html {
+      --cells-fontDefault: sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      font-family: var(--cells-fontDefault);
+      text-align: center;
+      background-color: #FAFAFA;
+
+      /* prevent selecting the iframe contents while dragging */
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .row {
+      padding: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    iframe {
+      margin: 60px auto 0;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px 0 rgba(0,0,0,.08);
+    }
+  </style>
+</custom-style>

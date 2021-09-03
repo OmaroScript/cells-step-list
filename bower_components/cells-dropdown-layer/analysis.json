@@ -1,0 +1,1164 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "# cells-dropdown-layer\n\n![Certificated](https://img.shields.io/badge/certificated-yes-brightgreen.svg) ![Polymer 2.x](https://img.shields.io/badge/Polymer-2.x-green.svg)\n\n[Demo of component in Cells Catalog](https://catalogs.platform.bbva.com/cells)\n\nComponent to show a control and an expansible content. Activating the control will show a layer which will be filled with the component contents.\n\n```html\n<cells-dropdown-layer label=\"Lorem ipsum\">\n  Content...\n</cells-dropdown-layer>\n```\n\nYou can set the label for the control, as well as an optional icon for it. You can use a prefix text for the control, too. You can also set 'disabled' state. The layer can be closed with the Esc key, activating the control again, or clicking/focusing anything outside it.\n\n```html\n<cells-dropdown-layer label=\"Lorem ipsum\" prefix=\"Lorem ipsum: \" disabled>\n  Content...\n</cells-dropdown-layer>\n<cells-dropdown-layer label=\"Lorem ipsum\" icon=\"coronita:creditcard\">\n  Content...\n</cells-dropdown-layer>\n```\n\nThe layer tends to open from top left to bottom right by default, but it will adjust its opening direction based on its content size and the available space in the viewport. You can use the `safeMargin` property to specify the \"safe distance\" (in pixels) to keep from the layer to the viewport limits. Opening direction can be specified using the `openingX` and `openingY` attributes. `opening-x` can receive 'left-to-right', 'right-to-left' or 'centered' as values, while `opening-y` can receive 'top-to-bottom' or 'bottom-to-top'.\n\n```html\n<cells-dropdown-layer label=\"Lorem ipsum\" opening-x=\"centered\" opening-y=\"bottom-to-top\" safe-margin=\"24\">\n  Content...\n</cells-dropdown-layer>\n```\n\nLayer width and height will adapt to its content, although it won't be smaller than the control width. You can allow the layer to be smaller than the control width setting the `controlAsMinWidthOff` property to true. Also, you can use CSS variables to set min-width, min-height, max-width and max-height for the layer.\n\n```html\n<cells-dropdown-layer label=\"Lorem ipsum\" control-as-min-width-off>\n  Content...\n</cells-dropdown-layer>\n```\n\nThe component will show an error status when setting its `error` property with an object containing a 'msg' (for example, `{ \"msg\": \"You must select an option\"}`).\n\nThe following helper classes are provided in the component styles:\n- 'small': makes the component control smaller.\n- 'dark': changes the component colors to improve contrast for dark backgrounds.\n- 'icon-only': leaves just the icon as visible element in the control.\n\n## Icons\n\nSince this component uses icons, it will need an [iconset](https://bbva.cellsjs.com/guides/best-practices/cells-icons.html) in your project as an [application level dependency](https://bbva.cellsjs.com/guides/advanced-guides/application-level-dependencies.html). In fact, this component uses an iconset in its demo.\n\n## Styling\n\nThe following custom properties and mixins are available for styling:\n\n| Custom property                                               | Description                                                               | Default |\n|:--------------------------------------------------------------|:--------------------------------------------------------------------------|:-------:|\n| --cells-dropdown-layer-value-color                            | Value color                                                               | #565C67 |\n| --cells-dropdown-layer-underline-color                        | Underline color                                                           | #C6C8CF |\n| --cells-dropdown-layer-icon-color                             | Icon color                                                                | #565C67 |\n| --cells-dropdown-layer-animation-time                         | Transitions duration                                                      |  0.3s   |\n| --cells-dropdown-layer                                        | Empty mixin for component                                                 |   {}    |\n| --cells-dropdown-layer-dark-value-color                       | Value color with dark class                                               | #D0D1D4 |\n| --cells-dropdown-layer-dark-underline-color,                  | Underline color with dark class                                           | #565C67 |\n| --cells-dropdown-layer-dark-icon-color                        | Icon color with dark class                                                | #A3A8AD |\n| --cells-dropdown-layer-dark                                   | Empty mixin for component with dark class                                 |   {}    |\n| --cells-dropdown-layer-opener                                 | Empty mixin for opener block                                              |   {}    |\n| --cells-dropdown-layer-control-text                           | Empty mixin for control text                                              |   {}    |\n| --cells-dropdown-layer-control-prefix                         | Empty mixin for control prefix                                            |   {}    |\n| --cells-dropdown-layer-control-icon-icon                      | Empty mixin for control icon iron-icon                                    |   {}    |\n| --cells-dropdown-layer-control-icon                           | Empty mixin for control icon block                                        |   {}    |\n| --cells-dropdown-layer-control                                | Empty mixin for control                                                   |   {}    |\n| --cells-dropdown-layer-line-underline-after                   | Empty mixin for underline after                                           |   {}    |\n| --cells-dropdown-layer-line-underline                         | Empty mixin for underline block                                           |   {}    |\n| --cells-dropdown-layer-line-icon-open                         | Empty mixin for open icon                                                 |   {}    |\n| --cells-dropdown-layer-line-icon-disabled                     | Empty mixin for disabled icon                                             |   {}    |\n| --cells-dropdown-layer-line-icon                              | Empty mixin for icon                                                      |   {}    |\n| --cells-dropdown-layer-line-icons                             | Empty mixin for icons block                                               |   {}    |\n| --cells-dropdown-layer-line                                   | Empty mixin for line block                                                |   {}    |\n| --cells-dropdown-layer-error-text                             | Empty mixin for error text                                                |   {}    |\n| --cells-dropdown-layer-layer-color                            | Layer color                                                               | #D0D1D4 |\n| --cells-dropdown-layer-layer-animating                        | Empty mixin for layer when animating                                      |   {}    |\n| --cells-dropdown-layer-layer-max-width                        | Layer max width                                                           |  none   |\n| --cells-dropdown-layer-layer-min-width                        | Layer min width                                                           |    0    |\n| --cells-dropdown-layer-layer-max-height                       | Layer max height                                                          |  none   |\n| --cells-dropdown-layer-layer-min-height                       | Layer min height                                                          |    0    |\n| --cells-dropdown-layer-wrapper                                | Empty mixin for layer wrapper                                             |   {}    |\n| --cells-dropdown-layer-content-bg-color                       | Layer content background color                                            | #343B49 |\n| --cells-dropdown-layer-content                                | Empty mixin for layer content                                             |   {}    |\n| --cells-dropdown-layer-top                                    | Empty mixin for layer on top opening                                      |   {}    |\n| --cells-dropdown-layer-bottom                                 | Empty mixin for layer on bottom opening                                   |   {}    |\n| --cells-dropdown-layer-left-top                               | Empty mixin for layer on left top opening                                 |   {}    |\n| --cells-dropdown-layer-left-bottom                            | Empty mixin for layer on left bottom opening                              |   {}    |\n| --cells-dropdown-layer-left                                   | Empty mixin for layer on left opening                                     |   {}    |\n| --cells-dropdown-layer-right-top                              | Empty mixin for layer on right top opening                                |   {}    |\n| --cells-dropdown-layer-right-bottom                           | Empty mixin for layer on right bottom opening                             |   {}    |\n| --cells-dropdown-layer-right                                  | Empty mixin for layer on right opening                                    |   {}    |\n| --cells-dropdown-layer-centered-wrapper                       | Empty mixin for layer wrapper on centered opening                         |   {}    |\n| --cells-dropdown-layer-centered-top                           | Empty mixin for layer on centered top opening                             |   {}    |\n| --cells-dropdown-layer-centered-bottom                        | Empty mixin for layer on centered bottom opening                          |   {}    |\n| --cells-dropdown-layer-centered                               | Empty mixin for layer on centered opening                                 |   {}    |\n| --cells-dropdown-layer-layer                                  | Empty mixin for layer                                                     |   {}    |\n| --cells-dropdown-layer-hovered-value-color                    | Value color when hovered/focused                                          | #224FBD |\n| --cells-dropdown-layer-hovered-underline-color                | Underline color when hovered/focused                                      | #224FBD |\n| --cells-dropdown-layer-hovered-icon-color                     | Icon color when hovered/focused                                           | #224FBD |\n| --cells-dropdown-layer-hovered-line-underline-after           | Empty mixin for underline after when hovered/focused                      |   {}    |\n| --cells-dropdown-layer-hovered                                | Empty mixin for hovered component                                         |   {}    |\n| --cells-dropdown-layer-dark-hovered-value-color               | Value color when hovered/focused with dark class                          |  #FFF   |\n| --cells-dropdown-layer-dark-hovered-underline-color           | Underline color when hovered/focused with dark class                      |  #FFF   |\n| --cells-dropdown-layer-dark-hovered-icon-color                | Icon color when hovered/focused with dark class                           |  #FFF   |\n| --cells-dropdown-layer-dark-hovered                           | Empty mixin for hovered component with dark class                         |   {}    |\n| --cells-dropdown-layer-opened-value-color                     | Value color when opened                                                   | #224FBD |\n| --cells-dropdown-layer-opened-underline-color                 | Underline color when opened                                               | #224FBD |\n| --cells-dropdown-layer-opened-icon-color                      | Icon color when opened                                                    | #224FBD |\n| --cells-dropdown-layer-opened-line-underline-after            | Empty mixin for underline after when opened                               |   {}    |\n| --cells-dropdown-layer-opened-line-icon-open                  | Empty mixin for open icon when opened                                     |   {}    |\n| --cells-dropdown-layer-opened-line                            | Empty mixin for line when opened                                          |   {}    |\n| --cells-dropdown-layer-opened-layer                           | Empty mixin for layer when opened                                         |   {}    |\n| --cells-dropdown-layer-opened                                 | Empty mixin for component when opened                                     |   {}    |\n| --cells-dropdown-layer-dark-opened-value-color                | Value color when opened with dark class                                   |  #FFF   |\n| --cells-dropdown-layer-dark-opened-underline-color            | Underline color when opened with dark class                               |  #FFF   |\n| --cells-dropdown-layer-dark-opened-icon-color                 | Icon color when opened with dark class                                    |  #FFF   |\n| --cells-dropdown-layer-dark-opened                            | Empty mixin for component when opened with dark class                     |   {}    |\n| --cells-dropdown-layer-disabled-value-color                   | Value color when disabled                                                 | #A3A8AD |\n| --cells-dropdown-layer-disabled-underline-color               | Underline color when disabled                                             | #D0D1D4 |\n| --cells-dropdown-layer-disabled-icon-color                    | Icon color when disabled                                                  | #A3A8AD |\n| --cells-dropdown-layer-disabled-line-icon-disabled            | Empty mixin for disabled icon when disabled                               |   {}    |\n| --cells-dropdown-layer-disabled-line-icon-open                | Empty mixin for open icon when disabled                                   |   {}    |\n| --cells-dropdown-layer-disabled-line-icons                    | Empty mixin for icons when disabled                                       |   {}    |\n| --cells-dropdown-layer-disabled                               | Empty mixin for disabled component                                        |   {}    |\n| --cells-dropdown-layer-dark-disabled-value-color              | Value color when disabled with dark class                                 | #A3A8AD |\n| --cells-dropdown-layer-dark-disabled-underline-color          | Underline color when disabled with dark class                             | #565C67 |\n| --cells-dropdown-layer-dark-disabled-icon-color               | Icon color when disabled with dark class                                  | #A3A8AD |\n| --cells-dropdown-layer-dark-disabled                          | Empty mixin for disabled component with dark class                        |   {}    |\n| --cells-dropdown-layer-with-error-value-color                 | Value color on error                                                      | #F970B5 |\n| --cells-dropdown-layer-with-error-underline-color             | Underline color on error                                                  | #F970B5 |\n| --cells-dropdown-layer-with-error-icon-color                  | Icon color on error                                                       | #F970B5 |\n| --cells-dropdown-layer-with-error-text                        | Empty mixin for error text on error                                       |   {}    |\n| --cells-dropdown-layer-with-error                             | Empty mixin for component on error                                        |   {}    |\n| --cells-dropdown-layer-dark-with-error-value-color            | Value color on error with dark class                                      | #F970B5 |\n| --cells-dropdown-layer-dark-with-error-underline-color        | Underline color on error with dark class                                  | #F970B5 |\n| --cells-dropdown-layer-dark-with-error-icon-color             | Icon color on error with dark class                                       | #F970B5 |\n| --cells-dropdown-layer-dark-with-error                        | Empty mixin for component on error with dark class                        |   {}    |\n| --cells-dropdown-layer-small-control-text                     | Empty mixin for control text with small class                             |   {}    |\n| --cells-dropdown-layer-small-control-icon                     | Empty mixin for control icon with small class                             |   {}    |\n| --cells-dropdown-layer-small-layer-top                        | Empty mixin for layer top with small class                                |   {}    |\n| --cells-dropdown-layer-small-layer-content                    | Empty mixin for layer content with small class                            |   {}    |\n| --cells-dropdown-layer-small-error-text                       | Empty mixin for error text with small class                               |   {}    |\n| --cells-dropdown-layer-small                                  | Empty mixin for component with small class                                |   {}    |\n| --cells-dropdown-layer-small-opened-line-icon-open            | Empty mixin for icon open when opened with small class                    |   {}    |\n| --cells-dropdown-layer-small-opened                           | Empty mixin when opened with small class                                  |   {}    |\n| --cells-dropdown-layer-icon-only-control-icon                 | Empty mixin for control icon with icon only class                         |   {}    |\n| --cells-dropdown-layer-icon-only-control-text                 | Empty mixin for control text with icon only class                         |   {}    |\n| --cells-dropdown-layer-icon-only-control                      | Empty mixin for control with icon only class                              |   {}    |\n| --cells-dropdown-layer-icon-only-line-underline-after         | Empty mixin for underline after with icon only class                      |   {}    |\n| --cells-dropdown-layer-icon-only-line-icons                   | Empty mixin for icons block with icon only class                          |   {}    |\n| --cells-dropdown-layer-icon-only-line                         | Empty mixin for line block with icon only class                           |   {}    |\n| --cells-dropdown-layer-icon-only                              | Empty mixin for component with icon only class                            |   {}    |\n| --cells-dropdown-layer-icon-only-hovered-line-underline-after | Empty mixin for underline after when hovered/focused with icon only class |   {}    |\n| --cells-dropdown-layer-icon-only-hovered                      | Empty mixin for component when hovered/focused with icon only class       |   {}    |",
+      "summary": "Shows a control and a collapsible layer associated to it",
+      "path": "cells-dropdown-layer/cells-dropdown-layer.js",
+      "properties": [
+        {
+          "name": "disabled",
+          "type": "boolean | null | undefined",
+          "description": "Set dropdown as disabled",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 6
+            },
+            "end": {
+              "line": 186,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "icon",
+          "type": "string | null | undefined",
+          "description": "Icon to show to the left of the label",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 191,
+              "column": 6
+            },
+            "end": {
+              "line": 194,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "prefix",
+          "type": "string | null | undefined",
+          "description": "Prefix for the label",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 199,
+              "column": 6
+            },
+            "end": {
+              "line": 202,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"checkControlMinWidth\"",
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "label",
+          "type": "string | null | undefined",
+          "description": "Text label for control",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 207,
+              "column": 6
+            },
+            "end": {
+              "line": 211,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"checkControlMinWidth\"",
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "iconDisabled",
+          "type": "string | null | undefined",
+          "description": "Disabled icon besides underline",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 216,
+              "column": 6
+            },
+            "end": {
+              "line": 219,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"coronita:block\""
+        },
+        {
+          "name": "iconOpen",
+          "type": "string | null | undefined",
+          "description": "Icon to show besides underline",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 224,
+              "column": 6
+            },
+            "end": {
+              "line": 227,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"coronita:unfold\""
+        },
+        {
+          "name": "opened",
+          "type": "boolean | null | undefined",
+          "description": "If true, layer is opened",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 232,
+              "column": 6
+            },
+            "end": {
+              "line": 238,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_opened\"",
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "animating",
+          "type": "boolean | null | undefined",
+          "description": "Animating status of layer",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 243,
+              "column": 6
+            },
+            "end": {
+              "line": 247,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "error",
+          "type": "string | null | undefined",
+          "description": "Error message",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 252,
+              "column": 6
+            },
+            "end": {
+              "line": 254,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "hasError",
+          "type": "boolean | null | undefined",
+          "description": "If true, component has error state",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 259,
+              "column": 6
+            },
+            "end": {
+              "line": 264,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_maxWidth",
+          "type": "number | null | undefined",
+          "description": "Max width of layer, autocalculated from viewport size",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 269,
+              "column": 6
+            },
+            "end": {
+              "line": 271,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
+        },
+        {
+          "name": "controlAsMinWidthOff",
+          "type": "boolean | null | undefined",
+          "description": "If true, layer can be less wide than control",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 276,
+              "column": 6
+            },
+            "end": {
+              "line": 279,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"checkControlMinWidth\"",
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "_minWidth",
+          "type": "number | null | undefined",
+          "description": "Base min width, calculated from control Width, or 80, based on controlAsMinWidthOff",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 284,
+              "column": 6
+            },
+            "end": {
+              "line": 286,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
+        },
+        {
+          "name": "_maxHeight",
+          "type": "number | null | undefined",
+          "description": "Max height of layer, autocalculated from viewport size",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 291,
+              "column": 6
+            },
+            "end": {
+              "line": 293,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
+        },
+        {
+          "name": "minHeight",
+          "type": "number | null | undefined",
+          "description": "Min height of layer",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 298,
+              "column": 6
+            },
+            "end": {
+              "line": 301,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "64"
+        },
+        {
+          "name": "openingX",
+          "type": "string | null | undefined",
+          "description": "Horizontal direction in which layer will open. Allowed values are 'left-to-right', 'right-to-left', 'centered' and 'auto'",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 306,
+              "column": 6
+            },
+            "end": {
+              "line": 309,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"auto\""
+        },
+        {
+          "name": "openingY",
+          "type": "string | null | undefined",
+          "description": "Vertical direction in which layer will open. Allowed values are 'top-to-bottom', 'bottom-to-top' and 'auto'",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 314,
+              "column": 6
+            },
+            "end": {
+              "line": 317,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"auto\""
+        },
+        {
+          "name": "safeMargin",
+          "type": "number | null | undefined",
+          "description": "Minimum distance from layer limits to viewport",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 322,
+              "column": 6
+            },
+            "end": {
+              "line": 325,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "32"
+        },
+        {
+          "name": "focused",
+          "type": "boolean | null | undefined",
+          "description": "If true, control has focus",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 330,
+              "column": 6
+            },
+            "end": {
+              "line": 334,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "overflowScreenWidth",
+          "type": "boolean | null | undefined",
+          "description": "If true, layer can overflow screen width limits",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 339,
+              "column": 6
+            },
+            "end": {
+              "line": 342,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "overflowScreenHeight",
+          "type": "boolean | null | undefined",
+          "description": "If true, layer can overflow screen height limits",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 347,
+              "column": 6
+            },
+            "end": {
+              "line": 350,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        }
+      ],
+      "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 358,
+              "column": 2
+            },
+            "end": {
+              "line": 363,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "checkControlMinWidth",
+          "description": "Set base min width of layer: 80, or control width",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 368,
+              "column": 2
+            },
+            "end": {
+              "line": 372,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_clickHandler",
+          "description": "Toggles opened state on click",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 377,
+              "column": 2
+            },
+            "end": {
+              "line": 386,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "focus",
+          "description": "Set focus on button",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 391,
+              "column": 2
+            },
+            "end": {
+              "line": 393,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_keyHandler",
+          "description": "Closes opened layer if Esc key is pressed",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 398,
+              "column": 2
+            },
+            "end": {
+              "line": 403,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_setErrorState",
+          "description": "Set hasError property based on error property",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 408,
+              "column": 2
+            },
+            "end": {
+              "line": 410,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "error"
+            }
+          ]
+        },
+        {
+          "name": "close",
+          "description": "Closes layer and removes listeners",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 415,
+              "column": 2
+            },
+            "end": {
+              "line": 424,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "open",
+          "description": "Opens layer",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 429,
+              "column": 2
+            },
+            "end": {
+              "line": 436,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_opened",
+          "description": "Set layer sizes, and adds listeners to close layer on outside focus/click",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 441,
+              "column": 2
+            },
+            "end": {
+              "line": 456,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "newValue"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_checkMax",
+          "description": "Sets direction classes on layer",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 461,
+              "column": 2
+            },
+            "end": {
+              "line": 471,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_checkHorizontal",
+          "description": "Set max width of layer and returns horizontal direction",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 476,
+              "column": 2
+            },
+            "end": {
+              "line": 506,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "opener"
+            },
+            {
+              "name": "view"
+            }
+          ]
+        },
+        {
+          "name": "_checkMaxWidth",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 508,
+              "column": 2
+            },
+            "end": {
+              "line": 510,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "_maxWidth"
+            }
+          ]
+        },
+        {
+          "name": "_checkVertical",
+          "description": "Set max height of layer and returns vertical direction",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 515,
+              "column": 2
+            },
+            "end": {
+              "line": 541,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "opener"
+            },
+            {
+              "name": "view"
+            }
+          ]
+        },
+        {
+          "name": "_checkMaxHeight",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 543,
+              "column": 2
+            },
+            "end": {
+              "line": 545,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "_maxHeight"
+            }
+          ]
+        },
+        {
+          "name": "_fixSize",
+          "description": "Reset layer sizes",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 550,
+              "column": 2
+            },
+            "end": {
+              "line": 560,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "ev"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_focus",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 562,
+              "column": 2
+            },
+            "end": {
+              "line": 564,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_blur",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 566,
+              "column": 2
+            },
+            "end": {
+              "line": 568,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 172,
+          "column": 0
+        },
+        "end": {
+          "line": 569,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "Polymer.Element",
+      "name": "cellsDropdownLayer",
+      "attributes": [
+        {
+          "name": "disabled",
+          "description": "Set dropdown as disabled",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 6
+            },
+            "end": {
+              "line": 186,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "icon",
+          "description": "Icon to show to the left of the label",
+          "sourceRange": {
+            "start": {
+              "line": 191,
+              "column": 6
+            },
+            "end": {
+              "line": 194,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "prefix",
+          "description": "Prefix for the label",
+          "sourceRange": {
+            "start": {
+              "line": 199,
+              "column": 6
+            },
+            "end": {
+              "line": 202,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "label",
+          "description": "Text label for control",
+          "sourceRange": {
+            "start": {
+              "line": 207,
+              "column": 6
+            },
+            "end": {
+              "line": 211,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "icon-disabled",
+          "description": "Disabled icon besides underline",
+          "sourceRange": {
+            "start": {
+              "line": 216,
+              "column": 6
+            },
+            "end": {
+              "line": 219,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "icon-open",
+          "description": "Icon to show besides underline",
+          "sourceRange": {
+            "start": {
+              "line": 224,
+              "column": 6
+            },
+            "end": {
+              "line": 227,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "opened",
+          "description": "If true, layer is opened",
+          "sourceRange": {
+            "start": {
+              "line": 232,
+              "column": 6
+            },
+            "end": {
+              "line": 238,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "animating",
+          "description": "Animating status of layer",
+          "sourceRange": {
+            "start": {
+              "line": 243,
+              "column": 6
+            },
+            "end": {
+              "line": 247,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "error",
+          "description": "Error message",
+          "sourceRange": {
+            "start": {
+              "line": 252,
+              "column": 6
+            },
+            "end": {
+              "line": 254,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "has-error",
+          "description": "If true, component has error state",
+          "sourceRange": {
+            "start": {
+              "line": 259,
+              "column": 6
+            },
+            "end": {
+              "line": 264,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "control-as-min-width-off",
+          "description": "If true, layer can be less wide than control",
+          "sourceRange": {
+            "start": {
+              "line": 276,
+              "column": 6
+            },
+            "end": {
+              "line": 279,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "min-height",
+          "description": "Min height of layer",
+          "sourceRange": {
+            "start": {
+              "line": 298,
+              "column": 6
+            },
+            "end": {
+              "line": 301,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "opening-x",
+          "description": "Horizontal direction in which layer will open. Allowed values are 'left-to-right', 'right-to-left', 'centered' and 'auto'",
+          "sourceRange": {
+            "start": {
+              "line": 306,
+              "column": 6
+            },
+            "end": {
+              "line": 309,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "opening-y",
+          "description": "Vertical direction in which layer will open. Allowed values are 'top-to-bottom', 'bottom-to-top' and 'auto'",
+          "sourceRange": {
+            "start": {
+              "line": 314,
+              "column": 6
+            },
+            "end": {
+              "line": 317,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "safe-margin",
+          "description": "Minimum distance from layer limits to viewport",
+          "sourceRange": {
+            "start": {
+              "line": 322,
+              "column": 6
+            },
+            "end": {
+              "line": 325,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "focused",
+          "description": "If true, control has focus",
+          "sourceRange": {
+            "start": {
+              "line": 330,
+              "column": 6
+            },
+            "end": {
+              "line": 334,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "overflow-screen-width",
+          "description": "If true, layer can overflow screen width limits",
+          "sourceRange": {
+            "start": {
+              "line": 339,
+              "column": 6
+            },
+            "end": {
+              "line": 342,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "overflow-screen-height",
+          "description": "If true, layer can overflow screen height limits",
+          "sourceRange": {
+            "start": {
+              "line": 347,
+              "column": 6
+            },
+            "end": {
+              "line": 350,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "opened-changed",
+          "description": "Fired when the `opened` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "cells-dropdown-layer"
+    }
+  ]
+}

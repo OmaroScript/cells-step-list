@@ -1,0 +1,15 @@
+{
+	"name": "cells-sass",
+	"version": "2.2.2",
+	"moduleType": [
+		"amd"
+	],
+	"license": "MIT",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	]
+}

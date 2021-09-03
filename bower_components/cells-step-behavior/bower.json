@@ -1,0 +1,22 @@
+{
+    "name": "cells-step-behavior",
+    "version": "4.22.0",
+    "description": "Provides several props and method to build step-by-step process.",
+    "keywords":     [
+        "behavior",
+        "step",
+        "steps",
+        "properties",
+        "methods",
+        "manager"
+    ],
+    "ignore": ["**/*."],
+    "dependencies": {},
+    "devDependencies":     {
+        "polymer": "Polymer/polymer#^2.0.0",
+        "web-component-tester": "^6.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    },
+    "resolutions": {"webcomponentsjs": "^1.0.0"},
+    "main": ["cells-step-behavior.html"]
+}

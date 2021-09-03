@@ -1,0 +1,32 @@
+{
+  "default": {
+    "type": null,
+    "icon": "coronita:info",
+    "iconLabel": "Custom aria label for the icon"
+  },
+  "info": {
+    "type": "info",
+    "icon": "coronita:info",
+    "iconLabel": null
+  },
+  "info-dark": {
+    "type": "info-dark",
+    "icon": "coronita:info",
+    "iconLabel": null
+  },
+  "warning": {
+    "type": "warning",
+    "icon": "coronita:alert",
+    "iconLabel": null
+  },
+  "error": {
+    "type": "error",
+    "icon": "coronita:error",
+    "iconLabel": null
+  },
+  "success": {
+    "type": "success",
+    "icon": "coronita:correct",
+    "iconLabel": null
+  }
+}
